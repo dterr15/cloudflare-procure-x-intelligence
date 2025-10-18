@@ -1,0 +1,1486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicio Basic - ProcureX Intelligence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --neutral-slate: #64748b;
+            --neutral-light: #f1f5f9;
+            --success-green: #22c55e;
+            --warning-amber: #f59e0b;
+        }
+
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: white;
+            overflow-x: hidden;
+        }
+
+
+        .slides-container {
+            width: 100%;
+            overflow-y: auto;
+            position: relative;
+            scroll-behavior: smooth;
+        }
+
+
+        .slide {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 6rem 4rem;
+        }
+
+
+        .slide-1 {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        .slide-1::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--secondary-cyan) 0%, transparent 70%);
+            top: -300px;
+            right: -300px;
+            opacity: 0.2;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+
+        .slide-1::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--accent-green) 0%, transparent 70%);
+            bottom: -200px;
+            left: -200px;
+            opacity: 0.15;
+            animation: pulse 4s ease-in-out infinite 2s;
+        }
+
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.2); opacity: 0.3; }
+        }
+
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+        }
+
+
+        .logo-container {
+            margin-bottom: 3rem;
+        }
+
+
+        .logo-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--secondary-cyan), var(--accent-green));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 900;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 20px 60px rgba(6, 182, 212, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+
+        .company-name {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+        }
+
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, var(--secondary-cyan), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+            font-weight: 600;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+            color: var(--secondary-cyan);
+        }
+
+
+        .client-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+
+        .info-item {
+            text-align: left;
+        }
+
+
+        .info-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+
+        .slide-2 {
+            background: linear-gradient(135deg, #0f172a 0%, var(--primary-blue) 100%);
+        }
+
+
+        .content-box {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+
+        .section-number {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--secondary-cyan), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+        }
+
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+
+        .value-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        .value-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--secondary-cyan), var(--accent-green));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+
+        .value-card:hover {
+            border-color: var(--secondary-cyan);
+            transform: translateY(-8px);
+        }
+
+
+        .value-card:hover::before {
+            transform: scaleX(1);
+        }
+
+
+        .value-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+
+        .value-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent-green);
+        }
+
+
+        .value-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+
+        .slide-3 {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0f172a 100%);
+        }
+
+
+        .dual-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+
+        .column {
+            background: rgba(255,255,255,0.05);
+            padding: 3rem;
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+
+        .column-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+
+        .column-title.include {
+            color: var(--success-green);
+        }
+
+
+        .column-title.exclude {
+            color: var(--warning-amber);
+        }
+
+
+        .list-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+
+        .list-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(8px);
+        }
+
+
+        .list-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+
+        .list-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+
+        .slide-4 {
+            background: linear-gradient(135deg, #0f172a 0%, var(--primary-blue) 100%);
+        }
+
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+
+        .metric-card {
+            background: rgba(255,255,255,0.05);
+            padding: 3rem;
+            border-radius: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+
+        .metric-card:hover {
+            border-color: var(--secondary-cyan);
+            transform: scale(1.05);
+        }
+
+
+        .metric-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+
+        .metric-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--secondary-cyan), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+
+        .metric-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+
+        .metric-detail {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 1rem;
+        }
+
+
+        .slide-5 {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0f172a 100%);
+        }
+
+
+        .process-flow {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+
+        .process-step {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+
+        .process-step:hover {
+            border-color: var(--secondary-cyan);
+            transform: translateY(-10px);
+        }
+
+
+        .step-number-badge {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--secondary-cyan), var(--accent-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin: 0 auto 1.5rem;
+        }
+
+
+        .step-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--accent-green);
+        }
+
+
+        .step-desc {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+
+
+        .slide-6 {
+            background: linear-gradient(135deg, #0f172a 0%, var(--primary-blue) 100%);
+        }
+
+
+        .tracking-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+
+
+        .feature-card:nth-child(1) { border-color: var(--accent-green); }
+        .feature-card:nth-child(2) { border-color: var(--secondary-cyan); }
+        .feature-card:nth-child(3) { border-color: #8b5cf6; }
+        .feature-card:nth-child(4) { border-color: var(--warning-amber); }
+
+
+        .feature-card:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(10px);
+        }
+
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent-green);
+        }
+
+
+        .feature-text {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+
+        .slide-7 {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0f172a 100%);
+        }
+
+
+        .example-table {
+            width: 100%;
+            margin-top: 3rem;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+
+
+        .example-table table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.85rem;
+        }
+
+
+        .example-table th {
+            background: linear-gradient(135deg, var(--secondary-cyan), var(--accent-green));
+            padding: 1.2rem 1rem;
+            font-weight: 700;
+            text-align: left;
+            font-size: 0.85rem;
+        }
+
+
+        .example-table td {
+            background: rgba(255,255,255,0.05);
+            padding: 1rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.8rem;
+        }
+
+
+        .example-table tr:hover td {
+            background: rgba(255,255,255,0.08);
+        }
+
+
+        .best-value {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+
+        .slide-8 {
+            background: linear-gradient(135deg, #0f172a 0%, var(--primary-blue) 100%);
+        }
+
+
+        .criteria-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+
+        .criteria-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+
+
+        .criteria-card:nth-child(1) { border-color: var(--accent-green); }
+        .criteria-card:nth-child(2) { border-color: var(--secondary-cyan); }
+        .criteria-card:nth-child(3) { border-color: #8b5cf6; }
+        .criteria-card:nth-child(4) { border-color: var(--warning-amber); }
+
+
+        .criteria-card:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(10px);
+        }
+
+
+        .criteria-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent-green);
+        }
+
+
+        .criteria-items {
+            list-style: none;
+        }
+
+
+        .criteria-items li {
+            padding: 0.5rem 0;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+
+        .criteria-items li::before {
+            content: '◆';
+            color: var(--secondary-cyan);
+        }
+
+
+        .slide-9 {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0f172a 100%);
+        }
+
+
+        .recommendation-box {
+            background: rgba(255,255,255,0.05);
+            padding: 3rem;
+            border-radius: 24px;
+            border: 3px solid var(--accent-green);
+            max-width: 900px;
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        .recommendation-box::before {
+            content: '✓';
+            position: absolute;
+            top: -30px;
+            right: 30px;
+            font-size: 10rem;
+            color: var(--accent-green);
+            opacity: 0.1;
+            font-weight: 900;
+        }
+
+
+        .rec-badge {
+            display: inline-block;
+            background: var(--accent-green);
+            color: white;
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+        }
+
+
+        .rec-content {
+            font-size: 1.3rem;
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+
+        .rec-highlight {
+            color: var(--accent-green);
+            font-weight: 700;
+        }
+
+
+        .risk-section {
+            background: rgba(245, 158, 11, 0.1);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border-left: 4px solid var(--warning-amber);
+            margin-top: 2rem;
+        }
+
+
+        .risk-title {
+            color: var(--warning-amber);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+
+        .slide-10 {
+            background: linear-gradient(135deg, #0f172a 0%, var(--primary-blue) 100%);
+        }
+
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+
+        .kpi-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+
+        .kpi-card:hover {
+            border-color: var(--secondary-cyan);
+            transform: scale(1.08);
+        }
+
+
+        .kpi-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+
+        .kpi-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--accent-green);
+            margin-bottom: 0.5rem;
+        }
+
+
+        .kpi-label {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+
+        .slide-11 {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0f172a 100%);
+        }
+
+
+        .steps-timeline {
+            margin-top: 3rem;
+            position: relative;
+        }
+
+
+        .timeline-step {
+            display: flex;
+            align-items: start;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideIn 0.6s ease forwards;
+        }
+
+
+        .timeline-step:nth-child(1) { animation-delay: 0.2s; }
+        .timeline-step:nth-child(2) { animation-delay: 0.4s; }
+        .timeline-step:nth-child(3) { animation-delay: 0.6s; }
+        .timeline-step:nth-child(4) { animation-delay: 0.8s; }
+
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+
+        .timeline-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--secondary-cyan), var(--accent-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+
+
+        .timeline-content {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 16px;
+        }
+
+
+        .timeline-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent-green);
+        }
+
+
+        .timeline-text {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+
+        .slide-12 {
+            background: linear-gradient(135deg, #0f172a 0%, var(--primary-blue) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        .slide-12::before {
+            content: '';
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--secondary-cyan) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.15;
+            animation: rotate 20s linear infinite;
+        }
+
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 700px;
+        }
+
+
+        .cta-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+
+        .cta-subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+        }
+
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--secondary-cyan), var(--accent-green));
+            color: white;
+            padding: 1.5rem 4rem;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 60px rgba(6, 182, 212, 0.4);
+        }
+
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 80px rgba(6, 182, 212, 0.6);
+        }
+
+
+        .contact-info {
+            margin-top: 3rem;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+
+        .slide-nav {
+            display: none;
+        }
+
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            .value-grid { grid-template-columns: 1fr; }
+            .dual-column { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .criteria-grid { grid-template-columns: 1fr; }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .process-flow { grid-template-columns: 1fr; }
+            .tracking-features { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="slides-container" id="slides">
+        <!-- SLIDE 1: PORTADA -->
+        <div class="slide slide-1">
+            <div class="hero-content">
+                <div class="logo-container">
+                    <div class="logo-icon">PX</div>
+                    <div class="company-name">PROCUREX INTELLIGENCE</div>
+                </div>
+                <h1 class="hero-title">
+                    Servicio <span class="highlight">Basic</span><br>
+                    para PYMES
+                </h1>
+                <p class="hero-subtitle">Cotiza rápido. Controla hasta la bodega. Compra con confianza.</p>
+                <div class="client-info">
+                    <div class="info-item">
+                        <div class="info-label">Cliente</div>
+                        <div class="info-value">{{Nombre del Cliente}}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Industria</div>
+                        <div class="info-value">{{Sector Industrial}}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Fecha</div>
+                        <div class="info-value">{{Fecha Presentación}}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Contacto</div>
+                        <div class="info-value">{{Email/Teléfono}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 2: PROPÓSITO -->
+        <div class="slide slide-2">
+            <div class="content-box">
+                <div class="section-number">01</div>
+                <h2 class="section-title">Propuesta</h2>
+                <p style="font-size: 1.4rem; opacity: 0.9; margin-bottom: 2rem; line-height: 1.6;">
+                    <strong style="color: var(--accent-green);">Decisiones de Compra</strong> 
+                    <strong style="color: var(--secondary-cyan);">Rápidas y Seguras</strong>.
+                </p>
+                <div class="value-grid">
+                    <div class="value-card">
+                        <div class="value-icon">📊</div>
+                        <div class="value-title">Cotiza</div>
+                        <div class="value-text">
+                            en horas, no días
+                        </div>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">🎯</div>
+                        <div class="value-title">Decide</div>
+                        <div class="value-text">
+                            con datos claros y comparables
+                        </div>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">⚡</div>
+                        <div class="value-title">Seguimiento</div>
+                        <div class="value-text">
+                            hasta que tu compra llega a tu bodega
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 3: ALCANCE -->
+        <div class="slide slide-3">
+            <div class="content-box">
+                <div class="section-number">02</div>
+                <h2 class="section-title">Alcance y Entregables</h2>
+                <div class="dual-column">
+                    <div class="column">
+                        <h3 class="column-title include">✓ Incluye</h3>
+                        <div class="list-item">
+                            <div class="list-icon">✓</div>
+                            <div class="list-text">3-5 Cotizaciones Comparables</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✓</div>
+                            <div class="list-text">Matriz de Decisión Clara</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✓</div>
+                            <div class="list-text">Plan de hitos por orden y tablero de seguimiento compartido</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✓</div>
+                            <div class="list-text">Alertas de excepción y seguimiento hasta recepción en bodega</div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <h3 class="column-title exclude">✗ No Incluye</h3>
+                        <div class="list-item">
+                            <div class="list-icon">✗</div>
+                            <div class="list-text">Análisis de servicios (solo productos físicos/digitales)</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✗</div>
+                            <div class="list-text">Negociación avanzada ni contratos marco</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✗</div>
+                            <div class="list-text">Due diligence profundo de proveedores</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✗</div>
+                            <div class="list-text">Importación, aduanas o logística especializada</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✗</div>
+                            <div class="list-text">Gestión documental ni almacenamiento de documentación</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 4: SLA -->
+        <div class="slide slide-4">
+            <div class="content-box">
+                <div class="section-number">03</div>
+                <h2 class="section-title">Objetivos de Calidad</h2>
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.8rem; color: var(--accent-green); margin-bottom: 1.5rem;">Sourcing (Cotizaciones)</h3>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">⚡</div>
+                        <div class="metric-value">1</div>
+                        <div class="metric-label">Día</div>
+                        <div class="metric-detail">Cotizaciones Listas</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">🎯</div>
+                        <div class="metric-value">95%</div>
+                        <div class="metric-label">Entregas</div>
+                        <div class="metric-detail">Dentro del Plazo</div>
+                    </div>
+                </div>
+                <div style="margin-top: 3rem; margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.8rem; color: var(--secondary-cyan); margin-bottom: 1.5rem;">Seguimiento (Post-Selección)</h3>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">🚀</div>
+                        <div class="metric-value">&lt;4h</div>
+                        <div class="metric-label">Kick-off de Seguimiento</div>
+                        <div class="metric-detail">Desde confirmación de proveedor seleccionado</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">🔄</div>
+                        <div class="metric-value">24h</div>
+                        <div class="metric-label">Actualizaciones diarias de Estado</div>
+                        <div class="metric-detail">Estándar (8h en modo urgente)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">⚠️</div>
+                        <div class="metric-value">Alertas</div>
+                        <div class="metric-label">Demoras, Cambios o Incidencias</div>
+                        <div class="metric-detail">Detección y notificación oportuna</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">📋</div>
+                        <div class="metric-value">100%</div>
+                        <div class="metric-label">Órdenes con Seguimiento</div>
+                        <div class="metric-detail">Línea base de hitos documentada</div>
+                    </div>
+                </div>
+                <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.05); border-radius: 16px; border-left: 4px solid var(--secondary-cyan);">
+                    <p style="font-size: 1rem; opacity: 0.9;">
+                        <strong style="color: var(--secondary-cyan);">⏰ Ventana de Servicio:</strong> 
+                        Lunes a viernes, 09:00–18:00 (zona del cliente) con canal dedicado para seguimiento en tiempo real.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 5: FLUJO E2E -->
+        <div class="slide slide-5">
+            <div class="content-box">
+                <div class="section-number">04</div>
+                <h2 class="section-title">Flujo Operativo End-to-End</h2>
+                <div class="process-flow">
+                    <div class="process-step">
+                        <div class="step-number-badge">1</div>
+                        <div class="step-title">Cotizamos</div>
+                        <div class="step-desc">Seguimiento Respuestas</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number-badge">2</div>
+                        <div class="step-title">Shortlist</div>
+                        <div class="step-desc">Seleccionamos Proveedores y Recomendamos</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number-badge">3</div>
+                        <div class="step-title">OC & Tracking</div>
+                        <div class="step-desc">Emites la OC y Hacemos Seguimiento</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number-badge">4</div>
+                        <div class="step-title">Monitoreo</div>
+                        <div class="step-desc">Hasta Recepción en Bodega</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number-badge">5</div>
+                        <div class="step-title">Cierre</div>
+                        <div class="step-desc">Trazabilidad Completa</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 6: SEGUIMIENTO OPERATIVO -->
+        <div class="slide slide-6">
+            <div class="content-box">
+                <div class="section-number">05</div>
+                <h2 class="section-title">Seguimiento Operativo hasta Bodega</h2>
+                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem;">
+                    Control completo desde la selección hasta la recepción confirmada
+                </p>
+                <div class="tracking-features">
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <div class="feature-title">Plan de Hitos</div>
+                        <div class="feature-text">
+                            Desde la OC hasta la bodega
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-title">Tablero Compartido</div>
+                        <div class="feature-text">
+                            Actualización de Estados
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⚠️</div>
+                        <div class="feature-title">Alertas ante Demoras</div>
+                        <div class="feature-text">
+                            Notificación Oportuna + Soluciones Propuestas
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📈</div>
+                        <div class="feature-title">Cierre de Caso</div>
+                        <div class="feature-text">
+                            Registro final (documentación OK, cantidad recibida, incidencias documentadas)
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(245,158,11,0.1); border-radius: 12px; border-left: 4px solid var(--warning-amber);">
+                    <p style="font-size: 1rem; opacity: 0.9;">
+                        <strong style="color: var(--warning-amber);">📋 Nota Importante:</strong> 
+                        No incluye gestión documental (almacenamiento de OC, guías, facturas). Solo registramos referencias e IDs para trazabilidad.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 7: TABLERO DE SEGUIMIENTO -->
+        <div class="slide slide-7">
+            <div class="content-box">
+                <div class="section-number">06</div>
+                <h2 class="section-title">Tablero de Seguimiento · Ejemplo</h2>
+                <div class="example-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>OC</th>
+                                <th>SKU</th>
+                                <th>Proveedor</th>
+                                <th>Qty</th>
+                                <th>ETA Comp.</th>
+                                <th>Estado</th>
+                                <th>Tracking</th>
+                                <th>Bodega</th>
+                                <th>Recepción</th>
+                                <th>Incidencias</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><strong>45001234</strong></td>
+                                <td>ABC-001</td>
+                                <td>Prov. A</td>
+                                <td>100</td>
+                                <td>2025-10-03</td>
+                                <td class="best-value">En tránsito</td>
+                                <td>TRK-8871</td>
+                                <td>Central</td>
+                                <td>2025-10-04 / 100</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td><strong>45001235</strong></td>
+                                <td>ABC-002</td>
+                                <td>Prov. B</td>
+                                <td>50</td>
+                                <td>2025-10-05</td>
+                                <td>Preparación</td>
+                                <td>---</td>
+                                <td>Norte</td>
+                                <td>Pendiente</td>
+                                <td>---</td>
+                            </tr>
+                            <tr>
+                                <td><strong>45001236</strong></td>
+                                <td>ABC-003</td>
+                                <td>Prov. C</td>
+                                <td>200</td>
+                                <td>2025-10-02</td>
+                                <td style="color: var(--warning-amber);">Demora</td>
+                                <td>TRK-8872</td>
+                                <td>Sur</td>
+                                <td>Pendiente</td>
+                                <td>+2 días ETA</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.05); border-radius: 12px;">
+                    <p style="font-size: 1rem; opacity: 0.9;">
+                        <strong>Estados posibles:</strong> OC emitida → Confirmada → En preparación → Despachada → En tránsito → Pre-alerta → Recibida
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 8: CRITERIOS DE EVALUACIÓN -->
+        <div class="slide slide-8">
+            <div class="content-box">
+                <div class="section-number">07</div>
+                <h2 class="section-title">Criterios de Evaluación</h2>
+                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem;">
+                    <strong style="color: var(--accent-green);">Evaluamos</strong> 
+                    lo que realmente importa: precio, tiempos, condiciones y riesgos.
+                </p>
+                <div class="criteria-grid">
+                    <div class="criteria-card">
+                        <div class="criteria-title">💰 Económicos</div>
+                        <ul class="criteria-items">
+                            <li>Precio unitario</li>
+                            <li>Descuentos por volumen</li>
+                            <li>Costos de envío</li>
+                            <li>Impuestos aplicables</li>
+                        </ul>
+                    </div>
+                    <div class="criteria-card">
+                        <div class="criteria-title">⚙️ Operativos</div>
+                        <ul class="criteria-items">
+                            <li>Lead time de entrega</li>
+                            <li>MOQ (Cantidad mínima)</li>
+                            <li>Capacidad de entrega</li>
+                            <li>Historial de cumplimiento</li>
+                        </ul>
+                    </div>
+                    <div class="criteria-card">
+                        <div class="criteria-title">📄 Comerciales/Legales</div>
+                        <ul class="criteria-items">
+                            <li>Validez de oferta</li>
+                            <li>Garantías incluidas</li>
+                            <li>Condiciones de pago</li>
+                            <li>Política de devoluciones</li>
+                        </ul>
+                    </div>
+                    <div class="criteria-card">
+                        <div class="criteria-title">⚠️ Riesgo Básico</div>
+                        <ul class="criteria-items">
+                            <li>Experiencia del proveedor</li>
+                            <li>Señales de cumplimiento</li>
+                            <li>Disponibilidad de stock</li>
+                            <li>Estabilidad comercial</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 9: RECOMENDACIÓN -->
+        <div class="slide slide-9">
+            <div class="content-box">
+                <div class="section-number">08</div>
+                <h2 class="section-title">Formato de Recomendación</h2>
+                <div class="recommendation-box">
+                    <div class="rec-badge">RECOMENDACIÓN DE COMPRA</div>
+                    <div class="rec-content">
+                        Seleccionar <span class="rec-highlight">Proveedor A</span> por 
+                        <span class="rec-highlight">menor TCO directo</span> bajo Incoterm EXW y 
+                        <span class="rec-highlight">lead time aceptable</span> de 5 días. 
+                        Balance óptimo entre precio, disponibilidad y condiciones comerciales.
+                    </div>
+                    <div class="risk-section">
+                        <div class="risk-title">⚠️ Riesgos Identificados</div>
+                        <p style="opacity: 0.9;">
+                            Validez de 15 días requiere emisión rápida de OC. 
+                            Ventana de decisión ajustada.
+                        </p>
+                    </div>
+                    <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(6,182,212,0.1); border-radius: 12px; border-left: 4px solid var(--secondary-cyan);">
+                        <p style="opacity: 0.9;">
+                            <strong style="color: var(--secondary-cyan);">📋 Plan B:</strong> 
+                            Proveedor C si se prioriza urgencia extrema (3 días lead time)
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 10: KPIs -->
+        <div class="slide slide-10">
+            <div class="content-box">
+                <div class="section-number">09</div>
+                <h2 class="section-title">Medimos Nuestro Servicio en lo que de verdad impacta tu negocio</h2>
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.5rem; color: var(--accent-green); margin-bottom: 1rem;">Sourcing</h3>
+                </div>
+                <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr); margin-bottom: 3rem;">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">🎯</div>
+                        <div class="kpi-number">≥3</div>
+                        <div class="kpi-label">Cotizaciones por SKU</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">⏱️</div>
+                        <div class="kpi-number">&lt;1d</div>
+                        <div class="kpi-label">Decisiones Rápidas</div>
+                    </div>
+                </div>
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.5rem; color: var(--secondary-cyan); margin-bottom: 1rem;">Seguimiento</h3>
+                </div>
+                <div class="kpi-grid" style="grid-template-columns: repeat(4, 1fr);">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">📦</div>
+                        <div class="kpi-number">OTIF</div>
+                        <div class="kpi-label">On-Time In-Full a bodega</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">📈</div>
+                        <div class="kpi-number">%Δ</div>
+                        <div class="kpi-label">Lead time real vs. plan</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">⚠️</div>
+                        <div class="kpi-number">Tasa</div>
+                        <div class="kpi-label">Incidencias resueltas</div>
+                    </div>
+                </div>
+                <div style="margin-top: 3rem; text-align: center;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 16px; display: inline-block;">
+                        <div style="font-size: 1.3rem; font-weight: 700; color: var(--accent-green); margin-bottom: 0.5rem;">
+                            🤝 Comité Quincenal
+                        </div>
+                        <div style="opacity: 0.9;">
+                            Reunión de 10 minutos de retroalimentación y ajuste de criterios
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 11: PRÓXIMOS PASOS -->
+        <div class="slide slide-11">
+            <div class="content-box">
+                <div class="section-number">10</div>
+                <h2 class="section-title">Próximos Pasos</h2>
+                <div class="steps-timeline">
+                    <div class="timeline-step">
+                        <div class="timeline-number">1</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Aprobación de Alcance</div>
+                        </div>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="timeline-number">2</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Configuración de Canales de Comunicación</div>
+                        </div>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="timeline-number">3</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Piloto Inicial</div>
+                            <div class="timeline-text">
+                                Ejecución de 1-2 solicitudes con seguimiento completo y validación del formato de entrega, tiempos y tablero
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="timeline-number">4</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Operación Continua</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 12: CTA FINAL -->
+        <div class="slide slide-12">
+            <div class="cta-content">
+                <h1 class="cta-title">
+                    ¿Listo para Comprar <span style="background: linear-gradient(135deg, var(--secondary-cyan), var(--accent-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">Más Rápido</span><br>
+                    y con menos Riesgo?
+                </h1>
+                <p class="cta-subtitle">
+                Solicita tu demo hoy y empieza a decidir en horas, con control hasta la bodega.
+                </p>
+                <a href="mailto:contacto@procurex-intelligence.com" class="cta-button">
+                    Solicitar Demo
+                </a>
+                <div class="contact-info">
+                    <p>📧 px@procure-x.cl</p>
+                    <p>📱 +56 9 8596 0018</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function scrollToSlide(index) {
+            const slides = document.querySelectorAll('.slide');
+            slides[index].scrollIntoView({ behavior: 'smooth' });
+        }
+
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const index = Array.from(document.querySelectorAll('.slide')).indexOf(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+
+        document.querySelectorAll('.slide').forEach(slide => observer.observe(slide));
+    </script>
+</body>
+</html>
+
