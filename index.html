@@ -236,16 +236,49 @@
     font-size:.8rem;color:var(--neutral-slate)
     }
     .cap-legend b{color:#0f766e}
+
+    .logo { display: flex; align-items: center; }
+    .brand { display: inline-flex; align-items: center; gap: .5rem; text-decoration: none; color: inherit; }
+    
+    /* Ajusta dimensiones del logo */
+    .logo-img { height: 40px; width: auto; display: block; }
+    @media (max-width: 480px) { .logo-img { height: 32px; } }
+    
+    /* Fallback “PX” visible por defecto */
+    .logo-fallback { font-weight: 700; letter-spacing: .5px; }
+    
+    /* Si la imagen cargó, ocultamos el fallback visualmente (sigue accesible para lectores si quieres) */
+    .brand.has-img .logo-fallback {
+      position: absolute !important;
+      width: 1px; height: 1px; margin: -1px; padding: 0; border: 0;
+      clip: rect(0 0 0 0); overflow: hidden; white-space: nowrap;
+    }    
   </style>
 </head>
 <body>
-
-
+  
   <!-- HEADER -->
   <header class="header">
     <div class="container">
-      <nav class="nav">
-        <div class="logo"><div class="logo-icon">PX</div> ProcureX Intelligence</div>
+      <nav class="nav">        
+        <div class="logo">
+          <a href="/" class="brand">
+            <!-- Imagen del logo -->
+            <img
+              src="/assets/img/logo-px.svg"
+              alt="ProcureX Intelligence"
+              class="logo-img"
+              onload="this.closest('.brand').classList.add('has-img')"
+              onerror="this.remove()"  <!-- si falla, se elimina y queda el 'PX' -->
+            />
+        
+            <!-- Fallback visible -->
+            <span class="logo-fallback" aria-hidden="false">PX</span>
+        
+            <!-- Nombre (opcional) -->
+            <span class="brand-name">ProcureX Intelligence</span>
+          </a>
+        </div>        
         <ul class="nav-links">
           <li><a href="servicios/showcase.html" class="nav-link">Servicios</a></li>
           <li><a href="#process" class="nav-link">Cómo trabajamos</a></li>
