@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ProcureX Intelligence · Starter · Basic · PRO</title>
+  <meta name="description" content="Landing de una página para los servicios Starter, Basic y PRO de ProcureX Intelligence. Decisiones rápidas, control operativo y ahorros medidos." />
+  <style>
+    :root{
+      --primary:#1e3a8a;        /* azul profundo */
+      --cyan:#06b6d4;           /* acento cian */
+      --green:#10b981;          /* acento verde */
+      --purple:#8b5cf6;         /* acento pro */
+      --slate:#94a3b8;          /* texto secundario */
+      --bg:#0b1020;             /* fondo */
+      --card:rgba(255,255,255,.06);
+      --muted:rgba(255,255,255,.08);
+      --ring:rgba(6,182,212,.35);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Inter,system-ui,sans-serif;background:linear-gradient(180deg,#0b1020,#0b1020 40%,#0a0f1a 100%);color:#fff;}
+    a{color:inherit;text-decoration:none}
+    .container{max-width:1100px;margin:0 auto;padding:0 20px}
+    .btn{display:inline-block;padding:14px 22px;border-radius:999px;font-weight:700;letter-spacing:.2px;background:linear-gradient(135deg,var(--cyan),var(--green));box-shadow:0 10px 30px var(--ring);transition:.2s transform}
+    .btn:hover{transform:translateY(-2px)}
+    .subtle{opacity:.85}
+    header{position:relative;overflow:hidden}
+    .hero{padding:88px 0 56px;text-align:center}
+    .badge{display:inline-flex;align-items:center;gap:8px;padding:8px 14px;border-radius:999px;background:var(--card);border:1px solid var(--muted);font-size:.85rem;color:var(--slate)}
+    h1{font-size:clamp(32px,6vw,56px);line-height:1.08;margin:16px 0}
+    .highlight{background:linear-gradient(135deg,var(--cyan),var(--green));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .hero p{max-width:820px;margin:14px auto 28px;color:#cbd5e1;font-size:1.15rem}
+    .hero-fig{position:absolute;inset:0;pointer-events:none}
+    .hero-fig:before,.hero-fig:after{content:"";position:absolute;border-radius:50%;filter:blur(60px);opacity:.18}
+    .hero-fig:before{width:520px;height:520px;background:radial-gradient(circle,var(--cyan),transparent 70%);top:-120px;right:-120px}
+    .hero-fig:after{width:420px;height:420px;background:radial-gradient(circle,var(--green),transparent 70%);bottom:-120px;left:-120px}
+
+
+
+
+    /* services section */
+    section{padding:64px 0}
+    h2{font-size:clamp(24px,4.2vw,36px);margin:0 0 10px}
+    .section-lead{color:#cbd5e1;margin:0 0 24px}
+    .grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    @media (max-width: 1200px){.grid{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width: 800px){.grid{grid-template-columns:1fr}}
+    .card{position:relative;border-radius:20px;padding:26px;background:var(--card);border:1px solid var(--muted);backdrop-filter:blur(6px);transition:transform .25s,border-color .25s;display:grid;grid-template-rows:auto auto auto 1fr auto;align-items:start;gap:12px}
+    .card:hover{transform:translateY(-6px);border-color:var(--ring)}
+    .card .btn{margin-top:auto;align-self:flex-start}
+    .card:hover{transform:translateY(-6px);border-color:var(--ring)}
+    .card .btn{margin-top:auto;align-self:flex-start}
+    .card:hover{transform:translateY(-6px);border-color:var(--ring)}
+    .tag{display:inline-block;font-size:.78rem;font-weight:800;letter-spacing:.3px;padding:6px 10px;border-radius:999px;margin-bottom:10px;border:1px solid var(--muted);opacity:.9}
+    .starter .tag{color:var(--cyan)}
+    .basic .tag{color:var(--green)}
+    .pro .tag{color:var(--purple)}
+    .card h3{margin:6px 0 6px;font-size:1.4rem;min-height:2.6em;display:flex;align-items:flex-end}
+    .card .subtle{display:block;width:100%;margin:2px 0 6px;line-height:1.5;min-height:3.4em}
+    .card > *{width:100%;}
+    .card .subtle + div{min-height:76px;display:flex;flex-wrap:wrap;gap:8px} 
+    .card .subtle{display:block;width:100%;margin:6px 0 8px;line-height:1.5} 
+    .card > *{width:100%;}
+    .pill{display:inline-block;margin:10px 6px 0 0;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--muted);font-size:.8rem;color:#cbd5e1}
+    .benefits{margin:14px 0 18px;padding:0;list-style:none}
+    .benefits li{position:relative;margin:12px 0;padding-left:1.4em;color:#dbeafe;line-height:1.5;word-break:normal}
+    .benefits li::before{content:"✓";position:absolute;left:0;top:.15em;color:var(--green);font-weight:900}
+    .benefits li strong{display:block;margin-top:2px}
+
+
+
+
+    /* results */
+    .results{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:18px}
+    @media (max-width:900px){.results{grid-template-columns:1fr}}
+    .kpi{padding:22px;border-radius:16px;background:var(--card);border:1px solid var(--muted);text-align:center}
+    .kpi strong{font-size:1.4rem;background:linear-gradient(135deg,var(--cyan),var(--green));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent}
+    .kpi p{margin:6px 0 0;color:#cbd5e1}
+
+
+
+
+    /* comparison band */
+    .compare{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:16px}
+    .compare .band{padding:16px;border-radius:14px;background:var(--card);border:1px solid var(--muted)}
+    .band h4{margin:0 0 8px}
+    .band p{margin:0;color:#cbd5e1}
+
+
+
+
+    /* proof */
+    .proof{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+    @media (max-width:900px){.proof{grid-template-columns:1fr}}
+    .tick{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--muted);border-radius:14px;padding:16px}
+    .tick:before{content:"★";color:var(--green);opacity:.9}
+
+
+
+
+    /* CTA */
+    .cta{padding:72px 0 88px;text-align:center}
+    .cta h2{font-size:clamp(28px,5vw,44px)}
+    .cta p{max-width:760px;margin:10px auto 20px;color:#cbd5e1}
+    .footer{margin-top:18px;color:#94a3b8}
+    .footer a{border-bottom:1px dashed rgba(255,255,255,.25)}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="hero-fig" aria-hidden="true"></div>
+    <div class="hero container hero">
+      <span class="badge">PROCUREX INTELLIGENCE</span>
+      <h1>Compra <span class="highlight">mejor</span> en horas, controla la entrega y <span class="highlight">captura valor</span> de forma recurrente</h1>
+      <p>Una única plataforma de servicios para PYMES que transforma tus compras en resultados: decisión rápida, ejecución controlada y ahorros medidos. Sin sistemas complejos.</p>
+      <a href="#servicios" class="btn">Ver servicios</a>
+    </div>
+  </header>
+
+
+
+
+  <main id="servicios" class="container">
+    <!-- Services Cards -->
+    <section aria-labelledby="svc-title">
+      <h2 id="svc-title">Tres servicios, un mismo objetivo: resultados</h2>
+      <p class="section-lead">Elige el nivel que necesitas hoy. Puedes escalar cuando quieras.</p>
+      <div class="grid">
+        <!-- STARTER -->
+        <article class="card starter" aria-labelledby="starter-title">
+          <span class="tag">STARTER</span>
+          <h3 id="starter-title">Decide en horas, con claridad</h3>
+          <p class="subtle">Comparación justa de ofertas para comprar rápido y con respaldo.</p>
+          <div>
+            <span class="pill">3–5 cotizaciones comparables</span>
+            <span class="pill">recomendación experta</span>
+            <span class="pill">evidencia documentada</span>
+          </div>
+          <ul class="benefits">
+            <li>Evitas semanas de correos y cotizas <strong>en el día</strong></li>
+            <li>Decisiones claras: <strong>mismo formato, mismas reglas</strong></li>
+            <li>Tu equipo dedica menos tiempo a cotizar y más a producir</li>
+          </ul>
+          <a class="btn" href="#contacto" aria-label="Solicitar demo Starter">Solicitar demo</a>
+        </article>
+
+
+
+
+        <!-- BASIC -->
+        <article class="card basic" aria-labelledby="basic-title">
+          <span class="tag">BASIC</span>
+          <h3 id="basic-title">Control hasta tu bodega</h3>
+          <p class="subtle">Visibilidad de punta a punta y alertas oportunas para llegar a tiempo.</p>
+          <div>
+            <span class="pill">tablero compartido</span>
+            <span class="pill">alertas de excepción</span>
+            <span class="pill">cierre trazable</span>
+          </div>
+          <ul class="benefits">
+            <li>Sabrás <strong>dónde está cada orden</strong> y qué sigue</li>
+            <li>Alertas inmediatas ante demoras, con <strong>plan de acción</strong></li>
+            <li>Recepción confirmada y <strong>registro final</strong> para auditoría</li>
+          </ul>
+          <a class="btn" href="#contacto" aria-label="Solicitar demo Basic">Solicitar demo</a>
+        </article>
+
+
+
+
+        <!-- PRO -->
+        <article class="card pro" aria-labelledby="pro-title">
+          <span class="tag">PRO</span>
+          <h3 id="pro-title">Ahorros recurrentes, medidos</h3>
+          <p class="subtle">Planificación y negociación por olas para capturar y demostrar valor.</p>
+          <div>
+            <span class="pill">plan de compras</span>
+            <span class="pill">negociación estructurada</span>
+            <span class="pill">ahorros validados</span>
+          </div>
+          <ul class="benefits">
+            <li>Consolidas demanda y <strong>mejoras condiciones</strong></li>
+            <li>Rondas competitivas y BAFO para <strong>precio y términos</strong></li>
+            <li>Valor probado: PPV/TCO/DPO con <strong>línea base y seguimiento</strong></li>
+          </ul>
+          <a class="btn" href="#contacto" aria-label="Solicitar demo PRO">Solicitar demo</a>
+        </article>
+      </div>
+
+
+
+
+      <!-- quick compare band -->
+      <div class="compare" aria-label="Resumen comparativo">
+        <div class="band">
+          <h4>Starter · Resultado</h4>
+          <p>Decisión de compra <strong>en horas</strong> con evidencia y trazabilidad.</p>
+        </div>
+        <div class="band">
+          <h4>Basic · Resultado</h4>
+          <p>Entrega <strong>bajo control</strong> hasta bodega, sin sorpresas.</p>
+        </div>
+        <div class="band">
+          <h4>PRO · Resultado</h4>
+          <p>Ahorros y mejoras <strong>recurrentes y medidos</strong>.</p>
+        </div>
+      </div>
+    </section>
+
+
+
+
+    <!-- Results / Outcomes section -->
+    <section aria-labelledby="outcomes-title">
+      <h2 id="outcomes-title">Resultados que puedes esperar</h2>
+      <p class="section-lead">Hablamos de impacto, no de promesas vacías.</p>
+      <div class="results">
+        <div class="kpi"><strong>Decisiones en horas</strong><p>sin perder días comparando correos y formatos.</p></div>
+        <div class="kpi"><strong>Visibilidad end‑to‑end</strong><p>del estado real de cada orden hasta la recepción.</p></div>
+        <div class="kpi"><strong>Ahorros demostrables</strong><p>con línea base y validación de finanzas (PPV, TCO, DPO).</p></div>
+      </div>
+    </section>
+
+
+
+
+    <!-- Proof / Why PX -->
+    <section aria-labelledby="why-title">
+      <h2 id="why-title">¿Por qué ProcureX?</h2>
+      <p class="section-lead">Porque combinamos claridad, control y captura de valor en un solo lugar.</p>
+      <div class="proof">
+        <div class="tick"><div>
+          <strong>Simple de adoptar</strong>
+          <p class="subtle">Sin sistemas complejos. Empezamos con tus SKUs reales y avanzamos.</p>
+        </div></div>
+        <div class="tick"><div>
+          <strong>Transparencia total</strong>
+          <p class="subtle">Evidencias y trazabilidad para auditoría y reportes internos.</p>
+        </div></div>
+        <div class="tick"><div>
+          <strong>Gobernanza ligera</strong>
+          <p class="subtle">Reuniones cortas para ajustar criterios y mantener el ritmo.</p>
+        </div></div>
+        <div class="tick"><div>
+          <strong>Escalable</strong>
+          <p class="subtle">Parte en Starter, suma seguimiento con Basic y evoluciona a PRO.</p>
+        </div></div>
+      </div>
+    </section>
+  </main>
+
+
+
+
+  <!-- CTA -->
+  <section id="contacto" class="cta">
+    <div class="container">
+      <h2>¿Listo para comprar mejor y con menos riesgo?</h2>
+      <p>Solicita tu demo y comienza a decidir en horas, con ejecución bajo control y ahorros medibles cuando estés listo para PRO.</p>
+      <p><a class="btn" href="mailto:px@procure-x.cl">px@procure-x.cl</a></p>
+      <div class="footer">
+        <span>También podemos atenderte en WhatsApp · +56 9 8596 0018</span>
+      </div>
+    </div>
+  </section>
+</body>
+</html>
