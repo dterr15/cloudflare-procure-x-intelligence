@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicio PRO - ProcureX Intelligence</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        :root {
+            --primary-blue: #1e3a8a;
+            --secondary-cyan: #06b6d4;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --neutral-slate: #64748b;
+            --neutral-light: #f1f5f9;
+            --success-green: #22c55e;
+            --warning-amber: #f59e0b;
+        }
+
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #000;
+            color: white;
+            overflow-x: hidden;
+        }
+
+
+        .slides-container {
+            width: 100%;
+            overflow-y: auto;
+            position: relative;
+            scroll-behavior: smooth;
+        }
+
+
+        .slide {
+            width: 100%;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 6rem 4rem;
+        }
+
+
+        .slide-1 {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0f172a 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        .slide-1::before {
+            content: '';
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, var(--accent-purple) 0%, transparent 70%);
+            top: -300px;
+            right: -300px;
+            opacity: 0.2;
+            animation: pulse 4s ease-in-out infinite;
+        }
+
+
+        .slide-1::after {
+            content: '';
+            position: absolute;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, var(--accent-green) 0%, transparent 70%);
+            bottom: -200px;
+            left: -200px;
+            opacity: 0.15;
+            animation: pulse 4s ease-in-out infinite 2s;
+        }
+
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 0.2; }
+            50% { transform: scale(1.2); opacity: 0.3; }
+        }
+
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 900px;
+        }
+
+
+        .logo-container {
+            margin-bottom: 3rem;
+        }
+
+
+        .logo-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-green));
+            border-radius: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3rem;
+            font-weight: 900;
+            margin: 0 auto 1.5rem;
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.4);
+            animation: float 3s ease-in-out infinite;
+        }
+
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+        }
+
+
+        .company-name {
+            font-size: 1.5rem;
+            font-weight: 300;
+            letter-spacing: 4px;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+        }
+
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 1.1;
+            margin-bottom: 1.5rem;
+        }
+
+
+        .hero-title .highlight {
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+            font-weight: 600;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+            color: var(--accent-purple);
+        }
+
+
+        .client-info {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 1.5rem;
+            margin-top: 3rem;
+            padding: 2rem;
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            backdrop-filter: blur(10px);
+        }
+
+
+        .info-item {
+            text-align: left;
+        }
+
+
+        .info-label {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 0.5rem;
+        }
+
+
+        .info-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--accent-green);
+        }
+
+
+        .slide-2 {
+            background: linear-gradient(135deg, #0f172a 0%, var(--primary-blue) 100%);
+        }
+
+
+        .content-box {
+            max-width: 1100px;
+            width: 100%;
+        }
+
+
+        .section-number {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+            opacity: 0.3;
+        }
+
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+        }
+
+
+        .value-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+
+        .value-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        .value-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-purple), var(--accent-green));
+            transform: scaleX(0);
+            transition: transform 0.3s ease;
+        }
+
+
+        .value-card:hover {
+            border-color: var(--accent-purple);
+            transform: translateY(-8px);
+        }
+
+
+        .value-card:hover::before {
+            transform: scaleX(1);
+        }
+
+
+        .value-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+
+        .value-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent-green);
+        }
+
+
+        .value-text {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+
+
+        .slide-3 {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0f172a 100%);
+        }
+
+
+        .dual-column {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+
+        .column {
+            background: rgba(255,255,255,0.05);
+            padding: 3rem;
+            border-radius: 24px;
+            backdrop-filter: blur(10px);
+        }
+
+
+        .column-title {
+            font-size: 2rem;
+            font-weight: 800;
+            margin-bottom: 2rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+
+        .column-title.include {
+            color: var(--success-green);
+        }
+
+
+        .column-title.exclude {
+            color: var(--warning-amber);
+        }
+
+
+        .list-item {
+            display: flex;
+            align-items: start;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.03);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+        }
+
+
+        .list-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(8px);
+        }
+
+
+        .list-icon {
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+
+        .list-text {
+            font-size: 1rem;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+
+        .slide-4 {
+            background: linear-gradient(135deg, #0f172a 0%, var(--primary-blue) 100%);
+        }
+
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+
+        .metric-card {
+            background: rgba(255,255,255,0.05);
+            padding: 3rem;
+            border-radius: 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+
+        .metric-card:hover {
+            border-color: var(--accent-purple);
+            transform: scale(1.05);
+        }
+
+
+        .metric-icon {
+            font-size: 4rem;
+            margin-bottom: 1.5rem;
+        }
+
+
+        .metric-value {
+            font-size: 3.5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+
+        .metric-label {
+            font-size: 1.2rem;
+            font-weight: 600;
+            opacity: 0.9;
+        }
+
+
+        .metric-detail {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-top: 1rem;
+        }
+
+
+        .slide-5 {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0f172a 100%);
+        }
+
+
+        .process-flow {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+
+        .process-step {
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            text-align: center;
+            position: relative;
+            border: 2px solid transparent;
+            transition: all 0.3s ease;
+        }
+
+
+        .process-step:hover {
+            border-color: var(--accent-purple);
+            transform: translateY(-10px);
+        }
+
+
+        .step-number-badge {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            margin: 0 auto 1.5rem;
+        }
+
+
+        .step-title {
+            font-size: 1rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--accent-green);
+        }
+
+
+        .step-desc {
+            font-size: 0.85rem;
+            opacity: 0.8;
+            line-height: 1.4;
+        }
+
+
+        .slide-6 {
+            background: linear-gradient(135deg, #0f172a 0%, var(--primary-blue) 100%);
+        }
+
+
+        .tracking-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+
+        .feature-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+
+
+        .feature-card:nth-child(1) { border-color: var(--accent-green); }
+        .feature-card:nth-child(2) { border-color: var(--secondary-cyan); }
+        .feature-card:nth-child(3) { border-color: var(--accent-purple); }
+        .feature-card:nth-child(4) { border-color: var(--warning-amber); }
+
+
+        .feature-card:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(10px);
+        }
+
+
+        .feature-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent-green);
+        }
+
+
+        .feature-text {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+
+        .slide-7 {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0f172a 100%);
+        }
+
+
+        .slide-8 {
+            background: linear-gradient(135deg, #0f172a 0%, var(--primary-blue) 100%);
+        }
+
+
+        .criteria-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+
+        .criteria-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2.5rem;
+            border-radius: 20px;
+            border-left: 4px solid;
+            transition: all 0.3s ease;
+        }
+
+
+        .criteria-card:nth-child(1) { border-color: var(--accent-green); }
+        .criteria-card:nth-child(2) { border-color: var(--secondary-cyan); }
+        .criteria-card:nth-child(3) { border-color: var(--accent-purple); }
+        .criteria-card:nth-child(4) { border-color: var(--warning-amber); }
+
+
+        .criteria-card:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(10px);
+        }
+
+
+        .criteria-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent-green);
+        }
+
+
+        .criteria-items {
+            list-style: none;
+        }
+
+
+        .criteria-items li {
+            padding: 0.5rem 0;
+            opacity: 0.9;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+
+        .criteria-items li::before {
+            content: '◆';
+            color: var(--accent-purple);
+        }
+
+
+        .slide-9 {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0f172a 100%);
+        }
+
+
+        .slide-10 {
+            background: linear-gradient(135deg, #0f172a 0%, var(--primary-blue) 100%);
+        }
+
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+
+        .kpi-card {
+            background: rgba(255,255,255,0.05);
+            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+
+        .kpi-card:hover {
+            border-color: var(--accent-purple);
+            transform: scale(1.08);
+        }
+
+
+        .kpi-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+        }
+
+
+        .kpi-number {
+            font-size: 2.5rem;
+            font-weight: 900;
+            color: var(--accent-green);
+            margin-bottom: 0.5rem;
+        }
+
+
+        .kpi-label {
+            font-size: 0.95rem;
+            opacity: 0.9;
+            line-height: 1.4;
+        }
+
+
+        .slide-11 {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, #0f172a 100%);
+        }
+
+
+        .steps-timeline {
+            margin-top: 3rem;
+            position: relative;
+        }
+
+
+        .timeline-step {
+            display: flex;
+            align-items: start;
+            gap: 2rem;
+            margin-bottom: 3rem;
+            opacity: 0;
+            transform: translateX(-50px);
+            animation: slideIn 0.6s ease forwards;
+        }
+
+
+        .timeline-step:nth-child(1) { animation-delay: 0.2s; }
+        .timeline-step:nth-child(2) { animation-delay: 0.4s; }
+        .timeline-step:nth-child(3) { animation-delay: 0.6s; }
+        .timeline-step:nth-child(4) { animation-delay: 0.8s; }
+
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+
+        .timeline-number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            font-weight: 900;
+            flex-shrink: 0;
+        }
+
+
+        .timeline-content {
+            flex: 1;
+            background: rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 16px;
+        }
+
+
+        .timeline-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: var(--accent-green);
+        }
+
+
+        .timeline-text {
+            opacity: 0.9;
+            line-height: 1.6;
+        }
+
+
+        .slide-12 {
+            background: linear-gradient(135deg, #0f172a 0%, var(--primary-blue) 100%);
+            position: relative;
+            overflow: hidden;
+        }
+
+
+        .slide-12::before {
+            content: '';
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            background: radial-gradient(circle, var(--accent-purple) 0%, transparent 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            opacity: 0.15;
+            animation: rotate 20s linear infinite;
+        }
+
+
+        @keyframes rotate {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+
+        .cta-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            max-width: 700px;
+        }
+
+
+        .cta-title {
+            font-size: 3.5rem;
+            font-weight: 900;
+            margin-bottom: 2rem;
+            line-height: 1.2;
+        }
+
+
+        .cta-subtitle {
+            font-size: 1.5rem;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+        }
+
+
+        .cta-button {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--accent-purple), var(--accent-green));
+            color: white;
+            padding: 1.5rem 4rem;
+            border-radius: 50px;
+            font-size: 1.3rem;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 20px 60px rgba(139, 92, 246, 0.4);
+        }
+
+
+        .cta-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 80px rgba(139, 92, 246, 0.6);
+        }
+
+
+        .contact-info {
+            margin-top: 3rem;
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+
+        .nego-card {
+            background: rgba(139, 92, 246, 0.1);
+            padding: 2rem;
+            border-radius: 16px;
+            border: 2px solid var(--accent-purple);
+            margin-top: 2rem;
+        }
+
+
+        .nego-title {
+            color: var(--accent-purple);
+            font-weight: 700;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+
+        @media (max-width: 768px) {
+            .hero-title { font-size: 2.5rem; }
+            .value-grid { grid-template-columns: 1fr; }
+            .dual-column { grid-template-columns: 1fr; }
+            .metrics-grid { grid-template-columns: 1fr; }
+            .criteria-grid { grid-template-columns: 1fr; }
+            .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+            .process-flow { grid-template-columns: 1fr; }
+            .tracking-features { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <div class="slides-container">
+        <!-- SLIDE 1: PORTADA -->
+        <div class="slide slide-1">
+            <div class="hero-content">
+                <div class="logo-container">
+                    <div class="logo-icon">PX</div>
+                    <div class="company-name">PROCUREX INTELLIGENCE</div>
+                </div>
+                <h1 class="hero-title">
+                    Servicio <span class="highlight">PRO</span><br>
+                    para PYMES
+                </h1>
+                <p class="hero-subtitle">Decisiones Rápidas - Compras Optimizadas - Ahorros Recurrentes</p>
+                <div class="client-info">
+                    <div class="info-item">
+                        <div class="info-label">Cliente</div>
+                        <div class="info-value">{{Nombre del Cliente}}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Industria</div>
+                        <div class="info-value">{{Sector Industrial}}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Fecha</div>
+                        <div class="info-value">{{Fecha Presentación}}</div>
+                    </div>
+                    <div class="info-item">
+                        <div class="info-label">Contacto</div>
+                        <div class="info-value">{{Email/Teléfono}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 2: PROPÓSITO -->
+        <div class="slide slide-2">
+            <div class="content-box">
+                <div class="section-number">01</div>
+                <h2 class="section-title">Propuesta de Valor</h2>
+                <p style="font-size: 1.4rem; opacity: 0.9; margin-bottom: 2rem; line-height: 1.6;">
+                    Combinamos <strong style="color: var(--accent-green);">velocidad en sourcing</strong>, 
+                    <strong style="color: var(--secondary-cyan);">control hasta bodega</strong> y 
+                    <strong style="color: var(--accent-purple);">mejora continua</strong> para capturar valor económico de forma recurrente.
+                </p>
+                <div class="value-grid">
+                    <div class="value-card">
+                        <div class="value-icon">📊</div>
+                        <div class="value-title">Cotiza</div>
+                        <div class="value-text">
+                            En horas, con 3-5 alternativas comparables
+                        </div>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">🎯</div>
+                        <div class="value-title">Monitorea</div>
+                        <div class="value-text">
+                            Seguimiento hasta recepción en bodega
+                        </div>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">📈</div>
+                        <div class="value-title">Planifica</div>
+                        <div class="value-text">
+                            Consolida demanda y optimiza olas de compra
+                        </div>
+                    </div>
+                    <div class="value-card">
+                        <div class="value-icon">💼</div>
+                        <div class="value-title">Negocia</div>
+                        <div class="value-text">
+                            Captura ahorros y mejora condiciones
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 3: ALCANCE -->
+        <div class="slide slide-3">
+            <div class="content-box">
+                <div class="section-number">02</div>
+                <h2 class="section-title">Alcance Completo</h2>
+                <div class="dual-column">
+                    <div class="column">
+                        <h3 class="column-title include">✓ Servicio Completo Incluye</h3>
+                        <div class="list-item">
+                            <div class="list-icon">✓</div>
+                            <div class="list-text">Sourcing Express: 3-5 cotizaciones por SKU</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✓</div>
+                            <div class="list-text">Seguimiento operativo hasta bodega</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✓</div>
+                            <div class="list-text">Planificación de compras trimestral/mensual</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✓</div>
+                            <div class="list-text">Negociación con Proveedores</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✓</div>
+                            <div class="list-text">Repositorio de documentación para revisión</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✓</div>
+                            <div class="list-text">Reporte de ahorros y mejora de términos</div>
+                        </div>
+                    </div>
+                    <div class="column">
+                        <h3 class="column-title exclude">✗ No Incluye</h3>
+                        <div class="list-item">
+                            <div class="list-icon">✗</div>
+                            <div class="list-text">Análisis de servicios (solo productos)</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✗</div>
+                            <div class="list-text">Negociación legal avanzada o contratos marco</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✗</div>
+                            <div class="list-text">Inspecciones o pruebas de calidad</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✗</div>
+                            <div class="list-text">Importación, aduanas o logística especializada</div>
+                        </div>
+                        <div class="list-item">
+                            <div class="list-icon">✗</div>
+                            <div class="list-text">Gestión documental activa (solo repositorio on-demand)</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 4: SLA -->
+        <div class="slide slide-4">
+            <div class="content-box">
+                <div class="section-number">03</div>
+                <h2 class="section-title">Compromisos de Servicio</h2>
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.8rem; color: var(--accent-green); margin-bottom: 1.5rem;">Sourcing Express</h3>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">⚡</div>
+                        <div class="metric-value">1</div>
+                        <div class="metric-label">Día Laboral</div>
+                        <div class="metric-detail">Cotizaciones Rápidas</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">🎯</div>
+                        <div class="metric-value">95%</div>
+                        <div class="metric-label">On-Time</div>
+                        <div class="metric-detail">Entregas</div>
+                    </div>
+                </div>
+                <div style="margin-top: 3rem; margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.8rem; color: var(--secondary-cyan); margin-bottom: 1.5rem;">Seguimiento Operativo</h3>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">🚀</div>
+                        <div class="metric-value">&lt;4h</div>
+                        <div class="metric-label">Kick-off</div>
+                        <div class="metric-detail">Desde confirmación de selección</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">📋</div>
+                        <div class="metric-value">100%</div>
+                        <div class="metric-label">Cobertura</div>
+                        <div class="metric-detail">Todas las órdenes con seguimiento</div>
+                    </div>
+                </div>
+                <div style="margin-top: 3rem; margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.8rem; color: var(--accent-purple); margin-bottom: 1.5rem;">Planificación y Negociación</h3>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-icon">📅</div>
+                        <div class="metric-value">1–3</div>
+                        <div class="metric-label">Semanas por Ola</div>
+                        <div class="metric-detail">Desde RFQ hasta cierre de negociación</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-icon">💼</div>
+                        <div class="metric-value">30–45min</div>
+                        <div class="metric-label">Sesión de Alineamiento</div>
+                        <div class="metric-detail">Por ciclo de planificación</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 5: FLUJO E2E -->
+        <div class="slide slide-5">
+            <div class="content-box">
+                <div class="section-number">04</div>
+                <h2 class="section-title">Flujo Operativo Integrado</h2>
+                <div class="process-flow">
+                    <div class="process-step">
+                        <div class="step-number-badge">1</div>
+                        <div class="step-title">Sourcing Express</div>
+                        <div class="step-desc">Cotizaciones y recomendación rápida</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number-badge">2</div>
+                        <div class="step-title">Selección</div>
+                        <div class="step-desc">Cliente emite OC</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number-badge">3</div>
+                        <div class="step-title">Seguimiento</div>
+                        <div class="step-desc">Control hasta bodega</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number-badge">4</div>
+                        <div class="step-title">Análisis de Demanda</div>
+                        <div class="step-desc">Consolidación por categorías</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number-badge">5</div>
+                        <div class="step-title">Planificación</div>
+                        <div class="step-desc">Definición de olas y calendario</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number-badge">6</div>
+                        <div class="step-title">Preparación</div>
+                        <div class="step-desc">Objetivos y palancas de negociación</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number-badge">7</div>
+                        <div class="step-title">Negociación</div>
+                        <div class="step-desc">Rondas y BAFO con proveedores</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number-badge">8</div>
+                        <div class="step-title">Cierre</div>
+                        <div class="step-desc">Minuta de acuerdo comercial</div>
+                    </div>
+                    <div class="process-step">
+                        <div class="step-number-badge">9</div>
+                        <div class="step-title">Medición</div>
+                        <div class="step-desc">Ahorros y mejora continua</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 6: PLANIFICACIÓN -->
+        <div class="slide slide-6">
+            <div class="content-box">
+                <div class="section-number">05</div>
+                <h2 class="section-title">Planificación Estratégica de Compras</h2>
+                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem;">
+                    Conviertes la compra en una estrategia
+                </p>
+                <div class="tracking-features">
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <div class="feature-title">Análisis de Demanda</div>
+                        <div class="feature-text">
+                            Detectamos tu demanda real
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-title">Segmentación ABC</div>
+                        <div class="feature-text">
+                            Priorizamos lo crítico
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📅</div>
+                        <div class="feature-title">Calendario de Olas</div>
+                        <div class="feature-text">
+                            Armamos olas de negociación
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💡</div>
+                        <div class="feature-title">Escenarios</div>
+                        <div class="feature-text">
+                            Recibes escenarios comparables (spot vs. acuerdos).
+                        </div>
+                    </div>
+                </div>
+                <div class="nego-card">
+                    <div class="nego-title">🗓️ Ciclo Sugerido</div>
+                    <p style="opacity: 0.9;">
+                        <strong>Mensual o Trimestral</strong> según volumen y complejidad de categorías. 
+                        Incluye sesión de alineamiento de 30-45 minutos por ciclo.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 7: NEGOCIACIÓN -->
+        <div class="slide slide-7">
+            <div class="content-box">
+                <div class="section-number">06</div>
+                <h2 class="section-title">Negociación Estructurada</h2>
+                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem;">
+                    
+                </p>
+                <div class="tracking-features">
+                    <div class="feature-card">
+                        <div class="feature-icon">🎯</div>
+                        <div class="feature-title">Preparación</div>
+                        <div class="feature-text">
+                            Objetivos claros
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💼</div>
+                        <div class="feature-title">Ejecución</div>
+                        <div class="feature-text">
+                        Rondas de proveedores con comparativas
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📋</div>
+                        <div class="feature-title">Cierre</div>
+                        <div class="feature-text">
+                            Acuerdo comercial con mejores condiciones
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📈</div>
+                        <div class="feature-title">Palancas Típicas</div>
+                        <div class="feature-text">
+                            Precio por escalas, términos de pago, consolidación de SKUs, Incoterms, garantías, rebates
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 2rem; padding: 1.5rem; background: rgba(255,255,255,0.05); border-radius: 12px; border-left: 4px solid var(--accent-purple);">
+                    <p style="font-size: 1rem; opacity: 0.9;">
+                        <strong style="color: var(--accent-purple);">📝 Importante:</strong> 
+                        Cliente firma y resguarda documentación. Nosotros generamos minutas y referencias en repositorio.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 8: CRITERIOS -->
+        <div class="slide slide-8">
+            <div class="content-box">
+                <div class="section-number">07</div>
+                <h2 class="section-title">Criterios de Evaluación</h2>
+                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem;">
+                    Evaluación integral con foco en <strong style="color: var(--accent-green);">TCO</strong> y 
+                    <strong style="color: var(--accent-purple);">condiciones comerciales</strong>
+                </p>
+                <div class="criteria-grid">
+                    <div class="criteria-card">
+                        <div class="criteria-title">💰 Económicos</div>
+                        <ul class="criteria-items">
+                            <li>Precio unitario y escalas</li>
+                            <li>Flete e impuestos</li>
+                            <li>TCO (Total Cost of Ownership)</li>
+                            <li>Rebates y descuentos por volumen</li>
+                        </ul>
+                    </div>
+                    <div class="criteria-card">
+                        <div class="criteria-title">⚙️ Operativos</div>
+                        <ul class="criteria-items">
+                            <li>Lead time comprometido</li>
+                            <li>MOQ y capacidad de entrega</li>
+                            <li>Fill rate histórico</li>
+                            <li>Flexibilidad operativa</li>
+                        </ul>
+                    </div>
+                    <div class="criteria-card">
+                        <div class="criteria-title">📄 Comerciales/Legales</div>
+                        <ul class="criteria-items">
+                            <li>Términos de pago (DPO)</li>
+                            <li>Vigencia y renovación</li>
+                            <li>Garantías y postventa</li>
+                            <li>Política de devoluciones</li>
+                        </ul>
+                    </div>
+                    <div class="criteria-card">
+                        <div class="criteria-title">⚠️ Riesgo</div>
+                        <ul class="criteria-items">
+                            <li>Historial de cumplimiento</li>
+                            <li>Estabilidad del proveedor</li>
+                            <li>Disponibilidad de alternativas</li>
+                            <li>Criticidad del SKU</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 9: MEDICIÓN DE VALOR -->
+        <div class="slide slide-9">
+            <div class="content-box">
+                <div class="section-number">08</div>
+                <h2 class="section-title">Medición de Ahorro y Valor</h2>
+                <p style="font-size: 1.2rem; opacity: 0.9; margin-bottom: 2rem;">
+                    Documentamos y validamos el valor capturado
+                </p>
+                <div class="tracking-features">
+                    <div class="feature-card">
+                        <div class="feature-icon">💵</div>
+                        <div class="feature-title">PPV (Price Variance)</div>
+                        <div class="feature-text">
+                            Diferencia entre precio nuevo vs. línea base documentada y validada
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">📊</div>
+                        <div class="feature-title">TCO Directo</div>
+                        <div class="feature-text">
+                            Precio + flete + impuestos normalizados para comparación real
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">💰</div>
+                        <div class="feature-title">Efecto Caja</div>
+                        <div class="feature-text">
+                            Mejora en términos de pago (DPO) y rebates que impactan flujo de efectivo
+                        </div>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">⏱️</div>
+                        <div class="feature-title">Lead Time</div>
+                        <div class="feature-text">
+                            Reducción de días vs. base y su impacto operativo documentado
+                        </div>
+                    </div>
+                </div>
+                <div class="nego-card">
+                    <div class="nego-title">📈 Línea Base y Seguimiento</div>
+                    <p style="opacity: 0.9;">
+                        Establecemos línea base documentada, validamos con finanzas del cliente, 
+                        separamos ahorros <strong>comprometidos vs. realizados</strong> y medimos curva de maduración.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 10: KPIs -->
+        <div class="slide slide-10">
+            <div class="content-box">
+                <div class="section-number">09</div>
+                <h2 class="section-title">KPIs de Servicio Integrado</h2>
+                <div style="margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.5rem; color: var(--accent-green); margin-bottom: 1rem;">Sourcing</h3>
+                </div>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">🎯</div>
+                        <div class="kpi-number">≥3</div>
+                        <div class="kpi-label">Cotizaciones por SKU</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">⏱️</div>
+                        <div class="kpi-number">&lt;1d</div>
+                        <div class="kpi-label">Tiempo de ciclo</div>
+                    </div>
+                </div>
+                <div style="margin-top: 3rem; margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.5rem; color: var(--secondary-cyan); margin-bottom: 1rem;">Seguimiento</h3>
+                </div>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">📦</div>
+                        <div class="kpi-number">OTIF</div>
+                        <div class="kpi-label">On-Time In-Full a bodega</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">⚠️</div>
+                        <div class="kpi-number">Tasa</div>
+                        <div class="kpi-label">Resolución incidencias</div>
+                    </div>
+                </div>
+                <div style="margin-top: 3rem; margin-bottom: 2rem;">
+                    <h3 style="font-size: 1.5rem; color: var(--accent-purple); margin-bottom: 1rem;">Planificación y Negociación</h3>
+                </div>
+                <div class="kpi-grid">
+                    <div class="kpi-card">
+                        <div class="kpi-icon">💰</div>
+                        <div class="kpi-number">%</div>
+                        <div class="kpi-label">Ahorro vs. objetivo</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="kpi-icon">💼</div>
+                        <div class="kpi-number">DPO</div>
+                        <div class="kpi-label">Mejora términos de pago</div>
+                    </div>
+                </div>
+                <div style="margin-top: 3rem; text-align: center;">
+                    <div style="background: rgba(255,255,255,0.05); padding: 2rem; border-radius: 16px; display: inline-block;">
+                        <div style="font-size: 1.3rem; font-weight: 700; color: var(--accent-green); margin-bottom: 0.5rem;">
+                            🤝 Gobernanza
+                        </div>
+                        <div style="opacity: 0.9;">
+                            Comité mensual (30-45 min) + Checkpoint semanal (15 min) en olas activas
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 11: PRÓXIMOS PASOS -->
+        <div class="slide slide-11">
+            <div class="content-box">
+                <div class="section-number">10</div>
+                <h2 class="section-title">Próximos Pasos</h2>
+                <div class="steps-timeline">
+                    <div class="timeline-step">
+                        <div class="timeline-number">1</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Aprobación de Alcance</div>
+                            <div class="timeline-text">
+                                Definir categorías/SKUs, ciclo (mensual/trimestral), objetivos de ahorro y modalidad económica
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="timeline-number">2</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Configuración</div>
+                            <div class="timeline-text">
+                                Envío de checklist, datos de contacto (proveedores, bodega), establecimiento de canales y repositorio
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="timeline-number">3</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Piloto</div>
+                            <div class="timeline-text">
+                                1 ola completa + 1-2 solicitudes express con seguimiento para validar formato, tiempos y negociación
+                            </div>
+                        </div>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="timeline-number">4</div>
+                        <div class="timeline-content">
+                            <div class="timeline-title">Operación Continua</div>
+                            <div class="timeline-text">
+                                Ajustes según feedback y arranque de ciclo regular con KPIs, comités y medición de ahorros
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- SLIDE 12: CTA FINAL -->
+        <div class="slide slide-12">
+            <div class="cta-content">
+                <h1 class="cta-title">
+                ¿Listo para que tus compras generen <span style="background: linear-gradient(135deg, var(--accent-purple), var(--accent-green)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">ahorros reales y medibles</span>?
+                </h1>
+                <p class="cta-subtitle">
+                Solicita tu demo hoy y empieza a capturar valor enseguida
+                </p>
+                <a href="mailto:px@procure-x.cl" class="cta-button">
+                    Solicitar Demo
+                </a>
+                <div class="contact-info">
+                    <p>📧 px@procure-x.cl</p>
+                    <p>📱 +56 9 8596 0018</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        function scrollToSlide(index) {
+            const slides = document.querySelectorAll('.slide');
+            slides[index].scrollIntoView({ behavior: 'smooth' });
+        }
+
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const index = Array.from(document.querySelectorAll('.slide')).indexOf(entry.target);
+                }
+            });
+        }, { threshold: 0.5 });
+
+
+        document.querySelectorAll('.slide').forEach(slide => observer.observe(slide));
+    </script>
+</body>
+</html>
+
