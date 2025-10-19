@@ -1,0 +1,41 @@
+Flujo rápido (solo con GitHub web)
+
+Crear rama de trabajo
+
+En el repo: Code → main → New branch
+Nombre: feature/menu-responsive → Create branch.
+
+Editar archivos en esa rama (no en main).
+
+GitHub te mostrará feature/menu-responsive en el selector.
+
+Haz cambios, Commit con mensaje claro (ej. feat(nav): menú móvil accesible).
+
+Abrir Pull Request (PR)
+
+Botón Compare & pull request → base: main, compare: feature/....
+
+Marca como Draft si aún no está listo.
+
+Probar preview en Cloudflare Pages
+
+Activa Preview Deployments por PR (en Cloudflare Pages → Project → Settings → Previews).
+
+Cada PR tendrá su URL de vista previa (ideal para ver menú en móvil).
+
+Merge a main
+
+Cuando se vea bien, Merge (recomiendo Squash & merge para historial limpio).
+
+Cloudflare despliega main → producción.
+
+Eliminar rama (opcional) y crear nueva para el siguiente cambio.
+
+Rollback (cuando algo queda mal)
+
+Revertir un merge: en la página del PR → Revert → crea PR de revert y merge.
+(No borra historial; aplica el inverso del cambio).
+
+Volver a un commit estable: en Commits → abre el commit bueno → Revert.
+
+Tags/Releases (extra): cuando tengas una versión estable, crea un tag v1.0.0. Si algo falla, puedes comparar y revertir hasta ese tag con seguridad.
