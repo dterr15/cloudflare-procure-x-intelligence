@@ -199,6 +199,46 @@
     @media (max-width:640px){
       .hero{padding:6.5rem 0 3rem}
     }
+    /* ↑ Sustituye estas reglas por las siguientes */
+    .menu-backdrop{
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 12, 22, .78);        /* más oscuro */
+      backdrop-filter: blur(3px);
+      opacity: 0;
+      transition: opacity .2s ease;
+      z-index: 1200;                           /* por encima del header */
+      pointer-events: none;                    /* no capta clicks cuando está cerrado */
+    }
+    .menu-panel{
+      position: fixed;
+      right: 12px; left: 12px;
+      /* top lo calcula JS según altura del header */
+      background: rgba(15, 23, 42, .92);       /* fondo sólido y legible */
+      border: 1px solid rgba(255,255,255,.18);
+      border-radius: 14px;
+      box-shadow: 0 20px 60px rgba(0,0,0,.35);
+      transform: translateY(-16px) scale(.98);
+      opacity: 0;
+      transition: transform .22s ease, opacity .2s ease;
+      z-index: 1300;                           /* por encima del backdrop */
+    }
+    .menu-list{list-style:none;margin:6px;padding:6px}
+    .menu-item{
+      display:block; padding:.9rem 1rem; border-radius:10px;
+      color:#fff; text-decoration:none; font-weight:600; letter-spacing:.2px;
+    }
+    .menu-item:hover,.menu-item:focus{outline:none;background:rgba(255,255,255,.10)}
+    .menu-cta{background:var(--accent-green); text-align:center; margin-top:6px}
+    
+    /* Estado abierto */
+    .menu-open .menu-backdrop{opacity:1; pointer-events:auto;}  /* ahora sí capta click */
+    .menu-open .menu-panel{opacity:1; transform:translateY(0) scale(1)}
+    .menu-open body{overflow:hidden}
+    
+    /* Toggle iconos */
+    .menu-open .nav-toggle .icon-burger{display:none}
+    .menu-open .nav-toggle .icon-close{display:block}
   </style>
 </head>
 <body>
@@ -556,57 +596,54 @@
     });
   </script>
   <script>
-  (function(){
-    const header = document.querySelector('.header');
-    const btn = document.getElementById('navToggle');
-    const panel = document.getElementById('mobileMenu');
-    const backdrop = document.getElementById('menuBackdrop');
-    const firstItem = () => panel?.querySelector('.menu-item');
-  
-    function setPanelTop(){
-      const h = header?.offsetHeight || 64;
-      panel.style.top = (h + 8) + 'px'; // 8px de respiro bajo el header
-    }
-  
-    function openMenu(){
+    (function(){
+      const header   = document.querySelector('.header');
+      const btn      = document.getElementById('navToggle');
+      const panel    = document.getElementById('mobileMenu');
+      const backdrop = document.getElementById('menuBackdrop');
+    
+      function setPanelTop(){
+        const h = header?.offsetHeight || 64;
+        panel.style.top = (h + 8) + 'px';
+      }
+    
+      function openMenu(){
+        setPanelTop();
+        document.documentElement.classList.add('menu-open');
+        panel.hidden = false; backdrop.hidden = false;
+        btn.setAttribute('aria-expanded','true');
+        btn.setAttribute('aria-label','Cerrar menú');
+        setTimeout(()=> panel.querySelector('.menu-item')?.focus(), 20);
+        document.body.style.overflow = 'hidden';
+      }
+    
+      function closeMenu(){
+        document.documentElement.classList.remove('menu-open');
+        btn.setAttribute('aria-expanded','false');
+        btn.setAttribute('aria-label','Abrir menú');
+        document.body.style.overflow = '';
+        setTimeout(()=>{ panel.hidden = true; backdrop.hidden = true; }, 180);
+      }
+    
+      btn?.addEventListener('click', () => {
+        (btn.getAttribute('aria-expanded') === 'true') ? closeMenu() : openMenu();
+      });
+    
+      // Cerrar al hacer click en backdrop o en cualquier link del panel
+      backdrop?.addEventListener('click', closeMenu);
+      panel?.addEventListener('click', e => { if (e.target.closest('a')) closeMenu(); });
+    
+      // Cerrar con ESC
+      window.addEventListener('keydown', e => { if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') closeMenu(); });
+    
+      // Cerrar al pasar a desktop
+      const mq = window.matchMedia('(min-width: 921px)');
+      mq.addEventListener?.('change', e => { if (e.matches) closeMenu(); });
+    
+      // Ajuste inicial/resize
+      window.addEventListener('resize', setPanelTop);
       setPanelTop();
-      document.documentElement.classList.add('menu-open');
-      panel.hidden = false; backdrop.hidden = false;
-      btn.setAttribute('aria-expanded','true');
-      btn.setAttribute('aria-label','Cerrar menú');
-      // Foco inicial (accesibilidad)
-      setTimeout(()=> firstItem()?.focus(), 10);
-      // Evita scroll de fondo
-      document.body.style.overflow = 'hidden';
-    }
-  
-    function closeMenu(){
-      document.documentElement.classList.remove('menu-open');
-      btn.setAttribute('aria-expanded','false');
-      btn.setAttribute('aria-label','Abrir menú');
-      document.body.style.overflow = '';
-      // animación: espera fin para ocultar nodos
-      setTimeout(()=>{ panel.hidden = true; backdrop.hidden = true; }, 180);
-    }
-  
-    btn?.addEventListener('click', () => {
-      const open = btn.getAttribute('aria-expanded') === 'true';
-      open ? closeMenu() : openMenu();
-    });
-  
-    // Cerrar por backdrop, ESC o click en links
-    backdrop?.addEventListener('click', closeMenu);
-    panel?.addEventListener('click', (e)=>{
-      const a = e.target.closest('a');
-      if (a) closeMenu();
-    });
-    window.addEventListener('keydown', (e)=>{
-      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') closeMenu();
-    });
-    window.addEventListener('resize', setPanelTop);
-    // Ajuste inicial
-    setPanelTop();
-  })();
+    })();
   </script>
 </body>
 </html>
