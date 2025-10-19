@@ -39,3 +39,46 @@ Revertir un merge: en la página del PR → Revert → crea PR de revert y merge
 Volver a un commit estable: en Commits → abre el commit bueno → Revert.
 
 Tags/Releases (extra): cuando tengas una versión estable, crea un tag v1.0.0. Si algo falla, puedes comparar y revertir hasta ese tag con seguridad.
+
+Protege main (evita errores)
+
+En GitHub: Settings → Branches → Add rule
+
+Branch name pattern: main
+
+Requerir Pull Request para merge
+
+Requerir 1 aprobación (aunque seas tú)
+
+Bloquear push directo a main
+
+Convención de commits (breve)
+
+Usa prefijos tipo Conventional Commits:
+
+feat: nueva función
+
+fix: corrección de bug
+
+docs:, style:, refactor:, chore:
+Ej.: fix(nav): corrige superposición del menú en 360px
+
+Buenas prácticas para tu sitio estático
+
+Ramas pequeñas (un objetivo por rama).
+
+Cache busting en assets: logo.png?v=6.
+
+Pruebas visuales en la URL Preview del PR (móvil/desktop).
+
+Commits atómicos: un cambio lógico por commit.
+
+Siguiente paso (concreto)
+
+Crea la rama feature/menu-desplegable.
+
+Ahí iteramos el menú sin tocar main.
+
+Abrimos PR y validamos en la Preview.
+
+Cuando quede impecable, hacemos Squash & merge a main.
