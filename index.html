@@ -154,6 +154,51 @@
       .step-number{position:relative;left:auto;transform:none;margin-bottom:1rem}
       .timeline-line{display:none}
     }
+        /* Mostrar toggle en móvil, ocultar en desktop */
+    .nav-toggle{display:none;background:transparent;border:0;color:#fff;padding:.5rem;border-radius:.5rem}
+    .nav-toggle .icon-close{display:none}
+    @media (max-width:920px){
+      .nav-links,.nav-cta{display:none}
+      .nav-toggle{display:inline-flex;align-items:center;justify-content:center}
+    }
+    
+    /* Backdrop y panel (móvil) */
+    .menu-backdrop{
+      position:fixed; inset:0; background:rgba(2,6,23,.5); backdrop-filter:blur(2px);
+      opacity:0; transition:opacity .2s ease; z-index:998;
+    }
+    .menu-panel{
+      position:fixed; right:12px; left:12px; /* top se calcula en JS según altura header */
+      background:linear-gradient(135deg,rgba(255,255,255,.12),rgba(255,255,255,.08));
+      border:1px solid rgba(255,255,255,.28); border-radius:14px;
+      backdrop-filter:blur(10px);
+      box-shadow:0 20px 60px rgba(0,0,0,.35);
+      transform:translateY(-16px) scale(.98); opacity:0;
+      transition:transform .22s ease, opacity .2s ease;
+      z-index:999;
+    }
+    .menu-list{list-style:none;margin:6px;padding:6px}
+    .menu-item{
+      display:block; padding:.9rem 1rem; border-radius:10px; color:#fff; text-decoration:none;
+      font-weight:600; letter-spacing:.2px;
+    }
+    .menu-item:hover,.menu-item:focus{outline:none;background:rgba(255,255,255,.18)}
+    .menu-cta{background:var(--accent-green); text-align:center; margin-top:6px}
+    .menu-cta:hover,.menu-cta:focus{filter:brightness(1.05)}
+    
+    /* Estado abierto */
+    .menu-open .menu-backdrop{opacity:1}
+    .menu-open .menu-panel{opacity:1; transform:translateY(0) scale(1)}
+    .menu-open body{overflow:hidden}
+    
+    /* Toggle: cambia icono */
+    .menu-open .nav-toggle .icon-burger{display:none}
+    .menu-open .nav-toggle .icon-close{display:block}
+    
+    /* Pequeños ajustes en cabecera y hero en móviles */
+    @media (max-width:640px){
+      .hero{padding:6.5rem 0 3rem}
+    }
   </style>
 </head>
 <body>
@@ -161,11 +206,11 @@
   <!-- HEADER -->
   <header class="header">
     <div class="container">
-      <nav class="nav">
+      <nav class="nav" role="navigation" aria-label="Principal">
         <div class="logo">
           <a href="/" class="brand">
             <img
-              src="/assets/img/Logo%20ProcureX%20Intelligence.png"
+              src="/assets/img/Logo%20ProcureX%20Intelligence.png?v=6"
               alt="ProcureX Intelligence"
               class="logo-img"
               onload="this.closest('.brand').classList.add('has-img')"
@@ -175,15 +220,36 @@
             <span class="brand-name">ProcureX Intelligence</span>
           </a>
         </div>
-
-        <button class="nav-toggle" aria-expanded="false" aria-controls="primary-menu" aria-label="Abrir menú">☰</button>
-
-        <ul id="primary-menu" class="nav-links">
+      
+        <!-- Desktop -->
+        <ul class="nav-links" id="primary-menu-desktop">
           <li><a href="servicios/showcase.html" class="nav-link">Servicios</a></li>
           <li><a href="#contact" class="nav-link">Contacto</a></li>
         </ul>
-
         <a href="#contact" class="cta-button nav-cta">Consulta sin costo</a>
+      
+        <!-- Toggle móvil -->
+        <button class="nav-toggle" id="navToggle"
+                aria-expanded="false" aria-controls="mobileMenu"
+                aria-label="Abrir menú">
+          <!-- icono hamburguesa / X (SVG accesible) -->
+          <svg class="icon-burger" viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+            <path d="M3 6h18M3 12h18M3 18h18" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+          <svg class="icon-close" viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+            <path d="M6 6l12 12M18 6l-12 12" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+          </svg>
+        </button>
+      
+        <!-- Backdrop + Panel móvil -->
+        <div id="menuBackdrop" class="menu-backdrop" hidden></div>
+        <div id="mobileMenu" class="menu-panel" hidden>
+          <ul class="menu-list" role="menu">
+            <li role="none"><a role="menuitem" tabindex="-1" href="servicios/showcase.html" class="menu-item">Servicios</a></li>
+            <li role="none"><a role="menuitem" tabindex="-1" href="#contact" class="menu-item">Contacto</a></li>
+            <li role="none"><a role="menuitem" tabindex="-1" href="#contact" class="menu-item menu-cta">Consulta sin costo</a></li>
+          </ul>
+        </div>
       </nav>
     </div>
   </header>
@@ -488,6 +554,59 @@
     menu?.addEventListener('click', e => {
       if(e.target.tagName === 'A'){ menu.classList.remove('open'); btn.setAttribute('aria-expanded','false'); }
     });
+  </script>
+  <script>
+  (function(){
+    const header = document.querySelector('.header');
+    const btn = document.getElementById('navToggle');
+    const panel = document.getElementById('mobileMenu');
+    const backdrop = document.getElementById('menuBackdrop');
+    const firstItem = () => panel?.querySelector('.menu-item');
+  
+    function setPanelTop(){
+      const h = header?.offsetHeight || 64;
+      panel.style.top = (h + 8) + 'px'; // 8px de respiro bajo el header
+    }
+  
+    function openMenu(){
+      setPanelTop();
+      document.documentElement.classList.add('menu-open');
+      panel.hidden = false; backdrop.hidden = false;
+      btn.setAttribute('aria-expanded','true');
+      btn.setAttribute('aria-label','Cerrar menú');
+      // Foco inicial (accesibilidad)
+      setTimeout(()=> firstItem()?.focus(), 10);
+      // Evita scroll de fondo
+      document.body.style.overflow = 'hidden';
+    }
+  
+    function closeMenu(){
+      document.documentElement.classList.remove('menu-open');
+      btn.setAttribute('aria-expanded','false');
+      btn.setAttribute('aria-label','Abrir menú');
+      document.body.style.overflow = '';
+      // animación: espera fin para ocultar nodos
+      setTimeout(()=>{ panel.hidden = true; backdrop.hidden = true; }, 180);
+    }
+  
+    btn?.addEventListener('click', () => {
+      const open = btn.getAttribute('aria-expanded') === 'true';
+      open ? closeMenu() : openMenu();
+    });
+  
+    // Cerrar por backdrop, ESC o click en links
+    backdrop?.addEventListener('click', closeMenu);
+    panel?.addEventListener('click', (e)=>{
+      const a = e.target.closest('a');
+      if (a) closeMenu();
+    });
+    window.addEventListener('keydown', (e)=>{
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') closeMenu();
+    });
+    window.addEventListener('resize', setPanelTop);
+    // Ajuste inicial
+    setPanelTop();
+  })();
   </script>
 </body>
 </html>
