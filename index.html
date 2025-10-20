@@ -807,7 +807,7 @@
       const planKey = $("plan").value;
       const cfg = PLAN_CONF[planKey];
 
-      const V = +cleanNumber($("V").value || '0');
+      const V = +(cleanNumber($("V").value) || '0');
       const S = +$("S").value;
 
       const { P } = price(V, S, cfg.R0, cfg.V0, cfg.k, cfg.C1);
@@ -824,6 +824,9 @@
       renderChart(cfg);
     }
 
+    ["plan", "V", "S"].forEach(id => $(id).addEventListener('input', recalc));
+    $("calcular")?.addEventListener('click', recalc);
+
     // ====== FORMATEO AUTOMÁTICO DEL INPUT DE VOLUMEN ======
     const inputV = $("V");
     
@@ -834,46 +837,47 @@
     
     // Función para limpiar formato y obtener número
     function cleanNumber(str) {
-      return str.replace(/\./g, '').replace(/\$/g, '');
+      return str.replace(/\./g, '').replace(/\$/g, '').replace(/\s/g, '');
     }
+    
+    // Variable para evitar loops infinitos
+    let isFormatting = false;
     
     // Evento al escribir
     inputV.addEventListener('input', function(e) {
-      let cursorPos = this.selectionStart;
-      let valueLength = this.value.length;
+      if (isFormatting) return;
+      isFormatting = true;
       
-      // Limpiar y formatear
+      // Limpiar el valor
       let cleanValue = cleanNumber(this.value);
-      if (cleanValue === '') {
+      
+      if (cleanValue === '' || cleanValue === '0') {
         this.value = '';
+        isFormatting = false;
         return;
       }
       
+      // Convertir a número y formatear
       let numValue = parseInt(cleanValue, 10);
       if (isNaN(numValue)) {
         this.value = '';
+        isFormatting = false;
         return;
       }
       
-      // Formatear con puntos
+      // Aplicar formato
       this.value = formatNumber(numValue);
       
-      // Ajustar posición del cursor
-      let newLength = this.value.length;
-      cursorPos = cursorPos + (newLength - valueLength);
-      this.setSelectionRange(cursorPos, cursorPos);
+      isFormatting = false;
     });
     
     // Formatear valor inicial
     if (inputV.value) {
-      inputV.value = formatNumber(inputV.value);
+      inputV.value = formatNumber(cleanNumber(inputV.value));
     }
-
-    ["plan", "V", "S"].forEach(id => $(id).addEventListener('input', recalc));
-    $("calcular")?.addEventListener('click', recalc);
-
+    
     function renderChart(cfg) {
-      const V = +cleanNumber($("V").value || '0');
+      const V = +(cleanNumber($("V").value) || '0');
       const S = +$("S").value || 0;
 
       const maxV = Math.max(5 * cfg.V0, 2 * V, 50000000);
