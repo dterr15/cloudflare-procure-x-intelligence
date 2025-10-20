@@ -880,7 +880,7 @@
       const V = +(cleanNumber($("V").value) || '0');
       const S = +$("S").value || 0;
 
-      const maxV = Math.max(5 * cfg.V0, 2 * V, 50000000);
+      const maxV = Math.max(5 * cfg.V0, 2 * V, 100000000);
       const minV = 0;
       const steps = 140;
 
@@ -902,9 +902,20 @@
       ];
 
       const layout = {
-        margin: { t: 20, r: 20, b: 60, l: 70 },
-        xaxis: { title: 'Volumen (CLP)', tickformat: '$,.0f' },
-        yaxis: { title: 'Precio (CLP)', tickformat: '$,.0f' },
+        margin: { t: 20, r: 20, b: 60, l: 100 }, // Aumentado de 70 a 100
+        xaxis: { 
+          title: 'Volumen (CLP)', 
+          tickformat: '$,.0f',
+          tickangle: -45 // Rotar etiquetas del eje X para evitar superposición
+        },
+        yaxis: { 
+          title: {
+            text: 'Precio (CLP)',
+            standoff: 15 // Separación adicional del título
+          },
+          tickformat: '$,.0f',
+          automargin: true // Ajuste automático si es necesario
+        },
         showlegend: false,
         plot_bgcolor: '#f8fafc',
         paper_bgcolor: '#ffffff',
