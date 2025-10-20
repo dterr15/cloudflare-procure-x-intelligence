@@ -666,58 +666,60 @@
     <div class="container">
       <div class="calculator-container">
         <div class="calculator-card">
-          <h2 class="calculator-title">Calculadora de Pricing Logarítmico</h2>
-          <p class="calculator-subtitle">Modelo minimal: 1 término log por volumen, amplificado por SKUs (β). Resultados en USD.</p>
-
-          <div class="eq">
-            <div><strong>Ecuación</strong></div>
-            <div style="line-height:1.5">
-              P(V, S) = {<br>&nbsp;&nbsp;<b>R₀</b>, si <b>V &lt; V₀</b><br>
-              &nbsp;&nbsp;<b>R₀ + C₁ · log₁₀(1 + (V − V₀)/V₀) · β(S)</b>, si <b>V ≥ V₀</b>}
-            </div>
-            <div>β(S) = 1 + (3.5 · S) / (S + <b>k</b>)</div>
-            <div style="margin-top:6px">ROI = (0.10 · V − P) / P <span style="color:#64748b"> (asume ahorro del 10% de V)</span></div>
-          </div>
-
-          <h3 style="margin:1.5rem 0 1rem;font-size:clamp(1.1rem,2vw,1.3rem);color:var(--primary-blue)">Parámetros</h3>
+          <h2 class="calculator-title">Estimador de Precio y ROI</h2>
+          <p class="calculator-subtitle">
+            Selecciona tu plan y ajusta volumen y SKUs. Calculamos un precio estimado y el ROI asumiendo un 10% de ahorro sobre tu volumen.
+          </p>
+  
+          <h3 style="margin:1.5rem 0 1rem;font-size:clamp(1.1rem,2vw,1.3rem);color:var(--primary-blue)">Configuración</h3>
           <div class="calc-grid">
-            <div class="field"><label class="input-label" for="R0">R₀ (retainer mínimo) — USD</label><input id="R0" type="number" class="input-field" value="1500" min="0" step="50"></div>
-            <div class="field"><label class="input-label" for="V0">V₀ (umbral activación) — USD</label><input id="V0" type="number" class="input-field" value="40000" min="100" step="1000"></div>
-            <div class="field"><label class="input-label" for="k">k (saturación SKUs)</label><input id="k" type="number" class="input-field" value="10" min="1" step="1"></div>
-            <div class="field"><label class="input-label" for="C1">C₁ (coef. variable) — USD</label><input id="C1" type="number" class="input-field" value="800" min="0" step="50"></div>
+            <div class="field">
+              <label class="input-label" for="plan">Plan</label>
+              <select id="plan" class="input-field">
+                <option value="starter">Starter</option>
+                <option value="basic">Basic</option>
+                <option value="pro">PRO</option>
+              </select>
+            </div>
           </div>
-
+  
           <h3 style="margin:1.5rem 0 1rem;font-size:clamp(1.1rem,2vw,1.3rem);color:var(--primary-blue)">Inputs</h3>
           <div class="calc-grid">
-            <div class="field"><label class="input-label" for="V">Volumen V — USD</label><input id="V" type="number" class="input-field" value="100000" min="0" step="5000"></div>
-            <div class="field"><label class="input-label" for="S">SKUs S — cantidad</label><input id="S" type="number" class="input-field" value="50" min="1" step="1"></div>
+            <div class="field">
+              <label class="input-label" for="V">Volumen mensual — moneda base</label>
+              <input id="V" type="number" class="input-field" value="10000000" min="0" step="5000">
+            </div>
+            <div class="field">
+              <label class="input-label" for="S">SKUs — cantidad</label>
+              <input id="S" type="number" class="input-field" value="50" min="1" step="1">
+            </div>
           </div>
-
+  
           <div style="margin-top:2rem">
             <h3 style="margin:0 0 1rem;font-size:clamp(1.1rem,2vw,1.3rem);color:var(--primary-blue)">Curva de Precio vs Volumen</h3>
             <div id="priceChart"></div>
           </div>
-
+  
           <div style="margin-top:2rem">
             <h3 style="margin:0 0 1rem;font-size:clamp(1.1rem,2vw,1.3rem);color:var(--primary-blue)">Resultado</h3>
             <div class="kpi-grid">
-              <div class="k"><small>β(S)</small><b id="betaOut">—</b></div>
-              <div class="k"><small>Precio P(V,S)</small><b id="priceOut">—</b></div>
-              <div class="k"><small>Fee efectivo P/V</small><b id="pctOut">—</b></div>
+              <div class="k"><small>Plan</small><b id="planOut">—</b></div>
+              <div class="k"><small>Precio estimado</small><b id="priceOut">—</b></div>
               <div class="k"><small>Ahorro (10% de V)</small><b id="savOut">—</b></div>
               <div class="k"><small>Beneficio Neto</small><b id="netOut">—</b></div>
               <div class="k"><small>ROI</small><b id="roiOut">—</b></div>
             </div>
             <small style="color:#64748b;display:block;margin-top:1rem;font-size:.85rem">
-              Nota: β(S) ∈ [1, 4.5) con k = 10 y coeficiente 3.5 fijo. ROI asume ahorro del 10% sobre el volumen V.
+              Nota: Los parámetros técnicos (umbral y complejidad por plan) se aplican automáticamente. Usa la misma moneda para tu volumen y la interpretación del precio.
             </small>
           </div>
-
+  
           <button id="calcular" class="cta-button" style="width:100%;margin-top:1.5rem">Recalcular</button>
         </div>
       </div>
     </div>
   </section>
+
 
   <!-- CTA CONTACT -->
   <section class="cta-section" id="contact">
@@ -771,103 +773,101 @@
     document.getElementById('y').textContent = new Date().getFullYear();
 
     // ====== CALCULADORA ======
+    // ====== CALCULADORA (Simplificada por Plan) ======
     const $ = id => document.getElementById(id);
-    const fmtUSD = n => n.toLocaleString('en-US',{style:'currency',currency:'USD',maximumFractionDigits:0});
-    const fmtPct = x => (x*100).toFixed(2)+"%";
-
-    function beta(S, k){ 
-      if(!isFinite(S) || S<=0) return 1; 
-      return 1 + (3.5 * S) / (S + Math.max(1,k)); 
+  
+    // Formato de dinero (usa la configuración local del usuario)
+    const fmtMoney = n =>
+      n.toLocaleString(undefined, { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
+  
+    const fmtPct = x => (x * 100).toFixed(2) + "%";
+  
+    // Parámetros internos por plan
+    // R0: retainer mínimo, V0: umbral de activación, k y C1: complejidad (ocultos en UI)
+    const PLAN_CONF = {
+      starter: { name: 'Starter', R0: 490000,  V0: 15000000, k: 20, C1: 200  }, // Tolerante a varios SKUs simples
+      basic:   { name: 'Basic',   R0: 890000,  V0: 25000000, k: 12, C1: 600  }, // Balance simplicidad/complejidad
+      pro:     { name: 'PRO',     R0: 1390000, V0: 40000000, k: 6,  C1: 1000 }  // Penaliza complejidad temprana
+    };
+  
+    // Modelo (oculto): beta y precio
+    const beta = (S, k) => (!isFinite(S) || S <= 0) ? 1 : 1 + (3.5 * S) / (S + Math.max(1, k));
+  
+    function price(V, S, R0, V0, k, C1) {
+      const b = beta(S, k);
+      const Vpos = Math.max(0, V);
+      const V0pos = Math.max(1, V0);
+      const R0p = Math.max(0, R0);
+  
+      if (Vpos < V0pos) return { P: R0p, base: R0p, variable: 0 };
+  
+      const varTerm = Math.max(0, C1) * Math.log10(1 + (Vpos - V0pos) / V0pos) * b;
+      return { P: R0p + varTerm, base: R0p, variable: varTerm };
     }
-    
-    function price(V,S,R0,V0,k,C1){
-      const b = beta(S,k);
-      const Vpos = Math.max(0,V);
-      const V0pos = Math.max(1,V0);
-      const R0p = Math.max(0,R0);
-      
-      if (Vpos < V0pos) return {P:R0p, b, base:R0p, variable:0};
-      
-      const varTerm = Math.max(0,C1) * Math.log10(1 + (Vpos - V0pos)/V0pos) * b;
-      return {P:R0p + varTerm, b, base:R0p, variable:varTerm};
-    }
-    
-    function recalc(){
-      const R0 = +$("R0").value;
-      const V0 = +$("V0").value;
-      const k = +$("k").value;
-      const C1 = +$("C1").value;
+  
+    function recalc() {
+      const planKey = $("plan").value;
+      const cfg = PLAN_CONF[planKey];
+  
       const V = +$("V").value;
       const S = +$("S").value;
-      
-      const {P, b} = price(V,S,R0,V0,k,C1);
-      const savings = 0.10 * Math.max(0,V);
+  
+      const { P } = price(V, S, cfg.R0, cfg.V0, cfg.k, cfg.C1);
+      const savings = 0.10 * Math.max(0, V);
       const net = savings - P;
-      const roi = P > 0 ? (net/P) : 0;
-      
-      $("betaOut").textContent = b.toFixed(2);
-      $("priceOut").textContent = fmtUSD(P);
-      $("pctOut").textContent = V > 0 ? fmtPct(P/V) : "—";
-      $("savOut").textContent = fmtUSD(savings);
-      $("netOut").textContent = fmtUSD(net);
+      const roi = P > 0 ? (net / P) : 0;
+  
+      $("planOut").textContent = cfg.name;
+      $("priceOut").textContent = fmtMoney(P);
+      $("savOut").textContent = fmtMoney(savings);
+      $("netOut").textContent = fmtMoney(net);
       $("roiOut").textContent = P > 0 ? fmtPct(roi) : "—";
-      
-      renderChart(R0,V0,k,S,C1);
+  
+      renderChart(cfg);
     }
-    
-    ["R0","V0","k","C1","V","S"].forEach(id => $(id).addEventListener('input', recalc));
-    $("calcular").addEventListener('click', recalc);
-    
-    function renderChart(R0,V0,k,S,C1){
-      const Vinput = +$("V").value || 0;
-      const maxV = Math.max(5*V0, 2*Vinput, 50000);
+  
+    ["plan", "V", "S"].forEach(id => $(id).addEventListener('input', recalc));
+    $("calcular")?.addEventListener('click', recalc);
+  
+    function renderChart(cfg) {
+      const V = +$("V").value || 0;
+      const S = +$("S").value || 0;
+  
+      const maxV = Math.max(5 * cfg.V0, 2 * V, 50000);
       const minV = 0;
       const steps = 140;
-      
+  
       const xs = [];
       const ys = [];
-      
-      for(let i=0; i<=steps; i++){
-        const V = minV + (maxV - minV) * i / steps;
-        const {P} = price(V,S,R0,V0,k,C1);
-        xs.push(V);
+  
+      for (let i = 0; i <= steps; i++) {
+        const v = minV + (maxV - minV) * i / steps;
+        const { P } = price(v, S, cfg.R0, cfg.V0, cfg.k, cfg.C1);
+        xs.push(v);
         ys.push(P);
       }
-      
-      const currentPrice = price(Vinput,S,R0,V0,k,C1).P;
-      
+  
+      const currentPrice = price(V, S, cfg.R0, cfg.V0, cfg.k, cfg.C1).P;
+  
       const data = [
-        {
-          x: xs,
-          y: ys,
-          type: 'scatter',
-          mode: 'lines',
-          line: {width: 3, color: '#6366f1'},
-          name: 'Precio'
-        },
-        {
-          x: [Vinput],
-          y: [currentPrice],
-          type: 'scatter',
-          mode: 'markers',
-          marker: {size: 12, color: '#dc2626'},
-          name: 'Punto actual'
-        }
+        { x: xs, y: ys, type: 'scatter', mode: 'lines', line: { width: 3 }, name: 'Precio' },
+        { x: [V], y: [currentPrice], type: 'scatter', mode: 'markers', marker: { size: 12 }, name: 'Punto actual' }
       ];
-      
+  
       const layout = {
-        margin: {t:20, r:20, b:60, l:70},
-        xaxis: {title: 'Volumen (USD)', tickformat: '$,.0f'},
-        yaxis: {title: 'Precio (USD)', tickformat: '$,.0f'},
+        margin: { t: 20, r: 20, b: 60, l: 70 },
+        xaxis: { title: 'Volumen', tickformat: ',.0f' },
+        yaxis: { title: 'Precio', tickformat: ',.0f' },
         showlegend: false,
         plot_bgcolor: '#f8fafc',
         paper_bgcolor: '#ffffff',
-        font: {size: 11}
+        font: { size: 11 }
       };
-      
-      Plotly.newPlot('priceChart', data, layout, {responsive: true, displayModeBar: false});
+  
+      Plotly.newPlot('priceChart', data, layout, { responsive: true, displayModeBar: false });
     }
-    
+  
+    // Inicial
     recalc();
 
     // ====== MENÚ MÓVIL ======
