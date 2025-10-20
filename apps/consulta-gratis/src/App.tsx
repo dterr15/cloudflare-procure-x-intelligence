@@ -52,8 +52,8 @@ export default function App(){
     <div className="container">
       <div className="card">
         <span className="badge">Consulta gratis</span>
-        <h1 className="h1">Agendemos tu <span style={{color:"#20e6c4"}}>demo</span> + pre-calificación</h1>
-        <p className="sub">Responde unas preguntas rápidas. Siempre obtendrás un reporte demo. Si calificas, seguimos al proceso de nurture.</p>
+        <h1 className="h1">Agendemos tu <span style={{color:"#20e6c4"}}>demo</span></h1>
+        <p className="sub">Responde unas preguntas rápidas. También obtendrás un reporte demo.</p>
 
         {/* progreso */}
         <div className="progress" aria-hidden>
@@ -122,11 +122,11 @@ function StepPerfil({ value, onChange }: {
         <div>
           <label>Volumen mensual aprox. (CLP)</label>
           <input
-            className="input" inputMode="numeric" placeholder="p.ej. 20000000"
+            className="input" inputMode="numeric" placeholder="p.ej. $20.000.000"
             value={value.volume}
             onChange={e=> onChange({...value, volume: e.target.value.replace(/[^\d]/g,"")})}
           />
-          <div className="help">Solo números, sin puntos.</div>
+          <div className="help">Solo números, sin puntos ni $.</div>
         </div>
         <div>
           <label># de SKUs activos</label>
@@ -223,17 +223,15 @@ function Resumen({ answers }: { answers: Answers }){
 
   return (
     <div>
-      <h2 className="h1" style={{fontSize:28, marginTop:0}}>¡Listo! Generaremos tu <span style={{color:"#20e6c4"}}>reporte demo</span></h2>
+      <h2 className="h1" style={{fontSize:28, marginTop:0}}>¡Listo! Enseguida recibirás tu <span style={{color:"#20e6c4"}}>reporte demo</span></h2>
       <p className="sub">
-        Enviaremos un PDF con hallazgos base y recomendaciones. 
-        {qualifies ? " Además, pasas a la etapa de nurture para coordinar la demo completa.": " Si deseas contratar, verás las condiciones en el anexo del reporte."}
+        Enviaremos un PDF con un ejemplo y recomendaciones.
       </p>
 
       <div className="result">
         <div className="kpi"><small>Volumen</small><b>${vol.toLocaleString("es-CL")}</b></div>
         <div className="kpi"><small>SKUs</small><b>{skus.toLocaleString("es-CL")}</b></div>
         <div className="kpi"><small>Categoría</small><b>{answers.category || "—"}</b></div>
-        <div className="kpi"><small>Califica</small><b>{qualifies ? "Sí" : "Demo / condiciones"}</b></div>
       </div>
 
       <div className="actions" style={{marginTop:16}}>
