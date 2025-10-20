@@ -687,7 +687,7 @@
           <div class="calc-grid">
             <div class="field">
               <label class="input-label" for="V">Volumen mensual — CLP</label>
-              <input id="V" type="number" class="input-field" value="40000000" min="0" step="1000000">
+              <input id="V" type="text" class="input-field" value="40000000" min="0" inputmode="numeric">
             </div>
             <div class="field">
               <label class="input-label" for="S">SKUs — cantidad</label>
@@ -837,7 +837,7 @@
     
     // Función para limpiar formato y obtener número
     function cleanNumber(str) {
-      return str.replace(/\./g, '').replace(/\$/g, '').replace(/\s/g, '');
+      return str.replace(/[^\d]/g, ''); // Solo deja dígitos
     }
     
     // Variable para evitar loops infinitos
@@ -848,10 +848,10 @@
       if (isFormatting) return;
       isFormatting = true;
       
-      // Limpiar el valor
+      // Limpiar el valor (solo números)
       let cleanValue = cleanNumber(this.value);
       
-      if (cleanValue === '' || cleanValue === '0') {
+      if (cleanValue === '') {
         this.value = '';
         isFormatting = false;
         return;
