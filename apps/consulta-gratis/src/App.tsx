@@ -1,26 +1,26 @@
 import React, { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import Swal from "sweetalert2";
 
 /* ================== Tipos ================== */
 type Answers = {
-  volume: string;      // CLP (texto para permitir formateo)
-  skus: string;        // número
-  category: string;    // select
-  pain: string;        // texto corto
+  volume: string;
+  skus: string;
+  category: string;
+  pain: string;
   contact: { name: string; email: string; company: string; phone: string };
 };
 
 /* ================== Constantes UI ================== */
 const steps = ["Perfil", "Operación", "Objetivo", "Contacto"];
 const variants = {
-  in:   { opacity: 0, y: 16, scale: 0.98 },
-  live: { opacity: 1, y: 0,  scale: 1 },
-  out:  { opacity: 0, y: -16, scale: 0.98 }
+  in: { opacity: 0, y: 16, scale: 0.98 },
+  live: { opacity: 1, y: 0, scale: 1 },
+  out: { opacity: 0, y: -16, scale: 0.98 }
 };
 
 /* ================== App ================== */
 export default function App() {
-  // step: 0..3 = form, 4 = resumen, 5 = contacto final
   const [step, setStep] = useState(0);
   const [answers, setAnswers] = useState<Answers>({
     volume: "",
@@ -41,12 +41,11 @@ export default function App() {
     return true;
   }, [step, answers]);
 
-  // Progreso visual (hasta el resumen)
   const progress = (Math.min(step, 4) + 1) / (steps.length + 1);
 
   function goNext() {
     if (!canNext) return;
-    setStep((s) => Math.min(s + 1, 4)); // 4 = resumen
+    setStep((s) => Math.min(s + 1, 4));
   }
   function goBack() {
     setStep((s) => Math.max(s - 1, 0));
@@ -64,7 +63,6 @@ export default function App() {
           seguimos al proceso de nurture.
         </p>
 
-        {/* Progreso simple */}
         <div className="progress" aria-hidden>
           {Array.from({ length: 5 }).map((_, i) => (
             <div
@@ -117,18 +115,18 @@ export default function App() {
               variants={variants}
               transition={{ duration: 0.22 }}
             >
-              <Resumen answers={answers} onContact={() => setStep(5)} />
+              <Resumen answers={answers} onFinish={() => setStep(5)} />
             </motion.section>
           ) : (
             <motion.section
-              key="contact"
+              key="final"
               initial="in"
               animate="live"
               exit="out"
               variants={variants}
               transition={{ duration: 0.22 }}
             >
-              <ContactFinal answers={answers} onBack={() => setStep(4)} />
+              <FinalScreen />
             </motion.section>
           )}
         </AnimatePresence>
@@ -293,15 +291,78 @@ function StepContacto({
 /* ================== Resumen ================== */
 function Resumen({
   answers,
-  onContact
+  onFinish
 }: {
   answers: Answers;
-  onContact: () => void;
+  onFinish: () => void;
 }) {
   const vol = Number(answers.volume || 0);
   const skus = Number(answers.skus || 0);
+  const qualifies = vol >= 15000000 && skus >= 40;
 
-  const qualifies = vol >= 15000000 && skus >= 40; // demo simple
+  const handleFinish = () => {
+    // Guardar TODA la información del usuario
+    const completeData = {
+      timestamp: new Date().toISOString(),
+      profile: {
+        volume: vol,
+        volumeFormatted: vol.toLocaleString("es-CL"),
+        skus: skus,
+        category: answers.category,
+      },
+      objective: {
+        pain: answers.pain,
+      },
+      contact: {
+        name: answers.contact.name,
+        email: answers.contact.email,
+        company: answers.contact.company,
+        phone: answers.contact.phone,
+      },
+      qualification: {
+        qualifies: qualifies,
+        reason: qualifies 
+          ? "Cumple con volumen mínimo y SKUs requeridos" 
+          : "No cumple con los requisitos mínimos",
+      }
+    };
+
+    // Guardar en localStorage
+    localStorage.setItem('procurex_form_data', JSON.stringify(completeData));
+    
+    // También guardar en el historial (array de submissions)
+    const history = JSON.parse(localStorage.getItem('procurex_form_history') || '[]');
+    history.push(completeData);
+    localStorage.setItem('procurex_form_history', JSON.stringify(history));
+
+    // Log para verificar (puedes enviarlo a tu backend aquí)
+    console.log('Datos completos guardados:', completeData);
+
+    // Mostrar SweetAlert2
+    Swal.fire({
+      icon: 'success',
+      title: '¡Formulario completado!',
+      html: `
+        <p style="margin: 16px 0;">Gracias por completar la evaluación.</p>
+        <div style="text-align: left; background: #f3f4f6; padding: 16px; border-radius: 8px; margin-top: 16px;">
+          <p style="margin: 8px 0;"><strong>Nombre:</strong> ${answers.contact.name}</p>
+          <p style="margin: 8px 0;"><strong>Empresa:</strong> ${answers.contact.company}</p>
+          <p style="margin: 8px 0;"><strong>Email:</strong> ${answers.contact.email}</p>
+          <p style="margin: 8px 0;"><strong>Volumen:</strong> $${vol.toLocaleString("es-CL")}</p>
+          <p style="margin: 8px 0;"><strong>SKUs:</strong> ${skus}</p>
+          <p style="margin: 8px 0;"><strong>Califica:</strong> ${qualifies ? '✅ Sí' : '⚠️ Revisar'}</p>
+        </div>
+      `,
+      confirmButtonText: 'Finalizar',
+      confirmButtonColor: '#20e6c4',
+      customClass: {
+        popup: 'swal-custom',
+        confirmButton: 'swal-button'
+      }
+    }).then(() => {
+      onFinish();
+    });
+  };
 
   return (
     <div>
@@ -332,185 +393,26 @@ function Resumen({
         </div>
       </div>
 
-      <div className="actions" style={{ marginTop: 16 }}>
-        <a className="btn" href="/">
-          Volver al inicio
-        </a>
-        <button className="btn btn-primary" onClick={onContact}>
-          Contactar
+      <div className="actions" style={{ marginTop: 16, justifyContent: 'center' }}>
+        <button className="btn btn-primary" onClick={handleFinish}>
+          Finalizar
         </button>
       </div>
     </div>
   );
 }
 
-/* ================== Contacto Final (sin mailto) ================== */
-function ContactFinal({
-  answers,
-  onBack
-}: {
-  answers: Answers;
-  onBack: () => void;
-}) {
-  const [sending, setSending] = useState(false);
-  const [sent, setSent] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-
-  // Añade tu clave de Web3Forms para envío directo
-  const WEB3FORMS_KEY = "YOUR_WEB3FORMS_KEY";
-
-  const volStr = Number(answers.volume || 0).toLocaleString("es-CL");
-  const skusStr = Number(answers.skus || 0).toLocaleString("es-CL");
-
-  const template = `Hola ProcureX,
-Quiero coordinar la demo. Aquí mis datos:
-
-• Nombre: ${answers.contact.name || "—"}
-• Empresa: ${answers.contact.company || "—"}
-• Email: ${answers.contact.email || "—"}
-• Teléfono: ${answers.contact.phone || "—"}
-
-• Volumen mensual (CLP): $${volStr}
-• SKUs activos: ${skusStr}
-• Categoría: ${answers.category || "—"}
-• Objetivo/Dolor: ${answers.pain || "—"}
-
-Gracias!`;
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    if (!WEB3FORMS_KEY || WEB3FORMS_KEY === "YOUR_WEB3FORMS_KEY") return; // fallback
-
-    setSending(true);
-    setError(null);
-    try {
-      const res = await fetch("https://api.web3forms.com/submit", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          access_key: WEB3FORMS_KEY,
-          subject: "Demo ProcureX – Precalificación",
-          from_name: answers.contact.name || "Formulario ProcureX",
-          email: answers.contact.email || "no-email@procure-x.cl",
-          message: template
-        })
-      });
-      const json = await res.json();
-      if (json.success) setSent(true);
-      else setError("No pudimos enviar el formulario. Intenta otra vez.");
-    } catch {
-      setError("Hubo un problema de red. Intenta nuevamente.");
-    } finally {
-      setSending(false);
-    }
-  }
-
-  function copyToClipboard() {
-    navigator.clipboard?.writeText(template);
-  }
-
-  const waURL =
-    "https://wa.me/56985960018?text=" + encodeURIComponent(template);
-
+/* ================== Pantalla Final ================== */
+function FinalScreen() {
   return (
-    <div className="form">
-      <h2 className="h1" style={{ fontSize: 28, marginTop: 0 }}>
-        Contacto
+    <div style={{ textAlign: "center", padding: "32px 0" }}>
+      <div style={{ fontSize: "64px", marginBottom: "16px" }}>✅</div>
+      <h2 className="h1" style={{ fontSize: 32, marginTop: 0 }}>
+        ¡Gracias!
       </h2>
-      <p className="sub">
-        Envíanos tus datos y coordinamos la demo. Si prefieres, usa WhatsApp o
-        copia el mensaje.
+      <p className="sub" style={{ maxWidth: "400px", margin: "0 auto 24px" }}>
+        Recibimos tu información correctamente. Te contactaremos pronto para coordinar tu demo personalizada.
       </p>
-
-      {!sent ? (
-        <form
-          onSubmit={handleSubmit}
-          className="contact-card"
-          style={{ display: "grid", gap: "12px" }}
-        >
-          <div className="result" style={{ marginBottom: 8 }}>
-            <div className="kpi">
-              <small>Volumen</small>
-              <b>${volStr}</b>
-            </div>
-            <div className="kpi">
-              <small>SKUs</small>
-              <b>{skusStr}</b>
-            </div>
-            <div className="kpi">
-              <small>Categoría</small>
-              <b>{answers.category || "—"}</b>
-            </div>
-          </div>
-
-          <label>Mensaje</label>
-          <textarea className="input" rows={6} defaultValue={template} readOnly />
-
-          {(!WEB3FORMS_KEY || WEB3FORMS_KEY === "YOUR_WEB3FORMS_KEY") ? (
-            <>
-              <div className="help">
-                (Para envío directo, agrega tu <b>access_key</b> de Web3Forms en el
-                código. Mientras tanto, usa una de estas opciones:)
-              </div>
-              <div
-                className="actions"
-                style={{ display: "flex", gap: 8, flexWrap: "wrap" }}
-              >
-                <button type="button" className="btn" onClick={copyToClipboard}>
-                  Copiar mensaje
-                </button>
-                <a
-                  className="btn btn-primary"
-                  href={waURL}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Enviar por WhatsApp
-                </a>
-                <button
-                  type="button"
-                  className="btn btn-ghost"
-                  onClick={onBack}
-                >
-                  Atrás
-                </button>
-              </div>
-            </>
-          ) : (
-            <div
-              className="actions"
-              style={{ display: "flex", gap: 8, flexWrap: "wrap" }}
-            >
-              <button
-                type="button"
-                className="btn btn-ghost"
-                onClick={onBack}
-                disabled={sending}
-              >
-                Atrás
-              </button>
-              <button type="submit" className="btn btn-primary" disabled={sending}>
-                {sending ? "Enviando…" : "Enviar"}
-              </button>
-              <a className="btn" href={waURL} target="_blank" rel="noreferrer">
-                WhatsApp
-              </a>
-            </div>
-          )}
-
-          {error && <div className="help" style={{ color: "#fca5a5" }}>{error}</div>}
-        </form>
-      ) : (
-        <div className="card" style={{ textAlign: "center" }}>
-          <h3 className="h1" style={{ fontSize: 24 }}>¡Gracias! ✅</h3>
-          <p className="sub">
-            Recibimos tu solicitud. Te contactaremos para coordinar la demo.
-          </p>
-          <div className="actions" style={{ justifyContent: "center" }}>
-            <a className="btn btn-primary" href="/">Volver al inicio</a>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
