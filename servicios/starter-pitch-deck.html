@@ -928,6 +928,17 @@ transform: scale(1.5);
 .process-flow { flex-direction: column; }
 .arrow { display: none; }
 }
+/* --- Logo accesible con fallback --- */
+.brand{ display:inline-flex; align-items:center; justify-content:center; color:inherit; text-decoration:none; position:relative; }
+.logo-img{ width:100%; height:100%; object-fit:contain; display:block; border-radius:24px; }
+/* Fallback “PX” visible por defecto */
+.logo-fallback{ font-weight:900; letter-spacing:.5px; }
+/* Si la imagen cargó, ocultamos el fallback visualmente (sigue accesible a lectores) */
+.brand.has-img .logo-fallback{
+  position:absolute !important;
+  width:1px; height:1px; margin:-1px; padding:0; border:0;
+  clip:rect(0 0 0 0); overflow:hidden; white-space:nowrap;
+}
 </style>
 </head>
 <body>
@@ -936,32 +947,23 @@ transform: scale(1.5);
 <div class="slide slide-1">
 <div class="hero-content">
 <div class="logo-container">
-    <div class="logo-icon">PX</div>
-    <div class="company-name">PROCUREX INTELLIGENCE</div>
+  <a href="/" class="brand logo-icon" aria-label="ProcureX Intelligence">
+    <img
+      src="/assets/img/Logo%20ProcureX%20Intelligence.png"
+      alt="ProcureX Intelligence"
+      class="logo-img"
+      onload="this.closest('.brand').classList.add('has-img')"
+      onerror="this.remove()"
+    />
+    <span class="logo-fallback" aria-hidden="false">PX</span>
+  </a>
+  <div class="company-name">PROCUREX INTELLIGENCE</div>
 </div>
 <h1 class="hero-title">
     Servicio <span class="highlight">Starter</span><br>
     para PYMES
 </h1>
 <p class="hero-subtitle">Decisiones de compra rápidas y Claras</p>
-<div class="client-info">
-    <div class="info-item">
-        <div class="info-label">Cliente</div>
-        <div class="info-value">{{Nombre del Cliente}}</div>
-    </div>
-    <div class="info-item">
-        <div class="info-label">Industria</div>
-        <div class="info-value">{{Sector Industrial}}</div>
-    </div>
-    <div class="info-item">
-        <div class="info-label">Fecha</div>
-        <div class="info-value">{{Fecha Presentación}}</div>
-    </div>
-    <div class="info-item">
-        <div class="info-label">Contacto</div>
-        <div class="info-value">{{Email/Teléfono}}</div>
-    </div>
-</div>
 </div>
 </div>
 
@@ -1067,9 +1069,9 @@ transform: scale(1.5);
 <div class="metrics-grid">
     <div class="metric-card">
         <div class="metric-icon">⚡</div>
-        <div class="metric-value">1</div>
+        <div class="metric-value">2</div>
         <div class="metric-label">Tiempo de respuesta promedio:</div>
-        <div class="metric-detail">Un día o menos</div>
+        <div class="metric-detail">Dos días o menos</div>
     </div>
     <div class="metric-card">
         <div class="metric-icon">🎯</div>
@@ -1093,7 +1095,7 @@ transform: scale(1.5);
 <div style="margin-top: 3rem; padding: 2rem; background: rgba(245,158,11,0.1); border-radius: 16px; border-left: 4px solid var(--warning-amber);">
     <p style="font-size: 1.1rem; opacity: 0.9;">
         <strong style="color: var(--warning-amber);">⏱️ Complejidad Alta:</strong> 
-        Items especiales (tecnología custom, repuestos críticos): 24-72 horas
+        Items especiales (tecnología custom, repuestos críticos): 48-96 horas
     </p>
 </div>
 </div>
@@ -1302,18 +1304,13 @@ transform: scale(1.5);
         <div class="kpi-label">On-Time Delivery sobre SLA</div>
     </div>
     <div class="kpi-card">
-        <div class="kpi-icon">✓</div>
-        <div class="kpi-number">≥99%</div>
-        <div class="kpi-label">Exactitud de normalización</div>
-    </div>
-    <div class="kpi-card">
         <div class="kpi-icon">🎯</div>
         <div class="kpi-number">≥3</div>
         <div class="kpi-label">Cotizaciones válidas por SKU</div>
     </div>
     <div class="kpi-card">
         <div class="kpi-icon">⏱️</div>
-        <div class="kpi-number">&lt;1d</div>
+        <div class="kpi-number">&lt;2d</div>
         <div class="kpi-label">Tiempo de ciclo promedio</div>
     </div>
 </div>
