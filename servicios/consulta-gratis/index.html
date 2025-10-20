@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Consulta gratis · Pre-calificación — ProcureX Intelligence</title>
+
+  <!-- Fuente + reset ligero -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Estilos base (compatibles con tu sitio actual) -->
+  <style>
+    :root{
+      --primary:#1e3a8a; --cyan:#06b6d4; --green:#10b981; --slate:#64748b;
+      --bg:#0b1220; --panel:#0f172a; --muted:rgba(255,255,255,.08);
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0; font-family:Inter,system-ui,Segoe UI,Roboto,sans-serif;
+      background:linear-gradient(135deg,var(--primary),#0a1a33);
+      color:#fff; min-height:100vh;
+    }
+    .wrap{max-width:920px;margin:0 auto;padding: clamp(16px, 3vw, 32px)}
+    .card{
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:20px; padding: clamp(16px,3vw,28px);
+      backdrop-filter: blur(10px);
+      box-shadow:0 20px 60px rgba(0,0,0,.25);
+    }
+    h1{font-size:clamp(24px,3.2vw,40px);line-height:1.15;margin:0 0 8px;font-weight:900}
+    p.lead{color:#dbeafe;margin:.25rem 0 1.25rem;max-width:60ch}
+    .badge{
+      display:inline-block; font-weight:800; font-size:.8rem; letter-spacing:.2px;
+      padding:.4rem .7rem; border-radius:999px; color:#0b1220; background:linear-gradient(135deg,var(--cyan),var(--green));
+      margin-bottom:.6rem;
+    }
+    .progress{
+      height:10px;background:rgba(255,255,255,.14);border-radius:999px;overflow:hidden;margin:10px 0 16px;
+    }
+    .bar{height:100%;background:linear-gradient(90deg,var(--green),#22c55e);width:0%;transition:width .35s ease}
+    .steps{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;margin-bottom:10px}
+    .stepDot{height:6px;border-radius:999px;background:rgba(255,255,255,.25)}
+    .stepDot.active{background:#22c55e}
+
+    /* Form */
+    .form{display:grid;gap:14px}
+    .field{display:flex;flex-direction:column;gap:6px}
+    label{font-weight:700;font-size:.92rem}
+    input, select, textarea{
+      width:100%; padding:12px 14px; border-radius:12px; border:1.5px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.95); color:#0f172a; font-size:1rem;
+      outline:none; transition:border-color .2s, box-shadow .2s;
+    }
+    input:focus, select:focus, textarea:focus{border-color:#06b6d4; box-shadow:0 0 0 4px rgba(6,182,212,.22)}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    @media (max-width:700px){ .row{grid-template-columns:1fr} }
+
+    .actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+    .btn{
+      appearance:none;border:0;border-radius:12px;padding:12px 16px;font-weight:800;cursor:pointer;
+      transition:transform .15s ease, box-shadow .2s ease; letter-spacing:.2px;
+    }
+    .btn:active{transform:translateY(1px)}
+    .btn-primary{background:var(--green);color:#fff;box-shadow:0 12px 28px rgba(16,185,129,.35)}
+    .btn-primary:hover{filter:brightness(1.05)}
+    .btn-secondary{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.35)}
+    .btn-secondary:hover{background:rgba(255,255,255,.08)}
+
+    /* Animaciones simples */
+    .slideIn{animation:slideIn .28s ease both}
+    @keyframes slideIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+
+    /* Mini “pill” info */
+    .pill{display:inline-flex;align-items:center;gap:8px;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);font-weight:700}
+    .muted{color:#c7d2fe}
+    .ok{color:#22c55e}
+    .warn{color:#f59e0b}
+    .center{display:grid;place-items:center;text-align:center}
+  </style>
+
+  <!-- Preact + htm (sin build) -->
+  <script type="module" src="https://unpkg.com/htm/preact/standalone.module.js"></script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card slideIn">
+      <span class="badge">Consulta gratis</span>
+      <h1>Agendemos tu <span style="background:linear-gradient(135deg,var(--cyan),var(--green));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent">demo + pre-calificación</span></h1>
+      <p class="lead">Responde unas preguntas rápidas. Si calificas, pasas a la etapa de <b>nurture</b> y coordinamos la demo para tu caso. Si no, igual recibirás un <b>reporte demo</b> completo.</p>
+
+      <!-- Progreso -->
+      <div class="steps" id="steps"></div>
+      <div class="progress"><div class="bar" id="bar"></div></div>
+
+      <!-- Aquí vive la app -->
+      <div id="app"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { html, render, useState, useMemo } from 'https://unpkg.com/htm/preact/standalone.module.js';
+
+    // ---- Utilidad de validación mínima
+    const isEmail = (v) => /\S+@\S+\.\S+/.test(v);
+
+    // ---- Pasos del formulario (6 pasos)
+    const STEPS = [
+      { key:'intro',     title:'Tu contacto',       fields:['name','email','company'] },
+      { key:'perfil',    title:'Perfil de compra',  fields:['volumen','skus','categoria'] },
+      { key:'operacion', title:'Operación actual',  fields:['historial','codificacion'] },
+      { key:'logistica', title:'Logística / pagos', fields:['logistica','ordenes'] },
+      { key:'capacidad', title:'Disponibilidad',    fields:['disponibilidad'] },
+      { key:'resumen',   title:'Resumen',           fields:[] },
+    ];
+
+    const initialData = {
+      name:'', email:'', company:'',
+      volumen:'', skus:'', categoria:'',
+      historial:'no', codificacion:'no',
+      logistica:'no', ordenes:'no',
+      disponibilidad:'normal'
+    };
+
+    function App(){
+      const [step, setStep] = useState(0);
+      const [data, setData] = useState(initialData);
+      const [sent, setSent] = useState(false);
+
+      // Progreso visual
+      const progress = ((step) / (STEPS.length-1)) * 100;
+      requestAnimationFrame(() => {
+        document.getElementById('bar').style.width = `${progress}%`;
+        const stepsWrap = document.getElementById('steps');
+        if (stepsWrap && stepsWrap.childElementCount === 0){
+          // Dots una sola vez
+          for (let i=0;i<STEPS.length;i++){
+            const d = document.createElement('div');
+            d.className = 'stepDot' + (i<=step ? ' active' : '');
+            stepsWrap.appendChild(d);
+          }
+        } else {
+          Array.from(stepsWrap.children).forEach((c,i)=>{
+            c.className = 'stepDot' + (i<=step ? ' active' : '');
+          });
+        }
+      });
+
+      const update = (k,v)=> setData(d=>({...d,[k]:v}));
+
+      // Reglas de validación básicas por paso
+      const canNext = useMemo(()=>{
+        const s = STEPS[step].key;
+        if (s==='intro')     return data.name.trim() && isEmail(data.email);
+        if (s==='perfil')    return data.volumen && data.skus && data.categoria;
+        if (s==='resumen')   return true;
+        return true;
+      },[step,data]);
+
+      const score = useMemo(()=>{
+        // Scoring sencillo de pre-calificación (0-100)
+        let pts=0;
+        const v = +data.volumen||0, sk = +data.skus||0;
+        if (v>=50000000) pts+=30; else if (v>=20000000) pts+=20; else if (v>=5000000) pts+=10;
+        if (sk>=20) pts+=15; else if (sk>=5) pts+=10;
+        if (data.historial==='si') pts+=10;
+        if (data.codificacion==='si') pts+=10;
+        if (data.logistica==='si') pts+=10;
+        if (data.ordenes==='si') pts+=10;
+        if (data.disponibilidad==='alta') pts+=10; else if (data.disponibilidad==='normal') pts+=5;
+        return Math.min(100, pts);
+      },[data]);
+
+      const qualify = score >= 50; // umbral de calificación
+
+      const handleSubmit = (e)=>{
+        e?.preventDefault?.();
+        setSent(true);
+        // Aquí podrías: enviar a un webhook/CF Worker/Email service
+        // fetch('/api/webhook', {method:'POST',body:JSON.stringify({data,score})})
+      };
+
+      // ---- UIs por paso
+      const StepIntro = html`
+        <form class="form" onsubmit=${(e)=>{e.preventDefault(); if(canNext) setStep(step+1);}}>
+          <div class="row">
+            <div class="field">
+              <label>Nombre</label>
+              <input value=${data.name} onInput=${e=>update('name',e.target.value)} placeholder="Tu nombre" required />
+            </div>
+            <div class="field">
+              <label>Email</label>
+              <input type="email" value=${data.email} onInput=${e=>update('email',e.target.value)} placeholder="tucorreo@empresa.com" required />
+            </div>
+          </div>
+          <div class="field">
+            <label>Empresa</label>
+            <input value=${data.company} onInput=${e=>update('company',e.target.value)} placeholder="Nombre de tu empresa" />
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" type="submit" disabled=${!canNext}>Siguiente</button>
+          </div>
+        </form>
+      `;
+
+      const StepPerfil = html`
+        <form class="form" onsubmit=${(e)=>{e.preventDefault(); if(canNext) setStep(step+1);}}>
+          <div class="row">
+            <div class="field">
+              <label>Volumen mensual aprox. (CLP)</label>
+              <input type="number" min="0" step="100000" value=${data.volumen} onInput=${e=>update('volumen',e.target.value)} placeholder="Ej: 30000000" required />
+            </div>
+            <div class="field">
+              <label># de SKUs activos</label>
+              <input type="number" min="1" step="1" value=${data.skus} onInput=${e=>update('skus',e.target.value)} placeholder="Ej: 25" required />
+            </div>
+          </div>
+          <div class="field">
+            <label>Categoría predominante</label>
+            <select value=${data.categoria} onInput=${e=>update('categoria',e.target.value)} required>
+              <option value="" disabled>Selecciona…</option>
+              <option>Materiales / MRO</option>
+              <option>TI / Equipamiento</option>
+              <option>Servicios generales</option>
+              <option>Retail / Consumo</option>
+              <option>Industrial</option>
+            </select>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary" type="button" onClick=${()=>setStep(step-1)}>Atrás</button>
+            <button class="btn btn-primary" type="submit" disabled=${!canNext}>Siguiente</button>
+          </div>
+        </form>
+      `;
+
+      const StepOperacion = html`
+        <div class="form">
+          <div class="row">
+            <div class="field">
+              <label>¿Tienes historial de compras accesible?</label>
+              <select value=${data.historial} onInput=${e=>update('historial',e.target.value)}>
+                <option value="si">Sí</option>
+                <option value="no">No / parcial</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>¿Productos codificados (SKU) y maestros limpios?</label>
+              <select value=${data.codificacion} onInput=${e=>update('codificacion',e.target.value)}>
+                <option value="si">Sí</option>
+                <option value="no">No / en progreso</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary" onClick=${()=>setStep(step-1)}>Atrás</button>
+            <button class="btn btn-primary" onClick=${()=>setStep(step+1)}>Siguiente</button>
+          </div>
+        </div>
+      `;
+
+      const StepLogistica = html`
+        <div class="form">
+          <div class="row">
+            <div class="field">
+              <label>¿Tienes logística/recepción estandarizada?</label>
+              <select value=${data.logistica} onInput=${e=>update('logistica',e.target.value)}>
+                <option value="si">Sí</option>
+                <option value="no">No / parcial</option>
+              </select>
+            </div>
+            <div class="field">
+              <label>¿Puedes emitir OCs y pagar a proveedores?</label>
+              <select value=${data.ordenes} onInput=${e=>update('ordenes',e.target.value)}>
+                <option value="si">Sí</option>
+                <option value="no">No / con restricciones</option>
+              </select>
+            </div>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary" onClick=${()=>setStep(step-1)}>Atrás</button>
+            <button class="btn btn-primary" onClick=${()=>setStep(step+1)}>Siguiente</button>
+          </div>
+        </div>
+      `;
+
+      const StepCapacidad = html`
+        <div class="form">
+          <div class="field">
+            <label>Disponibilidad de tu equipo para un piloto rápido</label>
+            <select value=${data.disponibilidad} onInput=${e=>update('disponibilidad',e.target.value)}>
+              <option value="alta">Alta (esta semana)</option>
+              <option value="normal">Normal (2–3 semanas)</option>
+              <option value="baja">Baja</option>
+            </select>
+          </div>
+          <div class="actions">
+            <button class="btn btn-secondary" onClick=${()=>setStep(step-1)}>Atrás</button>
+            <button class="btn btn-primary" onClick=${()=>setStep(step+1)}>Ver resultado</button>
+          </div>
+        </div>
+      `;
+
+      const StepResumen = html`
+        <div class="form">
+          <div class="center">
+            <div class="pill">
+              <span>Score:</span>
+              <span class=${qualify ? 'ok' : 'warn'}><b>${score}</b>/100</span>
+            </div>
+            <p class="muted" style="margin:.75rem 0 1.25rem">
+              ${qualify
+                ? '¡Buen calce! Te enviaremos un reporte demo y coordinaremos la demo personalizada.'
+                : 'Te enviaremos un reporte demo completo. Si te interesa avanzar, podrás solicitar condiciones y requisitos.'}
+            </p>
+          </div>
+          <div class="actions" style="justify-content:center">
+            <button class="btn btn-secondary" onClick=${()=>setStep(0)}>Editar respuestas</button>
+            <button class="btn btn-primary" onClick=${handleSubmit}>Finalizar y recibir reporte</button>
+          </div>
+        </div>
+      `;
+
+      const Sent = html`
+        <div class="center" style="gap:10px;padding:8px">
+          <div class="badge">Enviado</div>
+          <h2 style="margin:.25rem 0 0">¡Listo!</h2>
+          <p class="muted" style="max-width:60ch">
+            Recibirás tu <b>reporte demo</b> en el correo <b>${data.email}</b>. 
+            ${qualify ? 'También te contactaremos para agendar la demo y siguiente paso de nurture.' : 'Si deseas avanzar a servicio, podrás revisar el anexo de condiciones y escribirnos.'}
+          </p>
+          <div style="margin-top:.5rem">
+            <a class="btn btn-primary" href="/">Volver al inicio</a>
+          </div>
+        </div>
+      `;
+
+      const stepUIs = [StepIntro,StepPerfil,StepOperacion,StepLogistica,StepCapacidad,StepResumen];
+
+      return html`
+        <div class="slideIn">
+          ${sent ? Sent : stepUIs[step]}
+        </div>
+      `;
+    }
+
+    render(html`<${App}/>`, document.getElementById('app'));
+  </script>
+</body>
+</html>
