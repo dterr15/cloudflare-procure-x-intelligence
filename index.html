@@ -807,7 +807,7 @@
       const planKey = $("plan").value;
       const cfg = PLAN_CONF[planKey];
 
-      const V = +$("V").value;
+      const V = +cleanNumber($("V").value || '0');
       const S = +$("S").value;
 
       const { P } = price(V, S, cfg.R0, cfg.V0, cfg.k, cfg.C1);
@@ -824,11 +824,56 @@
       renderChart(cfg);
     }
 
+    // ====== FORMATEO AUTOMÁTICO DEL INPUT DE VOLUMEN ======
+    const inputV = $("V");
+    
+    // Función para formatear número con puntos de miles
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    
+    // Función para limpiar formato y obtener número
+    function cleanNumber(str) {
+      return str.replace(/\./g, '').replace(/\$/g, '');
+    }
+    
+    // Evento al escribir
+    inputV.addEventListener('input', function(e) {
+      let cursorPos = this.selectionStart;
+      let valueLength = this.value.length;
+      
+      // Limpiar y formatear
+      let cleanValue = cleanNumber(this.value);
+      if (cleanValue === '') {
+        this.value = '';
+        return;
+      }
+      
+      let numValue = parseInt(cleanValue, 10);
+      if (isNaN(numValue)) {
+        this.value = '';
+        return;
+      }
+      
+      // Formatear con puntos
+      this.value = formatNumber(numValue);
+      
+      // Ajustar posición del cursor
+      let newLength = this.value.length;
+      cursorPos = cursorPos + (newLength - valueLength);
+      this.setSelectionRange(cursorPos, cursorPos);
+    });
+    
+    // Formatear valor inicial
+    if (inputV.value) {
+      inputV.value = formatNumber(inputV.value);
+    }
+
     ["plan", "V", "S"].forEach(id => $(id).addEventListener('input', recalc));
     $("calcular")?.addEventListener('click', recalc);
 
     function renderChart(cfg) {
-      const V = +$("V").value || 0;
+      const V = +cleanNumber($("V").value || '0');
       const S = +$("S").value || 0;
 
       const maxV = Math.max(5 * cfg.V0, 2 * V, 50000000);
