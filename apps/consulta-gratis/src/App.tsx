@@ -10,6 +10,9 @@ type Answers = {
   skus: string;        // número
   category: string;    // select
   pain: string;        // texto corto
+  // Nuevas preguntas de pre-calificación:
+  formatAccepted: "" | "si" | "no";
+  planPct: "" | "0" | "25" | "50" | "75" | "100";
   contact: { name: string; email: string; company: string; phone: string };
 };
 
@@ -30,12 +33,14 @@ export default function App() {
     skus: "",
     category: "",
     pain: "",
+    formatAccepted: "",
+    planPct: "",
     contact: { name: "", email: "", company: "", phone: "" }
   });
 
   const canNext = useMemo(() => {
     if (step === 0) return !!answers.volume && !!answers.skus;
-    if (step === 1) return !!answers.category;
+    if (step === 1) return !!answers.category && !!answers.formatAccepted && !!answers.planPct;
     if (step === 2) return !!answers.pain && answers.pain.trim().length >= 10;
     if (step === 3) {
       const c = answers.contact;
@@ -60,11 +65,10 @@ export default function App() {
       <div className="card">
         <span className="badge">Consulta gratis</span>
         <h1 className="h1">
-          Agendemos tu <span style={{ color: "#20e6c4" }}>demo</span> + pre-calificación
+          Agendemos tu <span style={{ color: "#20e6c4" }}>demo</span>
         </h1>
         <p className="sub">
-          Responde unas preguntas rápidas. Siempre obtendrás un reporte demo. Si calificas,
-          seguimos al proceso de nurture.
+          Responde unas preguntas rápidas. Luego obtendrás un reporte demo.
         </p>
 
         {/* Progreso simple */}
@@ -207,6 +211,45 @@ function StepOperacion({
           <option>Industrial</option>
         </select>
       </div>
+
+      {/* Nuevas preguntas de pre-calificación */}
+      <div className="row" style={{ marginTop: 12 }}>
+        <div>
+          <label>¿Aceptas nuestro formato estándar de solicitud?</label>
+          <select
+            className="input"
+            value={value.formatAccepted}
+            onChange={(e) =>
+              onChange({ ...value, formatAccepted: e.target.value as Answers["formatAccepted"] })
+            }
+          >
+            <option value="" disabled>Selecciona…</option>
+            <option value="si">Sí</option>
+            <option value="no">No</option>
+          </select>
+          <div className="help">
+            Tabla con <i>descripción, cantidad, UDM, especificaciones/observaciones</i>.
+          </div>
+        </div>
+
+        <div>
+          <label>% de compras planificadas (no spot)</label>
+          <select
+            className="input"
+            value={value.planPct}
+            onChange={(e) =>
+              onChange({ ...value, planPct: e.target.value as Answers["planPct"] })
+            }
+          >
+            <option value="" disabled>Selecciona…</option>
+            <option value="0">0–25%</option>
+            <option value="25">26–50%</option>
+            <option value="50">51–75%</option>
+            <option value="75">76–100%</option>
+            <option value="100">100%</option>
+          </select>
+        </div>
+      </div>
     </div>
   );
 }
@@ -313,7 +356,7 @@ function Resumen({
         <span style={{ color: "#20e6c4" }}>reporte demo</span>
       </h2>
       <p className="sub">
-        Enviaremos un PDF con hallazgos base y recomendaciones.
+        Enviaremos un PDF con un ejemplo base y recomendaciones.
       </p>
 
       <div className="result">
@@ -330,15 +373,21 @@ function Resumen({
           <b>{answers.category || "—"}</b>
         </div>
         <div className="kpi">
+          <small>Formato solicitud</small>
+          <b>{answers.formatAccepted ? (answers.formatAccepted === "si" ? "Sí" : "No") : "—"}</b>
+        </div>
+        <div className="kpi">
+          <small>% planificado</small>
+          <b>{answers.planPct ? `${answers.planPct}%` : "—"}</b>
+        </div>
+        <div className="kpi">
           <small>Califica</small>
           <b>{qualifies ? "Sí" : "Revisar"}</b>
         </div>
       </div>
 
       <div className="actions" style={{ marginTop: 16 }}>
-        <a className="btn" href="/">
-          Volver al inicio
-        </a>
+        <a className="btn" href="/">Volver al inicio</a>
         <button className="btn btn-primary" onClick={onContact}>
           Contactar
         </button>
@@ -347,7 +396,7 @@ function Resumen({
   );
 }
 
-/* ================== Contacto Final (envía a /api/lead) ================== */
+/* ================== Contacto Final (envía a /api/lead; sin WhatsApp) ================== */
 function ContactFinal({
   answers,
   onBack
@@ -375,6 +424,9 @@ Quiero coordinar la demo. Aquí mis datos:
 • Categoría: ${answers.category || "—"}
 • Objetivo/Dolor: ${answers.pain || "—"}
 
+• ¿Acepta formato estándar de solicitud?: ${answers.formatAccepted ? (answers.formatAccepted === "si" ? "Sí" : "No") : "—"}
+• % de compras planificadas: ${answers.planPct ? answers.planPct + "%" : "—"}
+
 Gracias!`;
 
   async function handleSubmit(e: React.FormEvent) {
@@ -383,9 +435,6 @@ Gracias!`;
     setError(null);
 
     try {
-      const qualifies =
-        Number(answers.volume || 0) >= 15000000 && Number(answers.skus || 0) >= 40;
-
       const payload = {
         source: "procurex-demo-form",
         subjectPrefix: "[ProcureX Demo]",
@@ -394,7 +443,9 @@ Gracias!`;
         category: answers.category,
         pain: answers.pain,
         contact: answers.contact,
-        qualifies,
+        // NUEVOS CAMPOS (sin calificación automática)
+        formatAccepted: answers.formatAccepted,
+        planPct: answers.planPct,
         preview_text: template
       };
 
@@ -421,17 +472,13 @@ Gracias!`;
     navigator.clipboard?.writeText(template);
   }
 
-  const waURL =
-    "https://wa.me/56985960018?text=" + encodeURIComponent(template);
-
   return (
     <div className="form">
       <h2 className="h1" style={{ fontSize: 28, marginTop: 0 }}>
         Contacto
       </h2>
       <p className="sub">
-        Envíanos tus datos y coordinamos la demo. Si prefieres, usa WhatsApp o
-        copia el mensaje.
+        Envíanos tus datos y coordinamos la demo. También puedes copiar el mensaje si lo prefieres.
       </p>
 
       {!sent ? (
@@ -473,9 +520,6 @@ Gracias!`;
             <button type="submit" className="btn btn-primary" disabled={sending}>
               {sending ? "Enviando…" : "Enviar"}
             </button>
-            <a className="btn" href={waURL} target="_blank" rel="noreferrer">
-              WhatsApp
-            </a>
             <button type="button" className="btn" onClick={copyToClipboard}>
               Copiar mensaje
             </button>
