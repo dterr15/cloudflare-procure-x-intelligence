@@ -1,6 +1,9 @@
 import React, { useMemo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 
+/* ================== Endpoint local (Pages Function → n8n) ================== */
+const API_LEAD = "/api/lead";
+
 /* ================== Tipos ================== */
 type Answers = {
   volume: string;      // CLP (texto para permitir formateo)
@@ -344,7 +347,7 @@ function Resumen({
   );
 }
 
-/* ================== Contacto Final (sin mailto) ================== */
+/* ================== Contacto Final (envía a /api/lead) ================== */
 function ContactFinal({
   answers,
   onBack
@@ -355,9 +358,6 @@ function ContactFinal({
   const [sending, setSending] = useState(false);
   const [sent, setSent] = useState(false);
   const [error, setError] = useState<string | null>(null);
-
-  // Añade tu clave de Web3Forms para envío directo
-  const WEB3FORMS_KEY = "YOUR_WEB3FORMS_KEY";
 
   const volStr = Number(answers.volume || 0).toLocaleString("es-CL");
   const skusStr = Number(answers.skus || 0).toLocaleString("es-CL");
@@ -379,27 +379,39 @@ Gracias!`;
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    if (!WEB3FORMS_KEY || WEB3FORMS_KEY === "YOUR_WEB3FORMS_KEY") return; // fallback
-
     setSending(true);
     setError(null);
+
     try {
-      const res = await fetch("https://api.web3forms.com/submit", {
+      const qualifies =
+        Number(answers.volume || 0) >= 15000000 && Number(answers.skus || 0) >= 40;
+
+      const payload = {
+        source: "procurex-demo-form",
+        subjectPrefix: "[ProcureX Demo]",
+        volume: answers.volume,
+        skus: answers.skus,
+        category: answers.category,
+        pain: answers.pain,
+        contact: answers.contact,
+        qualifies,
+        preview_text: template
+      };
+
+      const res = await fetch(API_LEAD, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          access_key: WEB3FORMS_KEY,
-          subject: "Demo ProcureX – Precalificación",
-          from_name: answers.contact.name || "Formulario ProcureX",
-          email: answers.contact.email || "no-email@procure-x.cl",
-          message: template
-        })
+        body: JSON.stringify(payload)
       });
-      const json = await res.json();
-      if (json.success) setSent(true);
-      else setError("No pudimos enviar el formulario. Intenta otra vez.");
-    } catch {
-      setError("Hubo un problema de red. Intenta nuevamente.");
+
+      if (!res.ok) {
+        const msg = await res.text().catch(() => "");
+        throw new Error(msg || "Webhook error");
+      }
+      setSent(true);
+    } catch (err) {
+      console.error(err);
+      setError("No pudimos enviar el formulario. Intenta nuevamente.");
     } finally {
       setSending(false);
     }
@@ -446,57 +458,28 @@ Gracias!`;
           <label>Mensaje</label>
           <textarea className="input" rows={6} defaultValue={template} readOnly />
 
-          {(!WEB3FORMS_KEY || WEB3FORMS_KEY === "YOUR_WEB3FORMS_KEY") ? (
-            <>
-              <div className="help">
-                (Para envío directo, agrega tu <b>access_key</b> de Web3Forms en el
-                código. Mientras tanto, usa una de estas opciones:)
-              </div>
-              <div
-                className="actions"
-                style={{ display: "flex", gap: 8, flexWrap: "wrap" }}
-              >
-                <button type="button" className="btn" onClick={copyToClipboard}>
-                  Copiar mensaje
-                </button>
-                <a
-                  className="btn btn-primary"
-                  href={waURL}
-                  target="_blank"
-                  rel="noreferrer"
-                >
-                  Enviar por WhatsApp
-                </a>
-                <button
-                  type="button"
-                  className="btn btn-ghost"
-                  onClick={onBack}
-                >
-                  Atrás
-                </button>
-              </div>
-            </>
-          ) : (
-            <div
-              className="actions"
-              style={{ display: "flex", gap: 8, flexWrap: "wrap" }}
+          <div
+            className="actions"
+            style={{ display: "flex", gap: 8, flexWrap: "wrap" }}
+          >
+            <button
+              type="button"
+              className="btn btn-ghost"
+              onClick={onBack}
+              disabled={sending}
             >
-              <button
-                type="button"
-                className="btn btn-ghost"
-                onClick={onBack}
-                disabled={sending}
-              >
-                Atrás
-              </button>
-              <button type="submit" className="btn btn-primary" disabled={sending}>
-                {sending ? "Enviando…" : "Enviar"}
-              </button>
-              <a className="btn" href={waURL} target="_blank" rel="noreferrer">
-                WhatsApp
-              </a>
-            </div>
-          )}
+              Atrás
+            </button>
+            <button type="submit" className="btn btn-primary" disabled={sending}>
+              {sending ? "Enviando…" : "Enviar"}
+            </button>
+            <a className="btn" href={waURL} target="_blank" rel="noreferrer">
+              WhatsApp
+            </a>
+            <button type="button" className="btn" onClick={copyToClipboard}>
+              Copiar mensaje
+            </button>
+          </div>
 
           {error && <div className="help" style={{ color: "#fca5a5" }}>{error}</div>}
         </form>
