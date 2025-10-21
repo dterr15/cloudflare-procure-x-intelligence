@@ -1,24 +1,20 @@
 export interface Env {
-  N8N_WEBHOOK: string;
-  N8N_TOKEN: string;
+  N8N_WEBHOOK: string; // ej. https://<tu-n8n>/webhook/<id>
+  N8N_TOKEN: string;   // el secreto que definimos
 }
 
-export const onRequestPost: PagesFunction<Env> = async (context) => {
+export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   try {
-    const { request, env } = context;
     const body = await request.json();
 
-    // Validaciones mínimas (ejemplo)
-    if (
-      !body?.contact?.email ||
-      !/\S+@\S+\.\S+/.test(body.contact.email)
-    ) {
+    // Validación mínima
+    if (!body?.contact?.email || !/\S+@\S+\.\S+/.test(body.contact.email)) {
       return new Response(JSON.stringify({ ok: false, error: "Invalid email" }), {
         status: 400, headers: { "Content-Type": "application/json" }
       });
     }
 
-    // Reenvío a n8n con token privado
+    // Proxy seguro hacia n8n
     const res = await fetch(env.N8N_WEBHOOK, {
       method: "POST",
       headers: {
@@ -29,8 +25,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     });
 
     if (!res.ok) {
-      const txt = await res.text();
-      return new Response(JSON.stringify({ ok: false, error: "n8n error", detail: txt }), {
+      const detail = await res.text().catch(() => "");
+      return new Response(JSON.stringify({ ok: false, error: "n8n error", detail }), {
         status: 502, headers: { "Content-Type": "application/json" }
       });
     }
@@ -38,8 +34,8 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     return new Response(JSON.stringify({ ok: true }), {
       status: 200, headers: { "Content-Type": "application/json" }
     });
-  } catch (err: any) {
-    return new Response(JSON.stringify({ ok: false, error: err?.message || "server error" }), {
+  } catch (e: any) {
+    return new Response(JSON.stringify({ ok: false, error: e?.message || "server error" }), {
       status: 500, headers: { "Content-Type": "application/json" }
     });
   }
