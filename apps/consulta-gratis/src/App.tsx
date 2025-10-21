@@ -65,11 +65,10 @@ export default function App() {
       <div className="card">
         <span className="badge">Consulta gratis</span>
         <h1 className="h1">
-          Agendemos tu <span style={{ color: "#20e6c4" }}>demo</span> + pre-calificación
+          Agendemos tu <span style={{ color: "#20e6c4" }}>demo</span>
         </h1>
         <p className="sub">
-          Responde unas preguntas rápidas. Siempre obtendrás un reporte demo. Si calificas,
-          seguimos al proceso de nurture.
+          Responde unas preguntas rápidas. Luego obtendrás un reporte demo.
         </p>
 
         {/* Progreso simple */}
