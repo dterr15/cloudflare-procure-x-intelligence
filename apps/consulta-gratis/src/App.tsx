@@ -19,6 +19,12 @@ const variants = {
   out: { opacity: 0, y: -16, scale: 0.98 }
 };
 
+/* ================== Config envío a n8n ================== */
+const N8N_WEBHOOK =
+  (import.meta as any).env?.VITE_N8N_WEBHOOK || "https://<TU-N8N>/webhook/procurex-demo";
+const N8N_TOKEN =
+  (import.meta as any).env?.VITE_N8N_TOKEN || "<secreto-largo>";
+
 /* ================== App ================== */
 export default function App() {
   const [step, setStep] = useState(0);
@@ -56,11 +62,10 @@ export default function App() {
       <div className="card">
         <span className="badge">Consulta gratis</span>
         <h1 className="h1">
-          Agendemos tu <span style={{ color: "#20e6c4" }}>demo</span> + pre-calificación
+          Agendemos tu <span style={{ color: "#20e6c4" }}>demo</span>
         </h1>
         <p className="sub">
-          Responde unas preguntas rápidas. Siempre obtendrás un reporte demo. Si calificas,
-          seguimos al proceso de nurture.
+          Responde unas preguntas rápidas. Luego obtendrás un reporte demo sin costo.
         </p>
 
         <div className="progress" aria-hidden>
@@ -216,7 +221,7 @@ function StepObjetivo({
   return (
     <div className="form">
       <div>
-        <label>¿Cuál es el principal dolor u objetivo?</label>
+        <label>¿Cuál es el principal problema a resolver u objetivo?</label>
         <input
           className="input"
           placeholder="Ej: bajar costo en X, normalizar plazos, etc."
@@ -288,7 +293,7 @@ function StepContacto({
   );
 }
 
-/* ================== Resumen ================== */
+/* ================== Resumen (envía a n8n) ================== */
 function Resumen({
   answers,
   onFinish
@@ -300,68 +305,96 @@ function Resumen({
   const skus = Number(answers.skus || 0);
   const qualifies = vol >= 15000000 && skus >= 40;
 
-  const handleFinish = () => {
-    // Guardar TODA la información del usuario
+  const volStr = vol.toLocaleString("es-CL");
+  const skusStr = skus.toLocaleString("es-CL");
+
+  const template = `Hola ProcureX,
+Quiero coordinar la demo. Aquí mis datos:
+
+• Nombre: ${answers.contact.name || "—"}
+• Empresa: ${answers.contact.company || "—"}
+• Email: ${answers.contact.email || "—"}
+• Teléfono: ${answers.contact.phone || "—"}
+
+• Volumen mensual (CLP): $${volStr}
+• SKUs activos: ${skusStr}
+• Categoría: ${answers.category || "—"}
+• Objetivo/Dolor: ${answers.pain || "—"}
+
+Gracias!`;
+
+  const handleFinish = async () => {
+    // 1) Persistencia local (opcional)
     const completeData = {
       timestamp: new Date().toISOString(),
-      profile: {
-        volume: vol,
-        volumeFormatted: vol.toLocaleString("es-CL"),
-        skus: skus,
-        category: answers.category,
-      },
-      objective: {
-        pain: answers.pain,
-      },
-      contact: {
-        name: answers.contact.name,
-        email: answers.contact.email,
-        company: answers.contact.company,
-        phone: answers.contact.phone,
-      },
+      profile: { volume: vol, volumeFormatted: volStr, skus, category: answers.category },
+      objective: { pain: answers.pain },
+      contact: { ...answers.contact },
       qualification: {
-        qualifies: qualifies,
-        reason: qualifies 
-          ? "Cumple con volumen mínimo y SKUs requeridos" 
-          : "No cumple con los requisitos mínimos",
+        qualifies,
+        reason: qualifies
+          ? "Cumple con volumen mínimo y SKUs requeridos"
+          : "No cumple con los requisitos mínimos"
       }
     };
-
-    // Guardar en localStorage
-    localStorage.setItem('procurex_form_data', JSON.stringify(completeData));
-    
-    // También guardar en el historial (array de submissions)
-    const history = JSON.parse(localStorage.getItem('procurex_form_history') || '[]');
+    localStorage.setItem("procurex_form_data", JSON.stringify(completeData));
+    const history = JSON.parse(localStorage.getItem("procurex_form_history") || "[]");
     history.push(completeData);
-    localStorage.setItem('procurex_form_history', JSON.stringify(history));
+    localStorage.setItem("procurex_form_history", JSON.stringify(history));
 
-    // Log para verificar (puedes enviarlo a tu backend aquí)
-    console.log('Datos completos guardados:', completeData);
+    // 2) Envío a n8n
+    try {
+      const payload = {
+        source: "procurex-demo-form",
+        subjectPrefix: "[ProcureX Demo]",          // n8n usará esto para el asunto/filtro
+        volume: answers.volume,
+        skus: answers.skus,
+        category: answers.category,
+        pain: answers.pain,
+        contact: answers.contact,
+        qualifies,
+        preview_text: template                      // cuerpo legible para email
+      };
 
-    // Mostrar SweetAlert2
-    Swal.fire({
-      icon: 'success',
-      title: '¡Formulario completado!',
-      html: `
-        <p style="margin: 16px 0;">Gracias por completar la evaluación.</p>
-        <div style="text-align: left; background: #f3f4f6; padding: 16px; border-radius: 8px; margin-top: 16px;">
-          <p style="margin: 8px 0;"><strong>Nombre:</strong> ${answers.contact.name}</p>
-          <p style="margin: 8px 0;"><strong>Empresa:</strong> ${answers.contact.company}</p>
-          <p style="margin: 8px 0;"><strong>Email:</strong> ${answers.contact.email}</p>
-          <p style="margin: 8px 0;"><strong>Volumen:</strong> $${vol.toLocaleString("es-CL")}</p>
-          <p style="margin: 8px 0;"><strong>SKUs:</strong> ${skus}</p>
-          <p style="margin: 8px 0;"><strong>Califica:</strong> ${qualifies ? '✅ Sí' : '⚠️ Revisar'}</p>
-        </div>
-      `,
-      confirmButtonText: 'Finalizar',
-      confirmButtonColor: '#20e6c4',
-      customClass: {
-        popup: 'swal-custom',
-        confirmButton: 'swal-button'
-      }
-    }).then(() => {
+      const res = await fetch(N8N_WEBHOOK, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-ProcureX-Token": N8N_TOKEN            // verificación simple en n8n
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) throw new Error("Webhook error");
+
+      await Swal.fire({
+        icon: "success",
+        title: "¡Formulario enviado!",
+        html: `
+          <p style="margin: 16px 0;">Gracias por completar la evaluación.</p>
+          <div style="text-align: left; background: #f3f4f6; padding: 16px; border-radius: 8px; margin-top: 16px;">
+            <p style="margin: 8px 0;"><strong>Nombre:</strong> ${answers.contact.name}</p>
+            <p style="margin: 8px 0;"><strong>Empresa:</strong> ${answers.contact.company}</p>
+            <p style="margin: 8px 0;"><strong>Email:</strong> ${answers.contact.email}</p>
+            <p style="margin: 8px 0;"><strong>Volumen:</strong> $${volStr}</p>
+            <p style="margin: 8px 0;"><strong>SKUs:</strong> ${skusStr}</p>
+            <p style="margin: 8px 0;"><strong>Califica:</strong> ${qualifies ? "✅ Sí" : "⚠️ Revisar"}</p>
+          </div>
+        `,
+        confirmButtonText: "Finalizar",
+        confirmButtonColor: "#20e6c4",
+        customClass: { popup: "swal-custom", confirmButton: "swal-button" }
+      });
+
       onFinish();
-    });
+    } catch (err) {
+      console.error(err);
+      Swal.fire({
+        icon: "error",
+        title: "No pudimos enviar tu formulario",
+        text: "Intenta nuevamente en unos segundos."
+      });
+    }
   };
 
   return (
@@ -377,11 +410,11 @@ function Resumen({
       <div className="result">
         <div className="kpi">
           <small>Volumen</small>
-          <b>${vol.toLocaleString("es-CL")}</b>
+          <b>${volStr}</b>
         </div>
         <div className="kpi">
           <small>SKUs</small>
-          <b>{skus.toLocaleString("es-CL")}</b>
+          <b>{skusStr}</b>
         </div>
         <div className="kpi">
           <small>Categoría</small>
@@ -393,7 +426,7 @@ function Resumen({
         </div>
       </div>
 
-      <div className="actions" style={{ marginTop: 16, justifyContent: 'center' }}>
+      <div className="actions" style={{ marginTop: 16, justifyContent: "center" }}>
         <button className="btn btn-primary" onClick={handleFinish}>
           Finalizar
         </button>
