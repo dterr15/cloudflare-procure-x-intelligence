@@ -65,10 +65,11 @@ export default function App() {
       <div className="card">
         <span className="badge">Consulta gratis</span>
         <h1 className="h1">
-          Agendemos tu <span style={{ color: "#20e6c4" }}>demo</span>
+          Agendemos tu <span style={{ color: "#20e6c4" }}>demo</span> + pre-calificación
         </h1>
         <p className="sub">
-          Responde unas preguntas rápidas. Luego obtendrás un reporte demo.
+          Responde unas preguntas rápidas. Siempre obtendrás un reporte demo. Si calificas,
+          seguimos al proceso de nurture.
         </p>
 
         {/* Progreso simple */}
@@ -215,9 +216,12 @@ function StepOperacion({
       {/* Nuevas preguntas de pre-calificación */}
       <div className="row" style={{ marginTop: 12 }}>
         <div>
-          <label>¿Aceptas nuestro formato estándar de solicitud?</label>
+          <label>
+            ¿Aceptas nuestro <b>formato estándar</b> de solicitud?
+          </label>
           <select
             className="input"
+            aria-describedby="format-help"
             value={value.formatAccepted}
             onChange={(e) =>
               onChange({ ...value, formatAccepted: e.target.value as Answers["formatAccepted"] })
@@ -227,8 +231,24 @@ function StepOperacion({
             <option value="si">Sí</option>
             <option value="no">No</option>
           </select>
-          <div className="help">
-            Tabla con <i>descripción, cantidad, UDM, especificaciones/observaciones</i>.
+          {/* Bloque informativo con buena legibilidad */}
+          <div
+            id="format-help"
+            style={{
+              marginTop: 6,
+              fontSize: 13,
+              lineHeight: 1.35,
+              color: "#4b5563",           // gris medio (mejor contraste)
+              background: "#f9fafb",      // fondo sutil
+              border: "1px solid #e5e7eb",
+              borderRadius: 8,
+              padding: "8px 10px"
+            }}
+          >
+            <b>Formato estándar:</b> una tabla con{" "}
+            <i>descripción</i>, <i>cantidad</i>, <i>unidad de medida</i>,{" "}
+            <i>especificaciones técnicas</i> y <i>observaciones</i>. Este formato
+            agiliza cotizaciones y comparación de ofertas.
           </div>
         </div>
 
@@ -356,7 +376,7 @@ function Resumen({
         <span style={{ color: "#20e6c4" }}>reporte demo</span>
       </h2>
       <p className="sub">
-        Enviaremos un PDF con un ejemplo base y recomendaciones.
+        Enviaremos un PDF con hallazgos base y recomendaciones.
       </p>
 
       <div className="result">
@@ -387,9 +407,11 @@ function Resumen({
       </div>
 
       <div className="actions" style={{ marginTop: 16 }}>
-        <a className="btn" href="/">Volver al inicio</a>
+        <a className="btn" href="https://procure-x.cl">
+          Volver al inicio
+        </a>
         <button className="btn btn-primary" onClick={onContact}>
-          Contactar
+          Siguiente
         </button>
       </div>
     </div>
@@ -534,7 +556,7 @@ Gracias!`;
             Recibimos tu solicitud. Te contactaremos para coordinar la demo.
           </p>
           <div className="actions" style={{ justifyContent: "center" }}>
-            <a className="btn btn-primary" href="/">Volver al inicio</a>
+            <a className="btn btn-primary" href="https://procure-x.cl">Volver al inicio</a>
           </div>
         </div>
       )}
