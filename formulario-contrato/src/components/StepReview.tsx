@@ -1,4 +1,3 @@
-import React from "react";
 import type { FullContractForm } from "@/types";
 // ❌ La importación de 'formatCurrency' fue eliminada.
 
@@ -169,4 +168,5 @@ export function StepReview({ data, onEdit }: StepReviewProps) {
       </div>
     </div>
   );
+
 }
