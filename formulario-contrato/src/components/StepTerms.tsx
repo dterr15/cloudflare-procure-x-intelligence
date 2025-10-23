@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Checkbox } from "./Checkbox";
 import type { TermsInfo } from "@/types";
 
@@ -140,4 +139,5 @@ export function StepTerms({ data, onChange, errors }: StepTermsProps) {
       </div>
     </div>
   );
+
 }
