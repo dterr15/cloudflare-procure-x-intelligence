@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Textarea } from "./Textarea"; // Solo necesitamos Textarea para terminosEspeciales
 // Se eliminaron Input y Select de los imports si ya no se usan en este archivo
 import { Select } from "./Select"; // Mantener Select para tipoContrato
@@ -64,4 +63,5 @@ export function StepContract({ data, onChange, errors }: StepContractProps) {
       />
     </div>
   );
+
 }
