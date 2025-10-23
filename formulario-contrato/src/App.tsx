@@ -1,3 +1,4 @@
+import { useEffect, useState, lazy, Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useContractForm } from "@/hooks/useContractForm";
 // 1. Carga inmediata para el primer paso
@@ -341,3 +342,4 @@ export default function App() {
   );
 
 }
+
