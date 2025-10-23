@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { Input } from "./Input";
 import type { CompanyInfo } from "@/types";
 import { formatRut } from "@/utils/security";
@@ -118,4 +117,5 @@ export function StepCompany({ data, onChange, errors }: StepCompanyProps) {
       </div>
     </div>
   );
+
 }
