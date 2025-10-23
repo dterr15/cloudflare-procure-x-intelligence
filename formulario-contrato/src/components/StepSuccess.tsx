@@ -1,5 +1,3 @@
-import React from "react";
-
 interface StepSuccessProps {
   contractId?: string;
 }
@@ -91,4 +89,5 @@ export function StepSuccess({ contractId }: StepSuccessProps) {
       </div>
     </div>
   );
+
 }
