@@ -161,9 +161,13 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     // Sanitización
     const sanitizedPayload = sanitizeObject(payload);
 
+    // Generar ID de contrato ANTES de enviar a n8n
+    const contractId = `CONT-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
+
     // Agregar metadata de servidor
     const finalPayload = {
       ...sanitizedPayload,
+      contractId: contractId,  // Incluir el ID en el payload
       submittedAt: new Date().toISOString(),
       submittedFrom: clientIP,
     };
@@ -194,9 +198,6 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
         }
       );
     }
-
-    // Generar ID de contrato
-    const contractId = `CONT-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
     return new Response(
       JSON.stringify({
