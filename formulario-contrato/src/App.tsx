@@ -24,7 +24,7 @@ const StepSuccess = lazy(() =>
 // Si no lo tienes, puedes crear uno simple o usar un div.
 const LoadingFallback = () => <div style={{padding: '20px', textAlign: 'center'}}>Cargando paso...</div>;
 
-import type { FullContractForm, FormStep, ContractSubmissionResponse } from "@/types";
+import type { FormStep, ContractSubmissionResponse } from "@/types";
 import {
   generateFormToken,
   storeFormToken,
@@ -342,4 +342,5 @@ export default function App() {
   );
 
 }
+
 
