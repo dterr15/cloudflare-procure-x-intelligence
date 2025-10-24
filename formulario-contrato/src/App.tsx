@@ -39,7 +39,7 @@ import { fullContractFormSchema } from "@/types";
 /* ==================== Configuración ==================== */
 // ⚠️ CLAVE SECRETA TEMPORAL PARA PRUEBAS (DEBE SER IDÉNTICA EN N8N)
 const ENCRYPTION_KEY = "ProcureX-Contrato-2025-Secret"; 
-const N8N_ENDPOINT = "/api/contract-proxy";
+const N8N_ENDPOINT = "/api/contract";
 
 // Ya no necesitamos API_ENDPOINT, lo puedes borrar o dejar comentado.
 // const API_ENDPOINT = "/api/contract";
@@ -368,6 +368,7 @@ export default function App() {
   );
 
 }
+
 
 
 
