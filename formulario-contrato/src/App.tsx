@@ -5,40 +5,35 @@ import { useContractForm } from "@/hooks/useContractForm";
 import { StepPersonal } from "@/components/StepPersonal";
 
 // 🚀 Lazy Loading para Pasos 2 a 6
-const StepCompany = lazy(() => 
+const StepCompany = lazy(() => 
   import('@/components/StepCompany').then(module => ({ default: module.StepCompany }))
 );
-const StepContract = lazy(() => 
+const StepContract = lazy(() => 
   import('@/components/StepContract').then(module => ({ default: module.StepContract }))
 );
-const StepTerms = lazy(() => 
+const StepTerms = lazy(() => 
   import('@/components/StepTerms').then(module => ({ default: module.StepTerms }))
 );
-const StepReview = lazy(() => 
+const StepReview = lazy(() => 
   import('@/components/StepReview').then(module => ({ default: module.StepReview }))
 );
-const StepSuccess = lazy(() => 
+const StepSuccess = lazy(() => 
   import('@/components/StepSuccess').then(module => ({ default: module.StepSuccess }))
 );
 
+// Componente de carga para Suspense
 const LoadingFallback = () => <div style={{padding: '20px', textAlign: 'center'}}>Cargando paso...</div>;
 
 import type { FormStep, ContractSubmissionResponse } from "@/types";
 import {
   generateFormToken,
   storeFormToken,
-  // 🛑 Eliminamos las funciones de seguridad no utilizadas en el frontend:
-  // validateFormToken,
-  // checkRateLimit,
-  // generateHash,
-  // createSecureTimestamp,
+  // Eliminamos importaciones de seguridad no usadas en el frontend (TS6133)
 } from "@/utils/security";
-// 🛑 Eliminamos la importación de Zod, ya que la validación estricta la hace la Función:
-// import { fullContractFormSchema } from "@/types";
 
 /* ==================== Configuración ==================== */
-// 🛑 Eliminamos ENCRYPTION_KEY y la vieja N8N_ENDPOINT.
-const API_ENDPOINT = "/api/contract"; // ✅ Solución al error TS2304
+// Definimos el endpoint local (proxy a Cloudflare Function)
+const API_ENDPOINT = "/api/contract"; 
 
 const STEP_LABELS: Record<FormStep, string> = {
   personal: "Información Personal",
@@ -85,7 +80,7 @@ export default function App() {
   const currentStepIndex = stepOrder.indexOf(formState.currentStep);
   const progress = ((currentStepIndex + 1) / stepOrder.length) * 100;
 
-  // Nuevo y Simplificado handleSubmit en App.tsx
+  // Nuevo y Simplificado handleSubmit
   const handleSubmit = async () => {
       // La validación Zod y Rate Limiting se hacen en la Cloudflare Function
   
@@ -124,7 +119,8 @@ export default function App() {
               throw new Error(result.error || "Error desconocido");
           }
       } catch (error: any) {
-          setSubmitError(`NetworkError when attempting to fetch resource: ${error.message}`);
+          // Usamos el error nativo, no forzamos 'NetworkError' aquí.
+          setSubmitError(`Error de envío: ${error.message}`);
       } finally {
           setSubmitting(false);
       }
@@ -133,6 +129,184 @@ export default function App() {
   // Renderizar paso actual
   const renderCurrentStep = () => {
     const { currentStep, data, errors } = formState;
-// ... (resto del switch)
 
-// ... (resto del componente App)
+    switch (currentStep) {
+      case "personal":
+        return (
+          <StepPersonal
+            data={data.personal || {}}
+            onChange={(newData) => updateStepData("personal", newData)}
+            errors={errors}
+          />
+        );
+      case "company":
+        return (
+          <StepCompany
+            data={data.company || {}}
+            onChange={(newData) => updateStepData("company", newData)}
+            errors={errors}
+          />
+        );
+      case "contract":
+        return (
+          <StepContract
+            data={data.contract || {}}
+            onChange={(newData) => updateStepData("contract", newData)}
+            errors={errors}
+          />
+        );
+      case "terms":
+        return (
+          <StepTerms
+            data={data.terms || {}}
+            onChange={(newData) => updateStepData("terms", newData)}
+            errors={errors}
+          />
+        );
+      case "review":
+        return (
+          <StepReview
+            data={data}
+            onEdit={(step) => goToStep(step as FormStep)}
+          />
+        );
+      case "success":
+        return <StepSuccess contractId={contractId} />;
+      default:
+        return null;
+    }
+  }; // CIERRE DE renderCurrentStep
+
+  return (
+    <div className="container">
+      <div className="card">
+        {formState.currentStep !== "success" && (
+          <>
+            {/* Botón de Salida, posicionado absolutamente */}
+            <a 
+              href="https://procure-x.cl/inicio" 
+              className="btn-exit-header"
+              title="Volver a la página principal"
+            >
+              Salir
+            </a>
+            <div className="header">
+              <span className="badge">Formulario Seguro</span>
+              <h1 className="title">
+                Formulario de <span className="highlight">Contrato</span>
+              </h1>
+              <p className="subtitle">
+                Completa la información necesaria para generar tu contrato
+              </p>
+            </div>
+
+            {/* Indicador de progreso */}
+            <div className="progress-container">
+              <div className="progress-bar" style={{ width: `${progress}%` }} />
+            </div>
+
+            {/* Navegación de pasos */}
+            <div className="steps-nav">
+              {stepOrder.map((step, index) => (
+                <div
+                  key={step}
+                  className={`step-indicator ${
+                    index <= currentStepIndex ? "active" : ""
+                  } ${index === currentStepIndex ? "current" : ""}`}
+                >
+                  <div className="step-number">{index + 1}</div>
+                  <div className="step-label">{STEP_LABELS[step]}</div>
+                </div>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Contenido animado y Lazy Loaded */}
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={formState.currentStep}
+            initial="in"
+            animate="live"
+            exit="out"
+            variants={variants}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+          >
+            {/* IMPLEMENTACIÓN DE SUSPENSE */}
+            <Suspense fallback={<LoadingFallback />}>
+              {renderCurrentStep()} 
+            </Suspense>
+          </motion.div>
+        </AnimatePresence>
+
+        {/* Botones de navegación */}
+        {formState.currentStep !== "success" && (
+          <div className="actions">
+            {formState.currentStep !== "personal" && formState.currentStep !== "review" && (
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={goToPreviousStep}
+                disabled={formState.isSubmitting}
+              >
+                ← Atrás
+              </button>
+            )}
+
+            {formState.currentStep === "review" && (
+              <button
+                type="button"
+                className="btn btn-secondary"
+                onClick={goToPreviousStep}
+                disabled={formState.isSubmitting}
+              >
+                ← Modificar
+              </button>
+            )}
+
+            {formState.currentStep !== "review" ? (
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={() => {
+                  if (validateCurrentStep()) {
+                    goToNextStep();
+                  }
+                }}
+                disabled={!canProceed || formState.isSubmitting}
+              >
+                Continuar →
+              </button>
+            ) : (
+              <button
+                type="button"
+                className="btn btn-primary"
+                onClick={handleSubmit}
+                disabled={formState.isSubmitting}
+              >
+                {formState.isSubmitting ? "Enviando..." : "Enviar Formulario"}
+              </button>
+            )}
+          </div>
+        )}
+
+        {/* Mensaje de error */}
+        {formState.submitError && (
+          <div className="error-banner" role="alert">
+            <strong>Error:</strong> {formState.submitError}
+          </div>
+        )}
+
+        {/* Footer de seguridad */}
+        {formState.currentStep !== "success" && (
+          <div className="security-footer">
+            <div className="security-badge">🔒 Conexión Segura</div>
+            <p>
+              Tus datos están protegidos con encriptación SSL/TLS de grado bancario
+            </p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+} // CIERRE FINAL DEL COMPONENTE APP
