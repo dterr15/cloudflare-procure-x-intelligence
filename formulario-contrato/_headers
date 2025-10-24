@@ -1,0 +1,2 @@
+/*
+  Content-Security-Policy: default-src 'self'; connect-src 'self' https://n8n.srv876072.hstgr.cloud https://*.hstgr.cloud;
