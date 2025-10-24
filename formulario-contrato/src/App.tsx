@@ -39,7 +39,7 @@ import { fullContractFormSchema } from "@/types";
 /* ==================== Configuración ==================== */
 // ⚠️ CLAVE SECRETA TEMPORAL PARA PRUEBAS (DEBE SER IDÉNTICA EN N8N)
 const ENCRYPTION_KEY = "ProcureX-Contrato-2025-Secret"; 
-const N8N_ENDPOINT = "https://n8n.srv876072.hstgr.cloud/webhook-test/0a4330c3-76d7-4b39-ba5a-dfd2f151e554"; // <-- ¡PEGA LA URL DE TU WEBHOOK AQUÍ!
+const N8N_ENDPOINT = "/api/contract-proxy";
 
 // Ya no necesitamos API_ENDPOINT, lo puedes borrar o dejar comentado.
 // const API_ENDPOINT = "/api/contract";
@@ -368,6 +368,7 @@ export default function App() {
   );
 
 }
+
 
 
 
