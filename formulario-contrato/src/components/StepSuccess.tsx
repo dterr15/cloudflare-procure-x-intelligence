@@ -64,7 +64,7 @@ export function StepSuccess({ contractId }: StepSuccessProps) {
       </div>
 
       <div className="success-actions">
-        <a href="https://procure-x.cl" className="btn btn-primary">
+        <a href="https://procure-x.cl/inicio" className="btn btn-primary">
           Volver al Inicio
         </a>
         <button
@@ -82,12 +82,13 @@ export function StepSuccess({ contractId }: StepSuccessProps) {
         </p>
         <p>
           Contáctanos en{" "}
-          <a href="mailto:contratos@procure-x.cl">contratos@procure-x.cl</a>
+          <a href="mailto:px@procure-x.cl">px@procure-x.cl</a>
           {" "}o al{" "}
-          <a href="tel:+56223456789">+56 2 2345 6789</a>
+          <a href="tel:+56223456789">+56 9 8596 0018</a>
         </p>
       </div>
     </div>
   );
 
 }
+
