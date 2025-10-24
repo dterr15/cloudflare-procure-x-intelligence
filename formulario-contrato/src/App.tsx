@@ -1,4 +1,5 @@
 import React, { useEffect, useState, lazy, Suspense } from "react"; // <-- Asegura que tienes lazy y Suspense aquí
+import CryptoJS from "crypto-js";
 import { AnimatePresence, motion } from "framer-motion";
 import { useContractForm } from "@/hooks/useContractForm";
 // 1. Carga inmediata para el primer paso
@@ -340,4 +341,5 @@ export default function App() {
       </div>
     </div>
   );
+
 }
