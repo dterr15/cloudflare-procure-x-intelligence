@@ -9,7 +9,7 @@ interface StepReviewProps {
 // ❌ Se eliminaron las funciones 'calculateEndDate' y 'formatAmount'
 
 export function StepReview({ data, onEdit }: StepReviewProps) {
-  const { personal, company, contract, terms } = data;
+  const { personal, company, contract } = data;
 
   return (
     <div className="form-step review-step">
@@ -170,3 +170,4 @@ export function StepReview({ data, onEdit }: StepReviewProps) {
   );
 
 }
+
