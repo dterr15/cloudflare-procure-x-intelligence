@@ -1,54 +1,10 @@
-// Archivo: functions/api/contract.ts (al inicio)
-
+// Archivo: functions/api/contract.ts
 import { PagesFunction } from '@cloudflare/workers-types';
-import { ZodError } from 'zod'; // Necesario para atrapar errores de Zod
-import { fullContractFormSchema } from '../../src/types/index'; // 🎯 Importa el schema Zod centralizado
-// Asumo que esta función existe en tu utils/security.ts
-import { sanitizeObject } from '../../src/utils/security'; 
-// ...
 
 export interface Env {
-  N8N_WEBHOOK: string; // URL del webhook de N8N
-  N8N_TOKEN: string;   // Token de autenticación
-  ALLOWED_ORIGINS?: string; // Orígenes permitidos para CORS (separados por coma)
-}
-
-interface ContractPayload {
-  personal: {
-    nombre: string;
-    apellido: string;
-    rut: string;
-    email: string;
-    telefono: string;
-    direccion: string;
-    ciudad: string;
-    region: string;
-  };
-  company: {
-    razonSocial: string;
-    rutEmpresa: string;
-    giro: string;
-    direccionEmpresa: string;
-    ciudadEmpresa: string;
-    representanteLegal: string;
-    cargoRepresentante: string;
-  };
-  contract: {
-    tipoContrato: string;
-    terminosEspeciales?: string;
-  };
-  terms: {
-    aceptaTerminos: boolean;
-    aceptaPoliticaPrivacidad: boolean;
-    aceptaTratamientoDatos: boolean;
-  };
-  _meta?: {
-    timestamp: string;
-    token: string;
-    checksum: string;
-    userAgent: string;
-    source: string;
-  };
+  N8N_WEBHOOK: string;
+  N8N_TOKEN: string;
+  ALLOWED_ORIGINS?: string;
 }
 
 /* ==================== RATE LIMITING ==================== */
@@ -88,6 +44,60 @@ function getSecurityHeaders(allowedOrigin?: string): Record<string, string> {
   };
 }
 
+/* ==================== VALIDACIÓN BÁSICA ==================== */
+function validatePayload(payload: any): { valid: boolean; error?: string } {
+  // Validación básica de estructura
+  if (!payload.personal || !payload.company || !payload.contract || !payload.terms) {
+    return { valid: false, error: "Missing required sections" };
+  }
+
+  // Validar personal
+  const { personal } = payload;
+  if (!personal.nombre || !personal.apellido || !personal.rut || !personal.email) {
+    return { valid: false, error: "Missing required personal information" };
+  }
+
+  // Validar company
+  const { company } = payload;
+  if (!company.razonSocial || !company.rutEmpresa || !company.giro) {
+    return { valid: false, error: "Missing required company information" };
+  }
+
+  // Validar terms
+  const { terms } = payload;
+  if (!terms.aceptaTerminos || !terms.aceptaPoliticaPrivacidad || !terms.aceptaTratamientoDatos) {
+    return { valid: false, error: "All terms must be accepted" };
+  }
+
+  return { valid: true };
+}
+
+/* ==================== SANITIZACIÓN ==================== */
+function sanitizeString(str: string): string {
+  return str
+    .replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+    .replace(/<iframe\b[^<]*(?:(?!<\/iframe>)<[^<]*)*<\/iframe>/gi, '')
+    .replace(/on\w+\s*=\s*["'][^"']*["']/gi, '')
+    .trim();
+}
+
+function sanitizeObject(obj: any): any {
+  if (typeof obj === 'string') {
+    return sanitizeString(obj);
+  }
+  if (Array.isArray(obj)) {
+    return obj.map(sanitizeObject);
+  }
+  if (obj && typeof obj === 'object') {
+    const sanitized: any = {};
+    for (const key in obj) {
+      sanitized[key] = sanitizeObject(obj[key]);
+    }
+    return sanitized;
+  }
+  return obj;
+}
+
 /* ==================== HANDLER PRINCIPAL ==================== */
 export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
   const clientIP = request.headers.get("CF-Connecting-IP") || "unknown";
@@ -103,17 +113,17 @@ export const onRequestPost: PagesFunction<Env> = async ({ request, env }) => {
     });
   }
 
-  // 🛡️ [PULIDO 1] Validación de Tipo de Contenido (Content-Type)
-const contentType = request.headers.get("content-type") || "";
-if (!contentType.includes("application/json")) {
-  return new Response(
-    JSON.stringify({
-      ok: false,
-      message: "Invalid Content-Type. Must be application/json.",
-    }),
-    { status: 400, headers: getSecurityHeaders(allowedOrigin) }
-  );
-}
+  // Validación de Content-Type
+  const contentType = request.headers.get("content-type") || "";
+  if (!contentType.includes("application/json")) {
+    return new Response(
+      JSON.stringify({
+        ok: false,
+        error: "Invalid Content-Type. Must be application/json.",
+      }),
+      { status: 400, headers: getSecurityHeaders(allowedOrigin) }
+    );
+  }
 
   try {
     // Rate limiting
@@ -133,29 +143,40 @@ if (!contentType.includes("application/json")) {
     // Parsear body
     const payload = await request.json();
 
-    // 🚀 [PULIDO 3] Validación estricta Zod: Si falla, lanza ZodError
-    const validatedData = fullContractFormSchema.parse(payload);
+    // Validación
+    const validation = validatePayload(payload);
+    if (!validation.valid) {
+      return new Response(
+        JSON.stringify({
+          ok: false,
+          error: validation.error,
+        }),
+        {
+          status: 400,
+          headers: getSecurityHeaders(allowedOrigin),
+        }
+      );
+    }
 
-    // Sanitización centralizada
-    // Asumo que tu función sanitizeObject en src/utils/security.ts es robusta
-    const sanitizedPayload = sanitizeObject(validatedData);
+    // Sanitización
+    const sanitizedPayload = sanitizeObject(payload);
 
-    // Agregar metadata de servidor (usando los datos sanitizados)
+    // Agregar metadata de servidor
     const finalPayload = {
-        ...sanitizedPayload,
-        submittedAt: new Date().toISOString(),
-        submittedFrom: clientIP,
+      ...sanitizedPayload,
+      submittedAt: new Date().toISOString(),
+      submittedFrom: clientIP,
     };
 
     // Enviar a N8N
     const n8nResponse = await fetch(env.N8N_WEBHOOK, {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-            "X-ProcureX-Token": env.N8N_TOKEN,
-            "User-Agent": "ProcureX-ContractForm/1.0",
-        },
-        body: JSON.stringify(finalPayload),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-ProcureX-Token": env.N8N_TOKEN || "",
+        "User-Agent": "ProcureX-ContractForm/1.0",
+      },
+      body: JSON.stringify(finalPayload),
     });
 
     if (!n8nResponse.ok) {
@@ -166,7 +187,6 @@ if (!contentType.includes("application/json")) {
         JSON.stringify({
           ok: false,
           error: "Failed to process contract submission",
-          detail: "Please try again or contact support",
         }),
         {
           status: 502,
@@ -175,7 +195,7 @@ if (!contentType.includes("application/json")) {
       );
     }
 
-    // Generar ID de contrato (podrías usar UUID real en producción)
+    // Generar ID de contrato
     const contractId = `CONT-${Date.now()}-${Math.random().toString(36).substr(2, 9).toUpperCase()}`;
 
     return new Response(
@@ -190,22 +210,17 @@ if (!contentType.includes("application/json")) {
       }
     );
   } catch (e: any) {
-      // Manejo específico para errores de Zod
-      if (e instanceof ZodError) {
-          console.error("Zod Validation Error:", e.issues);
-          return new Response(
-              JSON.stringify({
-                  ok: false,
-                  error: "Payload validation failed",
-                  // Retorna detalles útiles para debug del frontend/servidor
-                  details: e.issues.map(issue => `${issue.path.join('.')} - ${issue.message}`) 
-              }),
-              { status: 400, headers: getSecurityHeaders(allowedOrigin) }
-          );
+    console.error("Contract submission error:", e);
+    return new Response(
+      JSON.stringify({
+        ok: false,
+        error: "Internal server error",
+      }),
+      {
+        status: 500,
+        headers: getSecurityHeaders(allowedOrigin),
       }
-      
-      console.error("Contract submission error:", e);
-      // ... (manejo de error 500)
+    );
   }
 };
 
