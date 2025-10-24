@@ -1,5 +1,6 @@
 import React, { useEffect, useState, lazy, Suspense } from "react"; // <-- Asegura que tienes lazy y Suspense aquí
 import CryptoJS from "crypto-js";
+import { useEffect, useState, lazy, Suspense } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useContractForm } from "@/hooks/useContractForm";
 // 1. Carga inmediata para el primer paso
@@ -25,7 +26,7 @@ const StepSuccess = lazy(() =>
 // Si no lo tienes, puedes crear uno simple o usar un div.
 const LoadingFallback = () => <div style={{padding: '20px', textAlign: 'center'}}>Cargando paso...</div>;
 
-import type { FullContractForm, FormStep, ContractSubmissionResponse } from "@/types";
+import type { FormStep, ContractSubmissionResponse } from "@/types";
 import {
   generateFormToken,
   storeFormToken,
@@ -343,3 +344,5 @@ export default function App() {
   );
 
 }
+
+

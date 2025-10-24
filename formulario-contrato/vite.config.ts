@@ -4,7 +4,7 @@ import path from "path";
 
 export default defineConfig({
   plugins: [react()],
-  base: '/formulario-contrato/',
+  base: "/",
   server: { 
     port: 5174,
     // Prevenir acceso desde IPs no autorizadas en desarrollo
@@ -29,3 +29,4 @@ export default defineConfig({
   }
 
 });
+

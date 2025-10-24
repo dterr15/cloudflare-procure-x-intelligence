@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { Input } from "./Input";
 import { Select } from "./Select";
 import type { PersonalInfo } from "@/types";
@@ -153,4 +153,6 @@ export function StepPersonal({ data, onChange, errors }: StepPersonalProps) {
       </div>
     </div>
   );
+
 }
+

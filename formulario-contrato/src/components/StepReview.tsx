@@ -1,4 +1,3 @@
-import React from "react";
 import type { FullContractForm } from "@/types";
 // ❌ La importación de 'formatCurrency' fue eliminada.
 
@@ -10,7 +9,7 @@ interface StepReviewProps {
 // ❌ Se eliminaron las funciones 'calculateEndDate' y 'formatAmount'
 
 export function StepReview({ data, onEdit }: StepReviewProps) {
-  const { personal, company, contract, terms } = data;
+  const { personal, company, contract } = data;
 
   return (
     <div className="form-step review-step">
@@ -169,4 +168,6 @@ export function StepReview({ data, onEdit }: StepReviewProps) {
       </div>
     </div>
   );
+
 }
+
