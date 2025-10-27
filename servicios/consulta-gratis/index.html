@@ -153,8 +153,7 @@
       const canNext = useMemo(()=>{
         const s = STEPS[step].key;
         if (s==='intro')     return data.name.trim() && isEmail(data.email);
-        if (s==='perfil')    return data.volumen && data.skus && data.categoria;
-        if (s==='resumen')   return true;
+        if (s==='perfil')    return data.volumen > 0 && data.skus > 0 && data.categoria.trim();        if (s==='resumen')   return true;
         return true;
       },[step,data]);
 
@@ -254,7 +253,7 @@
           </div>
           <div class="actions">
             <button class="btn btn-secondary" onClick=${()=>setStep(step-1)}>Atrás</button>
-            <button class="btn btn-primary" onClick=${()=>setStep(step+1)}>Siguiente</button>
+            <button class="btn btn-primary" onClick=${() => { if (canNext) setStep(step + 1); }} disabled=${!canNext}>Siguiente</button>
           </div>
         </div>
       `;
@@ -279,7 +278,7 @@
           </div>
           <div class="actions">
             <button class="btn btn-secondary" onClick=${()=>setStep(step-1)}>Atrás</button>
-            <button class="btn btn-primary" onClick=${()=>setStep(step+1)}>Siguiente</button>
+            <button class="btn btn-primary" onClick=${() => { if (canNext) setStep(step + 1); }} disabled=${!canNext}>Siguiente</button>
           </div>
         </div>
       `;
@@ -296,7 +295,7 @@
           </div>
           <div class="actions">
             <button class="btn btn-secondary" onClick=${()=>setStep(step-1)}>Atrás</button>
-            <button class="btn btn-primary" onClick=${()=>setStep(step+1)}>Ver resultado</button>
+            <button class="btn btn-primary" onClick=${() => { if (canNext) setStep(step + 1); }} disabled=${!canNext}>Ver resultado</button>
           </div>
         </div>
       `;
