@@ -222,6 +222,50 @@
       margin:16px 0;
       text-align:center;
     }
+    /* INICIO: Nuevos Estilos para Trust Badge y Checkbox */
+    .trust-badge {
+      font-size: 0.85rem;
+      color: #94a3b8; /* slate */
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-top: -8px; /* Ajuste visual */
+      margin-bottom: 24px;
+    }
+    
+    .checkbox-field {
+      display: flex;
+      align-items: flex-start;
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+    
+    .checkbox-field input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      margin-top: 3px;
+      margin-right: 12px;
+      border-radius: 6px;
+      border: 1.5px solid rgba(255,255,255,.3);
+      background: rgba(255,255,255,.05);
+      appearance: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all .2s;
+    }
+    
+    .checkbox-field input[type="checkbox"]:checked {
+      background-color: var(--green);
+      border-color: var(--green);
+    }
+    
+    .checkbox-field label {
+      margin-bottom: 0;
+      font-size: 0.95rem;
+      color: #c0d8f0;
+      font-weight: 400;
+    }
+    /* FIN: Nuevos Estilos */
   </style>
 </head>
 <body>
@@ -256,6 +300,14 @@
           <div class="field">
             <label for="company">Empresa *</label>
             <input type="text" id="company" name="company" required placeholder="Mi Empresa S.A.">
+            </div>
+              <div class="trust-badge">
+                🔒 Tus datos están protegidos (Política B2B). Nunca Spam.
+              </div>
+              <div class="checkbox-field">
+                <input type="checkbox" id="acepto_comunicaciones" name="acepto_comunicaciones" value="si">
+                <label for="acepto_comunicaciones">Acepto recibir comunicaciones profesionales de Procure-X Intelligence.</label>
+              </div>
           </div>
         </div>
 
@@ -276,11 +328,11 @@
             <label for="categoria">Categoría predominante *</label>
             <select id="categoria" name="categoria" required>
               <option value="">Selecciona una opción...</option>
-              <option value="Materiales / MRO">Materiales / MRO</option>
+              <option value="Repuestos / MRO">Repuestos / MRO</option>
               <option value="TI / Equipamiento">TI / Equipamiento</option>
-              <option value="Servicios generales">Servicios generales</option>
-              <option value="Retail / Consumo">Retail / Consumo</option>
-              <option value="Industrial">Industrial</option>
+              <option value="Packaging">Packaging</option>
+              <option value="Energia / Suministros Industriales">Energía / Suministros Industriales</option>
+              <option value="Materiales de Construccion">Materiales de Construcción</option>
             </select>
           </div>
         </div>
@@ -318,7 +370,7 @@
               </select>
             </div>
             <div class="field">
-              <label for="ordenes">¿Emites OCs y pagas proveedores?</label>
+              <label for="ordenes">¿Emites OCs y Documentos Tributarios?</label>
               <select id="ordenes" name="ordenes">
                 <option value="si">Sí</option>
                 <option value="no">No / con restricciones</option>
@@ -379,6 +431,7 @@
       inputs.forEach(input => {
         if (input.value.trim() !== '') filled++;
       });
+      const optionalCheckbox = document.getElementById('acepto_comunicaciones');
       const progress = (filled / inputs.length) * 100;
       progressBar.style.width = progress + '%';
     }
@@ -419,6 +472,9 @@
       // Recoger datos
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
+
+      // Procesar checkbox (si no está marcado, no aparece en data.entries(), lo forzamos a 'no')
+      data.acepto_comunicaciones = data.acepto_comunicaciones === 'si' ? 'si' : 'no';
       
       // Calcular score
       const score = calculateScore(data);
