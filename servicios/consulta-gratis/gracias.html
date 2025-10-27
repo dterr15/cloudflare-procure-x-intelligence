@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>¡Gracias! — ProcureX Intelligence</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    :root{
+      --primary:#1e3a8a; 
+      --cyan:#06b6d4; 
+      --green:#10b981; 
+    }
+    
+    * { box-sizing:border-box; }
+    
+    body {
+      margin:0; 
+      font-family:Inter,system-ui,sans-serif;
+      background:linear-gradient(135deg,var(--primary),#0a1a33);
+      color:#fff; 
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+    }
+    
+    .card {
+      background:rgba(255,255,255,.06);
+      border:1px solid rgba(255,255,255,.15);
+      border-radius:20px; 
+      padding:clamp(32px,4vw,48px);
+      backdrop-filter:blur(10px);
+      box-shadow:0 20px 60px rgba(0,0,0,.25);
+      max-width:600px;
+      text-align:center;
+    }
+
+    .icon {
+      font-size:4rem;
+      margin-bottom:16px;
+      animation:bounce 1s ease;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform:translateY(0); }
+      50% { transform:translateY(-20px); }
+    }
+    
+    h1 {
+      font-size:clamp(28px,4vw,42px);
+      line-height:1.2;
+      margin:0 0 16px;
+      font-weight:900;
+    }
+    
+    .highlight {
+      background:linear-gradient(135deg,var(--cyan),var(--green));
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    
+    p {
+      color:#dbeafe;
+      margin:0 0 16px;
+      font-size:1.1rem;
+      line-height:1.7;
+    }
+
+    .badge {
+      display:inline-block; 
+      font-weight:800; 
+      font-size:.85rem; 
+      padding:.5rem 1rem; 
+      border-radius:999px; 
+      color:#0b1220; 
+      background:linear-gradient(135deg,var(--cyan),var(--green));
+      margin:24px 0;
+    }
+
+    .btn {
+      display:inline-block;
+      border:0;
+      border-radius:12px;
+      padding:14px 28px;
+      font-weight:800;
+      cursor:pointer;
+      transition:all .2s; 
+      font-size:1rem;
+      font-family:inherit;
+      text-decoration:none;
+      background:var(--green);
+      color:#fff;
+      box-shadow:0 8px 20px rgba(16,185,129,.3);
+      margin-top:16px;
+    }
+    
+    .btn:hover {
+      transform:translateY(-2px);
+      box-shadow:0 12px 28px rgba(16,185,129,.4);
+    }
+
+    .details {
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.1);
+      border-radius:12px;
+      padding:20px;
+      margin:24px 0;
+      text-align:left;
+    }
+
+    .details h3 {
+      color:#06b6d4;
+      margin:0 0 12px;
+      font-size:1.1rem;
+    }
+
+    .details ul {
+      margin:0;
+      padding-left:20px;
+      color:#dbeafe;
+    }
+
+    .details li {
+      margin:8px 0;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="icon">✅</div>
+    <h1>¡<span class="highlight">Recibido</span>!</h1>
+    <p><strong>Gracias por tu interés en ProcureX Intelligence.</strong></p>
+    
+    <div class="badge">Pre-calificación enviada con éxito</div>
+    
+    <div class="details">
+      <h3>📬 ¿Qué sigue?</h3>
+      <ul>
+        <li><strong>Revisaremos tu información</strong> en las próximas 24-48 horas</li>
+        <li>Te contactaremos por email con los <strong>resultados de tu pre-calificación</strong></li>
+        <li>Si calificas, coordinaremos una <strong>demo personalizada</strong></li>
+        <li>Si no, recibirás un <strong>reporte demo completo</strong> para que conozcas nuestra plataforma</li>
+      </ul>
+    </div>
+
+    <p style="font-size:0.95rem;color:#94a3b8;">
+      Revisa tu bandeja de entrada (y spam) en las próximas horas.
+    </p>
+
+    <a href="/" class="btn">Volver al inicio</a>
+  </div>
+</body>
+</html>
