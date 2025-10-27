@@ -1,0 +1,29 @@
+{
+  "name": "formulario-contrato",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -p . && vite build",
+    "preview": "vite preview --port 4173",
+    "type-check": "tsc --noEmit"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "framer-motion": "11.2.10",
+    "zod": "^3.23.8",
+    "dompurify": "^3.1.7",
+    "crypto-js": "^4.2.0"
+  },
+  "devDependencies": {
+    "@types/react": "18.3.5",
+    "@types/react-dom": "18.3.0",
+    "@types/dompurify": "^3.0.5",
+    "@types/crypto-js": "^4.2.2",
+    "typescript": "5.6.2",
+    "vite": "5.4.2",
+    "@vitejs/plugin-react": "^4.3.1"
+  }
+}

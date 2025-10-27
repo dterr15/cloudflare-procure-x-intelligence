@@ -1,3 +1,10 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ProcureX Intelligence</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.26.0/plotly.min.js"></script>
 
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
@@ -488,7 +495,7 @@
           <li><a href="servicios/showcase.html" class="nav-link">Servicios</a></li>
           <li><a href="#contact" class="nav-link">Contacto</a></li>
         </ul>
-        <a href="#contact" class="cta-button nav-cta">Consulta sin costo</a>
+        <a href="https://demo.procure-x.cl" class="cta-button nav-cta">Consulta sin costo</a>
       
         <!-- Mobile Toggle -->
         <button class="nav-toggle" id="navToggle"
@@ -553,7 +560,7 @@
           <div class="cap-chip"><span>↔</span> Cubre hasta $15M/mes</div>
           <p class="benefit-description">Cotizaciones comparables (3–5 por SKU), matriz clara y recomendación experta para decidir rápido y con respaldo.</p>
           <div class="benefit-metrics">
-            <div class="benefit-metric"><div class="benefit-metric-value">≤24h</div><div class="benefit-metric-label">Tiempo de respuesta</div></div>
+            <div class="benefit-metric"><div class="benefit-metric-value">≤48h</div><div class="benefit-metric-label">Tiempo de respuesta</div></div>
             <div class="benefit-metric"><div class="benefit-metric-value">3–5</div><div class="benefit-metric-label">Ofertas / SKU</div></div>
           </div>
           <div class="benefit-actions">
@@ -571,7 +578,7 @@
           <p class="benefit-description">Seguimiento end-to-end: tablero compartido, alertas y cierre trazable para llegar a tiempo y sin sorpresas.</p>
           <div class="benefit-metrics">
             <div class="benefit-metric"><div class="benefit-metric-value">100%</div><div class="benefit-metric-label">Órdenes monitoreadas</div></div>
-            <div class="benefit-metric"><div class="benefit-metric-value">&lt;1h</div><div class="benefit-metric-label">Alertas de excepción</div></div>
+            <div class="benefit-metric"><div class="benefit-metric-value">!</div><div class="benefit-metric-label">Alertas de excepción</div></div>
           </div>
           <div class="benefit-actions">
             <a href="servicios/basic-pitch-deck.html" class="btn-info">Más información</a>
@@ -598,7 +605,7 @@
       </div>
 
       <div style="margin-top:2.5rem;text-align:center">
-        <a href="#contact" class="cta-button">Solicitar demo</a>
+        <a href="https://demo.procure-x.cl" class="cta-button">Solicitar demo</a>
       </div>
     </div>
   </section>
@@ -679,12 +686,12 @@
           <h3 style="margin:1.5rem 0 1rem;font-size:clamp(1.1rem,2vw,1.3rem);color:var(--primary-blue)">Inputs</h3>
           <div class="calc-grid">
             <div class="field">
-              <label class="input-label" for="V">Volumen mensual — moneda base</label>
-              <input id="V" type="number" class="input-field" value="10000000" min="0" step="5000">
+              <label class="input-label" for="V">Volumen mensual — CLP</label>
+              <input id="V" type="text" class="input-field" value="10000000" min="0" inputmode="numeric">
             </div>
             <div class="field">
               <label class="input-label" for="S">SKUs — cantidad</label>
-              <input id="S" type="number" class="input-field" value="50" min="1" step="1">
+              <input id="S" type="number" class="input-field" value="150" min="1" step="1">
             </div>
           </div>
   
@@ -703,7 +710,7 @@
               <div class="k"><small>ROI</small><b id="roiOut">—</b></div>
             </div>
             <small style="color:#64748b;display:block;margin-top:1rem;font-size:.85rem">
-              Nota: Los parámetros técnicos (umbral y complejidad por plan) se aplican automáticamente. Usa la misma moneda para tu volumen y la interpretación del precio.
+              Valores expresados en CLP.
             </small>
           </div>
   
@@ -712,7 +719,6 @@
       </div>
     </div>
   </section>
-
 
   <!-- CTA CONTACT -->
   <section class="cta-section" id="contact">
@@ -729,7 +735,7 @@
           <div class="row">
             <input class="form-field" type="text" name="company" placeholder="Empresa" aria-label="Empresa">
           </div>
-          <button type="submit" class="cta-button" style="width:100%;margin-top:.5rem">Solicitar demo</button>
+          <button href="https://demo.procure-x.cl" type="submit" class="cta-button" style="width:100%;margin-top:.5rem">Solicitar demo</button>
           <p class="contact-help">o escríbenos directo a <a href="mailto:px@procure-x.cl">px@procure-x.cl</a></p>
         </form>
       </div>
@@ -741,12 +747,11 @@
     <div class="container">
       <div class="footer-content">
         <div class="footer-logo">ProcureX Intelligence</div>
-        <p class="footer-tagline">Starter · Basic · PRO — decide en horas, controla la entrega y captura valor de forma recurrente.</p>
         <nav class="footer-links" aria-label="Sitio">
-          <a class="footer-link" href="#benefits">Servicios</a>
-          <a class="footer-link" href="#process">Cómo trabajamos</a>
-          <a class="footer-link" href="#calculator">Estimador</a>
-          <a class="footer-link" href="#contact">Contacto</a>
+          <a class="footer-link" href="legal/terminos-y-condiciones">Términos y Condiciones</a>
+          <a class="footer-link" href="#process">Política de Privacidad</a>
+          <a class="footer-link" href="#calculator">Política de Cookies</a>
+          <a class="footer-link" href="#contact">Aviso Legal</a>
         </nav>
         <div style="margin:1.5rem 0;display:flex;flex-wrap:wrap;gap:.75rem;justify-content:center">
           <a href="mailto:px@procure-x.cl" class="cta-button">px@procure-x.cl</a>
@@ -755,8 +760,8 @@
       </div>
       <div class="footer-bottom">
         © <span id="y"></span> ProcureX Intelligence · Todos los derechos reservados ·
-        <a class="footer-link" href="#" style="opacity:1">Términos</a> ·
-        <a class="footer-link" href="#" style="opacity:1">Privacidad</a>
+        <a class="footer-link" href="#" style="opacity:1"></a> ·
+        <a class="footer-link" href="#" style="opacity:1"></a>
       </div>
     </div>
   </footer>
@@ -765,101 +770,160 @@
     // Año dinámico
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    // ====== CALCULADORA ======
     // ====== CALCULADORA (Simplificada por Plan) ======
     const $ = id => document.getElementById(id);
-  
-    // Formato de dinero (usa la configuración local del usuario)
+
+    // Formato de dinero en CLP
     const fmtMoney = n =>
-      n.toLocaleString(undefined, { style: 'currency', currency: 'CLP', maximumFractionDigits: 0 });
-  
+      '$' + n.toLocaleString('es-CL', { maximumFractionDigits: 0 });
+
     const fmtPct = x => (x * 100).toFixed(2) + "%";
-  
+
     // Parámetros internos por plan
     // R0: retainer mínimo, V0: umbral de activación, k y C1: complejidad (ocultos en UI)
     const PLAN_CONF = {
-      starter: { name: 'Starter', R0: 490000,  V0: 15000000, k: 20, C1: 200  }, // Tolerante a varios SKUs simples
-      basic:   { name: 'Basic',   R0: 890000,  V0: 25000000, k: 12, C1: 600  }, // Balance simplicidad/complejidad
-      pro:     { name: 'PRO',     R0: 1390000, V0: 40000000, k: 6,  C1: 1000 }  // Penaliza complejidad temprana
+      starter: { name: 'Starter', R0: 490000,  V0: 15000000, k: 20, C1: 200000  }, // Tolerante a varios SKUs simples
+      basic:   { name: 'Basic',   R0: 890000,  V0: 25000000, k: 12, C1: 600000  }, // Balance simplicidad/complejidad
+      pro:     { name: 'PRO',     R0: 1390000, V0: 40000000, k: 6,  C1: 1000000 }  // Penaliza complejidad temprana
     };
-  
+
     // Modelo (oculto): beta y precio
     const beta = (S, k) => (!isFinite(S) || S <= 0) ? 1 : 1 + (3.5 * S) / (S + Math.max(1, k));
-  
+
     function price(V, S, R0, V0, k, C1) {
       const b = beta(S, k);
       const Vpos = Math.max(0, V);
       const V0pos = Math.max(1, V0);
       const R0p = Math.max(0, R0);
-  
+
       if (Vpos < V0pos) return { P: R0p, base: R0p, variable: 0 };
-  
+
       const varTerm = Math.max(0, C1) * Math.log10(1 + (Vpos - V0pos) / V0pos) * b;
       return { P: R0p + varTerm, base: R0p, variable: varTerm };
     }
-  
+
     function recalc() {
       const planKey = $("plan").value;
       const cfg = PLAN_CONF[planKey];
-  
-      const V = +$("V").value;
+
+      const V = +(cleanNumber($("V").value) || '0');
       const S = +$("S").value;
-  
+
       const { P } = price(V, S, cfg.R0, cfg.V0, cfg.k, cfg.C1);
       const savings = 0.10 * Math.max(0, V);
       const net = savings - P;
       const roi = P > 0 ? (net / P) : 0;
-  
+
       $("planOut").textContent = cfg.name;
       $("priceOut").textContent = fmtMoney(P);
       $("savOut").textContent = fmtMoney(savings);
       $("netOut").textContent = fmtMoney(net);
       $("roiOut").textContent = P > 0 ? fmtPct(roi) : "—";
-  
+
       renderChart(cfg);
     }
-  
+
     ["plan", "V", "S"].forEach(id => $(id).addEventListener('input', recalc));
     $("calcular")?.addEventListener('click', recalc);
-  
+
+    // ====== FORMATEO AUTOMÁTICO DEL INPUT DE VOLUMEN ======
+    const inputV = $("V");
+    
+    // Función para formatear número con puntos de miles
+    function formatNumber(num) {
+      return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    
+    // Función para limpiar formato y obtener número
+    function cleanNumber(str) {
+      return str.replace(/[^\d]/g, ''); // Solo deja dígitos
+    }
+    
+    // Variable para evitar loops infinitos
+    let isFormatting = false;
+    
+    // Evento al escribir
+    inputV.addEventListener('input', function(e) {
+      if (isFormatting) return;
+      isFormatting = true;
+      
+      // Limpiar el valor (solo números)
+      let cleanValue = cleanNumber(this.value);
+      
+      if (cleanValue === '') {
+        this.value = '';
+        isFormatting = false;
+        return;
+      }
+      
+      // Convertir a número y formatear
+      let numValue = parseInt(cleanValue, 10);
+      if (isNaN(numValue)) {
+        this.value = '';
+        isFormatting = false;
+        return;
+      }
+      
+      // Aplicar formato
+      this.value = formatNumber(numValue);
+      
+      isFormatting = false;
+    });
+    
+    // Formatear valor inicial
+    if (inputV.value) {
+      inputV.value = formatNumber(cleanNumber(inputV.value));
+    }
+    
     function renderChart(cfg) {
-      const V = +$("V").value || 0;
+      const V = +(cleanNumber($("V").value) || '0');
       const S = +$("S").value || 0;
-  
-      const maxV = Math.max(5 * cfg.V0, 2 * V, 50000);
+
+      const maxV = Math.max(5 * cfg.V0, 2 * V, 100000000);
       const minV = 0;
       const steps = 140;
-  
+
       const xs = [];
       const ys = [];
-  
+
       for (let i = 0; i <= steps; i++) {
         const v = minV + (maxV - minV) * i / steps;
         const { P } = price(v, S, cfg.R0, cfg.V0, cfg.k, cfg.C1);
         xs.push(v);
         ys.push(P);
       }
-  
+
       const currentPrice = price(V, S, cfg.R0, cfg.V0, cfg.k, cfg.C1).P;
-  
+
       const data = [
-        { x: xs, y: ys, type: 'scatter', mode: 'lines', line: { width: 3 }, name: 'Precio' },
-        { x: [V], y: [currentPrice], type: 'scatter', mode: 'markers', marker: { size: 12 }, name: 'Punto actual' }
+        { x: xs, y: ys, type: 'scatter', mode: 'lines', line: { width: 3, color: '#6366f1' }, name: 'Precio' },
+        { x: [V], y: [currentPrice], type: 'scatter', mode: 'markers', marker: { size: 12, color: '#dc2626' }, name: 'Punto actual' }
       ];
-  
+
       const layout = {
-        margin: { t: 20, r: 20, b: 60, l: 70 },
-        xaxis: { title: 'Volumen', tickformat: ',.0f' },
-        yaxis: { title: 'Precio', tickformat: ',.0f' },
+        margin: { t: 20, r: 20, b: 60, l: 100 }, // Aumentado de 70 a 100
+        xaxis: { 
+          title: 'Volumen (CLP)', 
+          tickformat: '$,.0f',
+          tickangle: 0 // Rotar etiquetas del eje X para evitar superposición
+        },
+        yaxis: { 
+          title: {
+            text: 'Precio (CLP)',
+            standoff: 15 // Separación adicional del título
+          },
+          tickformat: '$,.0f',
+          automargin: true // Ajuste automático si es necesario
+        },
         showlegend: false,
         plot_bgcolor: '#f8fafc',
         paper_bgcolor: '#ffffff',
         font: { size: 11 }
       };
-  
+
       Plotly.newPlot('priceChart', data, layout, { responsive: true, displayModeBar: false });
     }
-  
+
     // Inicial
     recalc();
 
