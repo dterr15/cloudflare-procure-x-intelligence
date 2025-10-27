@@ -235,16 +235,7 @@
         <div class="bar" id="progressBar"></div>
       </div>
 
-        <form id="qualificationForm" action="https://formsubmit.co/daniel.terreros9@gmail.com" method="POST">
-        <!-- Agregar estos campos ocultos justo después del <form> -->
-        <input type="hidden" name="_subject" value="🎯 Nueva Pre-calificación SYGNODE">
-        <input type="hidden" name="_template" value="table">
-        <input type="hidden" name="_captcha" value="false">
-        <input type="hidden" name="_next" value="https://demo.procure-x.cl/consulta-gratis/gracias.html">
-        
-        <!-- Campos para el score calculado -->
-        <input type="hidden" id="scoreField" name="Score" value="0">
-        <input type="hidden" id="qualifyField" name="Califica" value="No">
+      <form id="qualificationForm">
         <!-- Sección 1: Contacto -->
         <div class="section">
           <h3>📋 Tu información de contacto</h3>
@@ -380,6 +371,9 @@
     const successMsg = document.getElementById('successMsg');
     const result = document.getElementById('result');
 
+    // ⚠️ IMPORTANTE: Reemplaza esta URL con la de tu webhook de n8n
+    const N8N_WEBHOOK_URL = 'https://n8n.srv876072.hstgr.cloud/webhook-test/31ff2cb6-3964-4f00-a692-489aeef4e41e';
+
     // Actualizar barra de progreso
     form.addEventListener('input', updateProgress);
     
@@ -417,24 +411,62 @@
       return Math.min(100, pts);
     }
 
-   // Enviar formulario
-  // Enviar formulario
-form.addEventListener('submit', (e) => {
-  // Recoger datos
-  const formData = new FormData(form);
-  const data = Object.fromEntries(formData.entries());
-  const score = calculateScore(data);
-  const qualify = score >= 50;
+    // Enviar formulario a n8n
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      errorMsg.classList.add('hidden');
+      successMsg.classList.add('hidden');
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Enviando...';
 
-  // Actualizar campos ocultos con el score antes de enviar
-  document.getElementById('scoreField').value = score;
-  document.getElementById('qualifyField').value = qualify ? 'Sí ✅' : 'No ⚠️';
+      // Recoger datos
+      const formData = new FormData(form);
+      const data = Object.fromEntries(formData.entries());
+      
+      // Calcular score
+      const score = calculateScore(data);
+      const qualify = score >= 50;
 
-  // El formulario se enviará automáticamente a FormSubmit
-});
+      // Agregar metadata
+      data.score = score;
+      data.qualify = qualify;
+      data.timestamp = new Date().toISOString();
+      data.source = 'demo.procure-x.cl';
 
-// Inicializar progreso
-updateProgress();
+      try {
+        // Enviar a n8n
+        const response = await fetch(N8N_WEBHOOK_URL, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(data)
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
+
+        // Mostrar resultado exitoso
+        form.classList.add('hidden');
+        result.classList.remove('hidden');
+        document.getElementById('finalScore').textContent = score;
+        document.getElementById('resultMessage').textContent = qualify 
+          ? '¡Excelente calce! Te contactaremos pronto para coordinar tu demo personalizada.'
+          : 'Te enviaremos un reporte demo completo a tu correo. Si deseas avanzar, podrás revisar condiciones y requisitos.';
+
+      } catch (error) {
+        console.error('Error:', error);
+        errorMsg.textContent = 'Hubo un error al enviar el formulario. Por favor intenta nuevamente.';
+        errorMsg.classList.remove('hidden');
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Enviar Formulario';
+      }
+    });
+
+    // Inicializar progreso
+    updateProgress();
   </script>
-  </body>
+</body>
 </html>
