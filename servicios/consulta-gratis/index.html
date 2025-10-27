@@ -417,34 +417,31 @@
       return Math.min(100, pts);
     }
 
-    // Enviar formulario
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      
-      errorMsg.classList.add('hidden');
-      successMsg.classList.add('hidden');
-      submitBtn.disabled = true;
-      submitBtn.textContent = 'Enviando...';
-
-      // Recoger datos
-      const formData = new FormData(form);
-      const data = Object.fromEntries(formData.entries());
-      const score = calculateScore(data);
-      const qualify = score >= 50;
-
-      // Agregar score
-      data.score = score;
-      data.qualify = qualify;
-
-      // Actualizar campos ocultos con el score antes de enviar
-      document.getElementById('scoreField').value = score;
-      document.getElementById('qualifyField').value = qualify ? 'Sí ✅' : 'No ⚠️';
-
-// El formulario se enviará automáticamente a FormSubmit
-// No hacemos nada más, FormSubmit redirige a la página de gracias
-
-    // Inicializar progreso
-    updateProgress();
+   // Enviar formulario
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    
+    errorMsg.classList.add('hidden');
+    successMsg.classList.add('hidden');
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Enviando...';
+  
+    // Recoger datos
+    const formData = new FormData(form);
+    const data = Object.fromEntries(formData.entries());
+    const score = calculateScore(data);
+    const qualify = score >= 50;
+  
+    // Actualizar campos ocultos con el score antes de enviar
+    document.getElementById('scoreField').value = score;
+    document.getElementById('qualifyField').value = qualify ? 'Sí ✅' : 'No ⚠️';
+  
+    // Enviar el formulario manualmente a FormSubmit
+    form.submit();
+  });
+  
+  // Inicializar progreso
+  updateProgress();
   </script>
-</body>
+  </body>
 </html>
