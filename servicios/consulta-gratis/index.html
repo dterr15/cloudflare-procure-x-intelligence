@@ -153,8 +153,10 @@
       const canNext = useMemo(()=>{
         const s = STEPS[step].key;
         if (s==='intro')     return data.name.trim() && isEmail(data.email);
-        if (s==='perfil')    return data.volumen > 0 && data.skus > 0 && data.categoria.trim();        if (s==='resumen')   return true;
-        return true;
+        if (s==='perfil') {
+          // Nota: Number('') es 0, por lo que '0 > 0' es FALSE, lo que hace que un campo vacío falle correctamente.
+          return Number(data.volumen) > 0 && Number(data.skus) > 0 && data.categoria.trim().length > 0;
+        }        return true;
       },[step,data]);
 
       const score = useMemo(()=>{
