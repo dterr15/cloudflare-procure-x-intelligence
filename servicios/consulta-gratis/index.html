@@ -224,54 +224,53 @@
     }
     /* INICIO: Estilos del Recuadro de Aviso B2B y Elementos */
     .disclaimer-box {
-        background: rgba(6, 182, 212, 0.1); /* Fondo cian muy sutil */
-        border: 1px solid var(--cyan); /* Borde cian */
-        border-radius: 10px;
-        padding: 12px 16px;
-        margin-top: 16px; /* Espacio después de los inputs */
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid var(--cyan);
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-top: 16px;
     }
     
     .trust-badge {
-        font-size: 0.85rem;
-        color: #e0f2fe; /* Color más claro (como el label) */
-        font-weight: 600; /* Mayor peso */
-        display: flex;
-        align-items: center;
-        gap: 8px;
-        margin: 0 0 8px 0; /* Espacio debajo del aviso */
+      font-size: 0.85rem;
+      color: #e0f2fe;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 0 0 8px 0;
     }
     
-    /* Ajustes al Checkbox dentro del nuevo recuadro */
     .checkbox-field {
-        display: flex;
-        align-items: flex-start;
-        margin: 0; /* Eliminar margen extra */
+      display: flex;
+      align-items: flex-start;
+      margin: 0;
     }
     
     .checkbox-field input[type="checkbox"] {
-        width: 18px;
-        height: 18px;
-        margin-top: 2px;
-        margin-right: 10px;
-        border-radius: 4px;
-        border: 1.5px solid var(--cyan); /* Borde cian para destacar */
-        background: rgba(255,255,255,.1);
-        appearance: none;
-        cursor: pointer;
-        flex-shrink: 0;
-        transition: all .2s;
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      margin-right: 10px;
+      border-radius: 4px;
+      border: 1.5px solid var(--cyan);
+      background: rgba(255,255,255,.1);
+      appearance: none;
+      cursor: pointer;
+      flex-shrink: 0;
+      transition: all .2s;
     }
     
     .checkbox-field input[type="checkbox"]:checked {
-        background-color: var(--green);
-        border-color: var(--green);
+      background-color: var(--green);
+      border-color: var(--green);
     }
     
     .checkbox-field label {
-        margin-bottom: 0;
-        font-size: 0.9rem;
-        color: #c0d8f0;
-        font-weight: 400;
+      margin-bottom: 0;
+      font-size: 0.9rem;
+      color: #c0d8f0;
+      font-weight: 400;
     }
     /* FIN: Estilos del Recuadro de Aviso B2B y Elementos */
   </style>
@@ -309,15 +308,15 @@
             <label for="company">Empresa *</label>
             <input type="text" id="company" name="company" required placeholder="Mi Empresa S.A.">
           </div>
-            <div class="disclaimer-box">
-              <div class="trust-badge">
-                🔒 Tus datos están protegidos (Política B2B). Nunca Spam.
-              </div>
-              <div class="checkbox-field">
-                <input type="checkbox" id="acepto_comunicaciones" name="acepto_comunicaciones" value="si">
-                <label for="acepto_comunicaciones">Acepto recibir comunicaciones profesionales de Procure-X Intelligence.</label>
-              </div>
+          <div class="disclaimer-box">
+            <div class="trust-badge">
+              🔒 Tus datos están protegidos (Política B2B). Nunca Spam.
             </div>
+            <div class="checkbox-field">
+              <input type="checkbox" id="acepto_comunicaciones" name="acepto_comunicaciones" value="si">
+              <label for="acepto_comunicaciones">Acepto recibir comunicaciones profesionales de Procure-X Intelligence.</label>
+            </div>
+          </div>
         </div>
 
         <!-- Sección 2: Perfil de compra -->
@@ -413,6 +412,8 @@
 
       <div id="result" class="result hidden">
         <h2 style="margin:0 0 12px;">¡Gracias por tu interés! Te contactamos en breve.</h2>
+        <!-- Aquí se inyecta dinámicamente el botón de descarga -->
+        <div id="downloadLinkContainer" style="margin:16px 0;"></div>
         <div style="margin-top:24px;">
           <a href="https://procure-x.cl/inicio" class="btn btn-primary">Volver al inicio</a>
         </div>
@@ -427,20 +428,22 @@
     const errorMsg = document.getElementById('errorMsg');
     const successMsg = document.getElementById('successMsg');
     const result = document.getElementById('result');
+    const downloadLinkContainer = document.getElementById('downloadLinkContainer');
 
     // ⚠️ IMPORTANTE: Reemplaza esta URL con la de tu webhook de n8n
-    const N8N_WEBHOOK_URL = 'https://n8n.srv876072.hstgr.cloud/webhook-test/31ff2cb6-3964-4f00-a692-489aeef4e41e'; //
+    const N8N_WEBHOOK_URL = 'https://n8n.srv876072.hstgr.cloud/webhook-test/31ff2cb6-3964-4f00-a692-489aeef4e41e';
+
+    // 🔗 URL del PDF en R2 — REEMPLAZA por tu dominio/objeto real
+    const R2_PDF_URL = 'https://TU-BUCKET.r2.dev/Reporte-Demo-SYGNODE.pdf';
 
     // Actualizar barra de progreso
     form.addEventListener('input', updateProgress);
-    
     function updateProgress() {
       const inputs = form.querySelectorAll('input[required], select[required]');
       let filled = 0;
       inputs.forEach(input => {
         if (input.value.trim() !== '') filled++;
       });
-      const optionalCheckbox = document.getElementById('acepto_comunicaciones');
       const progress = (filled / inputs.length) * 100;
       progressBar.style.width = progress + '%';
     }
@@ -482,7 +485,7 @@
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
 
-      // Procesar checkbox (si no está marcado, no aparece en data.entries(), lo forzamos a 'no')
+      // Procesar checkbox (si no está marcado, lo forzamos a 'no')
       data.acepto_comunicaciones = data.acepto_comunicaciones === 'si' ? 'si' : 'no';
       
       // Calcular score
@@ -499,23 +502,23 @@
         // Enviar a n8n
         const response = await fetch(N8N_WEBHOOK_URL, {
           method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
+          headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify(data)
         });
 
-        if (!response.ok) {
-          throw new Error(`Error: ${response.status}`);
-        }
+        if (!response.ok) throw new Error(`Error: ${response.status}`);
 
         // Mostrar resultado exitoso
         form.classList.add('hidden');
         result.classList.remove('hidden');
-        document.getElementById('finalScore').textContent = score;
-        document.getElementById('resultMessage').textContent = qualify 
-          ? '¡Excelente calce! Te contactaremos pronto para coordinar tu demo personalizada.'
-          : 'Te enviaremos un reporte demo completo a tu correo. Si deseas avanzar, podrás revisar condiciones y requisitos.';
+
+        // ⭐️ Inyectar botón de descarga del PDF (R2)
+        downloadLinkContainer.innerHTML = `
+          <a href="${R2_PDF_URL}" class="btn btn-primary" style="background:#06b6d4; box-shadow:0 8px 20px rgba(6,182,212,.3); margin-bottom:12px;" download target="_blank" rel="noopener">
+            📥 Descargar Reporte PDF Demo
+          </a>
+          <p style="font-size:.95rem; color:#a5b4fc; margin:0;">(El PDF enviado a tu email será personalizado).</p>
+        `;
 
       } catch (error) {
         console.error('Error:', error);
