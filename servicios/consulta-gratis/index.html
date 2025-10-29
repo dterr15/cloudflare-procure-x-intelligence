@@ -4,268 +4,79 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Consulta gratis · SYGNODE.</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-
   <style>
-    :root{
-      --primary:#1e3a8a; 
-      --cyan:#06b6d4; 
-      --green:#10b981; 
-      --slate:#64748b;
-    }
-    
+    :root{ --primary:#1e3a8a; --cyan:#06b6d4; --green:#10b981; --slate:#64748b; }
     * { box-sizing:border-box; }
-    
-    body {
-      margin:0; 
-      font-family:Inter,system-ui,sans-serif;
-      background:linear-gradient(135deg,var(--primary),#0a1a33);
-      color:#fff; 
-      min-height:100vh;
-      padding:20px;
-    }
-    
-    .wrap {
-      max-width:800px;
-      margin:0 auto;
-      padding:clamp(16px, 3vw, 32px);
-    }
-    
-    .card {
-      background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.15);
-      border-radius:20px; 
-      padding:clamp(20px,3vw,32px);
-      backdrop-filter:blur(10px);
-      box-shadow:0 20px 60px rgba(0,0,0,.25);
-    }
-    
-    h1 {
-      font-size:clamp(24px,3.2vw,36px);
-      line-height:1.2;
-      margin:0 0 12px;
-      font-weight:900;
-    }
-    
-    .highlight {
-      background:linear-gradient(135deg,var(--cyan),var(--green));
-      -webkit-background-clip:text;
-      background-clip:text;
-      -webkit-text-fill-color:transparent;
-    }
-    
-    p.lead {
-      color:#dbeafe;
-      margin:0 0 24px;
-      font-size:1.05rem;
-      line-height:1.6;
-    }
-    
-    .badge {
-      display:inline-block; 
-      font-weight:800; 
-      font-size:.8rem; 
-      padding:.4rem .7rem; 
-      border-radius:999px; 
-      color:#0b1220; 
-      background:linear-gradient(135deg,var(--cyan),var(--green));
-      margin-bottom:12px;
-    }
-    
-    .progress {
-      height:8px;
-      background:rgba(255,255,255,.14);
-      border-radius:999px;
-      overflow:hidden;
-      margin:16px 0 24px;
-    }
-    
-    .bar {
-      height:100%;
-      background:linear-gradient(90deg,var(--green),#22c55e);
-      width:0%;
-      transition:width .4s ease;
-    }
-
-    .section {
-      background:rgba(255,255,255,.03);
-      border:1px solid rgba(255,255,255,.1);
-      border-radius:12px;
-      padding:20px;
-      margin-bottom:16px;
-    }
-
-    .section h3 {
-      margin:0 0 16px;
-      font-size:1.1rem;
-      color:#06b6d4;
-    }
-    
-    .field {
-      margin-bottom:16px;
-    }
-    
-    label {
-      display:block;
-      font-weight:700;
-      font-size:.92rem;
-      margin-bottom:6px;
-      color:#e0f2fe;
-    }
-    
-    input, select {
-      width:100%; 
-      padding:12px 14px; 
-      border-radius:10px; 
-      border:1.5px solid rgba(255,255,255,.18);
-      background:rgba(255,255,255,.95); 
-      color:#0f172a; 
-      font-size:1rem;
-      outline:none; 
-      transition:all .2s;
-      font-family:inherit;
-    }
-    
-    input:focus, select:focus {
-      border-color:#06b6d4; 
-      box-shadow:0 0 0 3px rgba(6,182,212,.15);
-    }
-    
-    .row {
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
-    
-    @media (max-width:700px) { 
-      .row { grid-template-columns:1fr; } 
-    }
-
-    .actions {
-      display:flex;
-      gap:12px;
-      margin-top:24px;
-      justify-content:flex-start;
-    }
-    
-    .btn {
-      border:0;
-      border-radius:12px;
-      padding:14px 28px;
-      font-weight:800;
-      cursor:pointer;
-      transition:all .2s; 
-      font-size:1rem;
-      font-family:inherit;
-    }
-    
-    .btn:disabled {
-      opacity:0.5;
-      cursor:not-allowed;
-    }
-    
-    .btn-primary {
-      background:var(--green);
-      color:#fff;
-      box-shadow:0 8px 20px rgba(16,185,129,.3);
-    }
-    
-    .btn-primary:hover:not(:disabled) {
-      transform:translateY(-2px);
-      box-shadow:0 12px 28px rgba(16,185,129,.4);
-    }
-
-    .btn-primary:active:not(:disabled) {
-      transform:translateY(0);
-    }
-    
-    .result {
-      text-align:center;
-      padding:32px 20px;
-    }
-
-    .score-badge {
-      display:inline-flex;
-      align-items:center;
-      gap:12px;
-      padding:16px 24px;
-      border-radius:999px;
-      background:rgba(16,185,129,.15);
-      border:2px solid var(--green);
-      font-weight:800;
-      font-size:1.5rem;
-      margin:20px 0;
-    }
-
-    .hidden {
-      display:none;
-    }
-
-    .error {
-      background:rgba(239,68,68,.1);
-      border:1px solid rgba(239,68,68,.3);
-      color:#fca5a5;
-      padding:12px;
-      border-radius:8px;
-      margin:16px 0;
-      text-align:center;
-    }
-
-    .success {
-      background:rgba(16,185,129,.1);
-      border:1px solid rgba(16,185,129,.3);
-      color:#6ee7b7;
-      padding:12px;
-      border-radius:8px;
-      margin:16px 0;
-      text-align:center;
-    }
+    body { margin:0; font-family:Inter,system-ui,sans-serif; background:linear-gradient(135deg,var(--primary),#0a1a33); color:#fff; min-height:100vh; padding:20px; }
+    .wrap { max-width:800px; margin:0 auto; padding:clamp(16px, 3vw, 32px); }
+    .card { background:rgba(255,255,255,.06); border:1px solid rgba(255,255,255,.15); border-radius:20px; padding:clamp(20px,3vw,32px); backdrop-filter:blur(10px); box-shadow:0 20px 60px rgba(0,0,0,.25); }
+    h1 { font-size:clamp(24px,3.2vw,36px); line-height:1.2; margin:0 0 12px; font-weight:900; }
+    .highlight { background:linear-gradient(135deg,var(--cyan),var(--green)); -webkit-background-clip:text; background-clip:text; -webkit-text-fill-color:transparent; }
+    p.lead { color:#dbeafe; margin:0 0 24px; font-size:1.05rem; line-height:1.6; }
+    .badge { display:inline-block; font-weight:800; font-size:.8rem; padding:.4rem .7rem; border-radius:999px; color:#0b1220; background:linear-gradient(135deg,var(--cyan),var(--green)); margin-bottom:12px; }
+    .progress { height:8px; background:rgba(255,255,255,.14); border-radius:999px; overflow:hidden; margin:16px 0 24px; }
+    .bar { height:100%; background:linear-gradient(90deg,var(--green),#22c55e); width:0%; transition:width .4s ease; }
+    .section { background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.1); border-radius:12px; padding:20px; margin-bottom:16px; }
+    .section h3 { margin:0 0 16px; font-size:1.1rem; color:#06b6d4; }
+    .field { margin-bottom:16px; }
+    label { display:block; font-weight:700; font-size:.92rem; margin-bottom:6px; color:#e0f2fe; }
+    input, select { width:100%; padding:12px 14px; border-radius:10px; border:1.5px solid rgba(255,255,255,.18); background:rgba(255,255,255,.95); color:#0f172a; font-size:1rem; outline:none; transition:all .2s; font-family:inherit; }
+    input:focus, select:focus { border-color:#06b6d4; box-shadow:0 0 0 3px rgba(6,182,212,.15); }
+    .row { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+    @media (max-width:700px) { .row { grid-template-columns:1fr; } }
+    .actions { display:flex; gap:12px; margin-top:24px; justify-content:flex-start; }
+    .btn { border:0; border-radius:12px; padding:14px 28px; font-weight:800; cursor:pointer; transition:all .2s; font-size:1rem; font-family:inherit; }
+    .btn:disabled { opacity:0.5; cursor:not-allowed; }
+    .btn-primary { background:var(--green); color:#fff; box-shadow:0 8px 20px rgba(16,185,129,.3); }
+    .btn-primary:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 12px 28px rgba(16,185,129,.4); }
+    .btn-primary:active:not(:disabled) { transform:translateY(0); }
+    .result { text-align:center; padding:32px 20px; }
+    .score-badge { display:inline-flex; align-items:center; gap:12px; padding:16px 24px; border-radius:999px; background:rgba(16,185,129,.15); border:2px solid var(--green); font-weight:800; font-size:1.5rem; margin:20px 0; }
+    .hidden { display:none; }
+    .error { background:rgba(239,68,68,.1); border:1px solid rgba(239,68,68,.3); color:#fca5a5; padding:12px; border-radius:8px; margin:16px 0; text-align:center; }
+    .success { background:rgba(16,185,129,.1); border:1px solid rgba(16,185,129,.3); color:#6ee7b7; padding:12px; border-radius:8px; margin:16px 0; text-align:center; }
     /* INICIO: Estilos del Recuadro de Aviso B2B y Elementos */
     .disclaimer-box {
-      background: rgba(6, 182, 212, 0.1);
-      border: 1px solid var(--cyan);
+      background: rgba(6, 182, 212, 0.1); /* Fondo cian muy sutil */
+      border: 1px solid var(--cyan); /* Borde cian */
       border-radius: 10px;
       padding: 12px 16px;
-      margin-top: 16px;
+      margin-top: 16px; /* Espacio después de los inputs */
     }
-    
     .trust-badge {
       font-size: 0.85rem;
-      color: #e0f2fe;
-      font-weight: 600;
+      color: #e0f2fe; /* Color más claro (como el label) */
+      font-weight: 600; /* Mayor peso */
       display: flex;
       align-items: center;
       gap: 8px;
-      margin: 0 0 8px 0;
+      margin: 0 0 8px 0; /* Espacio debajo del aviso */
     }
-    
+    /* Ajustes al Checkbox dentro del nuevo recuadro */
     .checkbox-field {
       display: flex;
       align-items: flex-start;
-      margin: 0;
+      margin: 0; /* Eliminar margen extra */
     }
-    
     .checkbox-field input[type="checkbox"] {
       width: 18px;
       height: 18px;
       margin-top: 2px;
       margin-right: 10px;
       border-radius: 4px;
-      border: 1.5px solid var(--cyan);
+      border: 1.5px solid var(--cyan); /* Borde cian para destacar */
       background: rgba(255,255,255,.1);
       appearance: none;
       cursor: pointer;
       flex-shrink: 0;
       transition: all .2s;
     }
-    
     .checkbox-field input[type="checkbox"]:checked {
       background-color: var(--green);
       border-color: var(--green);
     }
-    
     .checkbox-field label {
       margin-bottom: 0;
       font-size: 0.9rem;
@@ -412,8 +223,6 @@
 
       <div id="result" class="result hidden">
         <h2 style="margin:0 0 12px;">¡Gracias por tu interés! Te contactamos en breve.</h2>
-        <!-- Aquí se inyecta dinámicamente el botón de descarga -->
-        <div id="downloadLinkContainer" style="margin:16px 0;"></div>
         <div style="margin-top:24px;">
           <a href="https://procure-x.cl/inicio" class="btn btn-primary">Volver al inicio</a>
         </div>
@@ -428,13 +237,9 @@
     const errorMsg = document.getElementById('errorMsg');
     const successMsg = document.getElementById('successMsg');
     const result = document.getElementById('result');
-    const downloadLinkContainer = document.getElementById('downloadLinkContainer');
 
     // ⚠️ IMPORTANTE: Reemplaza esta URL con la de tu webhook de n8n
-    const N8N_WEBHOOK_URL = 'https://n8n.srv876072.hstgr.cloud/webhook-test/31ff2cb6-3964-4f00-a692-489aeef4e41e';
-
-    // 🔗 URL del PDF en R2 — REEMPLAZA por tu dominio/objeto real
-    const R2_PDF_URL = 'https://TU-BUCKET.r2.dev/Reporte-Demo-SYGNODE.pdf';
+    const N8N_WEBHOOK_URL = 'https://n8n.srv876072.hstgr.cloud/webhook-test/31ff2cb6-3964-4f00-a692-489aeef4e41e'; //
 
     // Actualizar barra de progreso
     form.addEventListener('input', updateProgress);
@@ -444,6 +249,7 @@
       inputs.forEach(input => {
         if (input.value.trim() !== '') filled++;
       });
+      const optionalCheckbox = document.getElementById('acepto_comunicaciones');
       const progress = (filled / inputs.length) * 100;
       progressBar.style.width = progress + '%';
     }
@@ -485,7 +291,7 @@
       const formData = new FormData(form);
       const data = Object.fromEntries(formData.entries());
 
-      // Procesar checkbox (si no está marcado, lo forzamos a 'no')
+      // Procesar checkbox (si no está marcado, no aparece en data.entries(), lo forzamos a 'no')
       data.acepto_comunicaciones = data.acepto_comunicaciones === 'si' ? 'si' : 'no';
       
       // Calcular score
@@ -502,22 +308,23 @@
         // Enviar a n8n
         const response = await fetch(N8N_WEBHOOK_URL, {
           method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
+          headers: {
+            'Content-Type': 'application/json',
+          },
           body: JSON.stringify(data)
         });
 
-        if (!response.ok) throw new Error(`Error: ${response.status}`);
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status}`);
+        }
 
         // Mostrar resultado exitoso
         form.classList.add('hidden');
         result.classList.remove('hidden');
-
-        // ⭐️ Inyectar botón de descarga del PDF (R2)
-        downloadLinkContainer.innerHTML = `
-          <a href="${R2_PDF_URL}" class="btn btn-primary" style="background:#06b6d4; box-shadow:0 8px 20px rgba(6,182,212,.3); margin-bottom:12px;" download target="_blank" rel="noopener">
-            📥 Descargar Reporte PDF Demo
-          </a>
-        `;
+        document.getElementById('finalScore').textContent = score;
+        document.getElementById('resultMessage').textContent = qualify 
+          ? '¡Excelente calce! Te contactaremos pronto para coordinar tu demo personalizada.'
+          : 'Te enviaremos un reporte demo completo a tu correo. Si deseas avanzar, podrás revisar condiciones y requisitos.';
 
       } catch (error) {
         console.error('Error:', error);
