@@ -1,6 +1,0 @@
-# Redirect para www.procure-x.cl - NO mostrar consulta-gratis
-/ /index.html 200
-/servicios/* /servicios/:splat 200
-
-# Solo demo.procure-x.cl puede acceder a consulta-gratis
-# (esto se maneja mejor con Workers, ver abajo)
