@@ -1,1 +1,11 @@
-/ /servicios/consulta-gratis/ 200
+/servicios/consulta-gratis/* https://demo.procure-x.cl/servicios/consulta-gratis/:splat 200
+```
+
+## Archivo `_headers` (seguridad)
+```
+/servicios/consulta-gratis/*
+  X-Frame-Options: SAMEORIGIN
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Access-Control-Allow-Origin: https://www.procure-x.cl
+  Content-Security-Policy: default-src 'self' https://demo.procure-x.cl; script-src 'self' 'unsafe-inline' https://demo.procure-x.cl; style-src 'self' 'unsafe-inline' https://demo.procure-x.cl; img-src 'self' https://demo.procure-x.cl data:; font-src 'self' https://demo.procure-x.cl data:
