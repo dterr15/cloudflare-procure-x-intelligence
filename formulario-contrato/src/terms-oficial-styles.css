@@ -1,0 +1,348 @@
+/* ==================== ESTILOS ADICIONALES PARA TÉRMINOS OFICIALES ==================== */
+
+/* Header con información de la empresa */
+.terms-header-notice {
+  background: rgba(16, 185, 129, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.terms-header-notice strong {
+  display: block;
+  font-size: 1.25rem;
+  color: var(--accent);
+  margin-bottom: 0.5rem;
+}
+
+.terms-header-notice p {
+  margin: 0.25rem 0;
+  color: var(--text);
+}
+
+.legal-reference {
+  font-size: 0.875rem;
+  color: var(--text-muted);
+  font-style: italic;
+}
+
+/* Aviso importante */
+.important-notice {
+  background: rgba(255, 168, 0, 0.1);
+  border-left: 4px solid #ffa800;
+  padding: 1rem 1.5rem;
+  margin-bottom: 1.5rem;
+  border-radius: var(--radius-sm);
+}
+
+.important-notice strong {
+  display: block;
+  color: #ffa800;
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+.important-notice p {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+/* Cláusula crítica */
+.critical-clause {
+  background: rgba(248, 113, 113, 0.1);
+  border: 2px solid rgba(248, 113, 113, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+
+.critical-clause p {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.6;
+}
+
+.critical-clause strong {
+  color: var(--error);
+  font-weight: 700;
+}
+
+/* Aviso de autorización */
+.authorization-notice {
+  background: rgba(6, 182, 212, 0.1);
+  border: 1px solid rgba(6, 182, 212, 0.3);
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  margin: 1rem 0;
+}
+
+.authorization-notice > p {
+  margin-bottom: 1rem;
+  color: var(--text);
+}
+
+.authorization-text {
+  background: var(--panel-light);
+  border-left: 3px solid var(--cyan);
+  padding: 1rem;
+  border-radius: var(--radius-sm);
+  margin-top: 1rem;
+}
+
+.authorization-text p {
+  margin: 0;
+  color: var(--text);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+/* Encabezados de nivel 4 (h4) */
+.terms-modal-content h4 {
+  color: var(--cyan);
+  font-size: 1rem;
+  font-weight: 600;
+  margin-top: 1.25rem;
+  margin-bottom: 0.75rem;
+}
+
+.terms-modal-content h4:first-of-type {
+  margin-top: 0.5rem;
+}
+
+/* Footer de términos */
+.terms-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 2px solid var(--border);
+}
+
+.terms-footer p {
+  margin-bottom: 0.75rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.terms-footer ul {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.terms-footer li {
+  margin-bottom: 0.5rem;
+  color: var(--text-muted);
+}
+
+.terms-footer a {
+  color: var(--cyan);
+  text-decoration: none;
+}
+
+.terms-footer a:hover {
+  color: var(--accent);
+  text-decoration: underline;
+}
+
+/* Mejoras para listas numeradas y con viñetas */
+.terms-modal-content ul {
+  margin-left: 1.5rem;
+  margin-bottom: 1rem;
+  margin-top: 0.5rem;
+}
+
+.terms-modal-content li {
+  margin-bottom: 0.5rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Strong dentro del contenido */
+.terms-modal-content strong {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* Enlaces dentro del contenido */
+.terms-modal-content a {
+  color: var(--cyan);
+  text-decoration: underline;
+  transition: color 0.2s;
+}
+
+.terms-modal-content a:hover {
+  color: var(--accent);
+}
+
+/* Párrafos */
+.terms-modal-content p {
+  margin-bottom: 1rem;
+  color: var(--text-muted);
+  line-height: 1.6;
+}
+
+/* Última actualización mejorada */
+.terms-modal-content .terms-last-updated {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border);
+  color: var(--text-muted);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+
+.terms-modal-content .terms-last-updated strong {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* Responsive adjustments */
+@media (max-width: 640px) {
+  .terms-header-notice {
+    padding: 1rem;
+  }
+
+  .terms-header-notice strong {
+    font-size: 1.125rem;
+  }
+
+  .critical-clause,
+  .authorization-notice {
+    padding: 1rem;
+  }
+
+  .terms-modal-content h3 {
+    font-size: 1rem;
+  }
+
+  .terms-modal-content h4 {
+    font-size: 0.9375rem;
+  }
+}
+
+/* Print styles para términos */
+@media print {
+  .terms-header-notice,
+  .important-notice,
+  .critical-clause,
+  .authorization-notice {
+    border: 1px solid #000;
+    page-break-inside: avoid;
+  }
+
+  .terms-modal-content a {
+    color: #000;
+    text-decoration: underline;
+  }
+}
+
+/* ==================== ESTILOS PARA TABLA LEGAL ==================== */
+
+.table-container {
+  overflow-x: auto;
+  margin: 1.5rem 0;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+}
+
+.legal-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.legal-table thead {
+  background: rgba(16, 185, 129, 0.1);
+}
+
+.legal-table th {
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+  color: var(--text);
+  border-bottom: 2px solid var(--border);
+}
+
+.legal-table td {
+  padding: 1rem;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.legal-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.legal-table tbody tr:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.legal-table td strong {
+  color: var(--text);
+  display: block;
+  margin-bottom: 0.25rem;
+}
+
+/* Responsive table */
+@media (max-width: 768px) {
+  .legal-table {
+    font-size: 0.8125rem;
+  }
+
+  .legal-table th,
+  .legal-table td {
+    padding: 0.75rem 0.5rem;
+  }
+
+  /* Convertir tabla a cards en mobile */
+  .legal-table thead {
+    display: none;
+  }
+
+  .legal-table,
+  .legal-table tbody,
+  .legal-table tr,
+  .legal-table td {
+    display: block;
+    width: 100%;
+  }
+
+  .legal-table tr {
+    margin-bottom: 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    padding: 0.75rem;
+  }
+
+  .legal-table td {
+    border: none;
+    padding: 0.5rem 0;
+    position: relative;
+    padding-left: 45%;
+  }
+
+  .legal-table td:before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 40%;
+    padding-right: 0.5rem;
+    font-weight: 600;
+    color: var(--text);
+  }
+
+  .legal-table td:first-child:before {
+    content: "Finalidad: ";
+  }
+
+  .legal-table td:nth-child(2):before {
+    content: "Base Legal: ";
+  }
+
+  .legal-table td:nth-child(3):before {
+    content: "Consentimiento: ";
+  }
+}
